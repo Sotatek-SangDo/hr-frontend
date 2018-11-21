@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default class BaseRequest {
     getPrefix () {
-        return 'https://be-hr.local/api/v1';
+        return `${window.config.API_URL}`;
     }
 
     get (url, params = {}, cancelToken) {
