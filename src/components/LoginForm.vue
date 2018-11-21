@@ -10,7 +10,7 @@
             <label class="mdl-textfield__label" for="email">Tài khoản</label>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" :class="passError || !validatePass ? 'is-invalid' : ''">
-            <input class="mdl-textfield__input" type="password" id="password" @focus="onPassFocus()" v-model="params.password" placeholder="Mật khẩu"/>
+            <input class="mdl-textfield__input" type="password" id="password" @keyup="checkAndSubmit" @focus="onPassFocus()" v-model="params.password" placeholder="Mật khẩu"/>
         </div>
         <div class="error" v-if="passError || !validatePass">
           <i class="material-icons">error_outline</i>
@@ -74,11 +74,15 @@
           const screenHeight = $(window).height();
           const screenWidth = $(window).width();
           ele.css({top: (screenHeight - ele.width())/2, left: (screenWidth - ele.height())/2 });
+        },
+        checkAndSubmit(e) {
+          if (e.keyCode === 13) {
+            !this.isDisable() || this.login()
+          }
         }
       },
       mounted() {
         this.init()
-        console.log('Component mounted.')
       }
     }
 </script>
