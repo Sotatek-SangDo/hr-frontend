@@ -433,7 +433,6 @@ export default {
 .mdl-layout__header-row
   color: white
 .page-title-area
-    border-bottom: 1px solid #dae4e8
-    margin-bottom: 20px
-
+  border-bottom: 1px solid #dae4e8
+  margin-bottom: 20px
 </style>

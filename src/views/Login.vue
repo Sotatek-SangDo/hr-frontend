@@ -42,7 +42,7 @@ export default {
 
 <style lang="scss">
 .login-area {
-  background-image: url(/img/bg.9bfb61c1.jpg);
+  background-image: url(/img/bg.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   &.login-s2 {

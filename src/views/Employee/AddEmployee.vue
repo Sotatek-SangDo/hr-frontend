@@ -20,15 +20,7 @@
                       v-text="national.name"/>
                 </select>
               </div>
-              <div class="form-group">
-                <label>Ngày Sinh</label>
-                <div id="datepicker" ref="birthday" class="input-group date" data-date-format="dd-mm-yyyy">
-                  <input class="form-control" type="text" name="birthday" readonly/>
-                  <span class="input-group-addon">
-                    <i class="ti-calendar"></i>
-                  </span>
-                </div>
-              </div>
+              <date-picker :title="birthday" v-model="emp.birthday"></date-picker>
               <div class="form-group">
                 <label class="col-form-label">Giới tính</label>
                 <select v-model="emp.gender" class="form-control">
@@ -111,24 +103,8 @@
                   <label for="email" class="col-form-label">Email công việc</label>
                   <input class="form-control" type="email" v-model="emp.email" id="email" autocomplete="off" placeholder="Nhập vào email công việc ...">
               </div>
-              <div class="form-group">
-                <label>Ngày gia nhập</label>
-                <div id="datepicker-join" class="input-group date" data-date-format="dd-mm-yyyy">
-                  <input class="form-control" type="text" name="joined_at" readonly />
-                  <span class="input-group-addon">
-                    <i class="ti-calendar"></i>
-                  </span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Ngày xác nhận</label>
-                <div id="datepicker-confirm" class="input-group date" data-date-format="dd-mm-yyyy">
-                  <input class="form-control" name="confirmed_at" type="text" readonly />
-                  <span class="input-group-addon">
-                    <i class="ti-calendar"></i>
-                  </span>
-                </div>
-              </div>
+              <date-picker :title="joinAt" v-model="emp.joined_at"></date-picker>
+              <date-picker :title="confirmAt" v-model="emp.confirmed_at"></date-picker>
               <div class="form-group">
                 <label class="col-form-label">Phòng ban</label>
                 <select v-model="emp.department" class="form-control">
@@ -176,8 +152,8 @@
 
 <script>
 import MasterView from "../MasterView.vue";
+import DatePicker from "../../components/commons/DatePicker.vue";
 import rf from "../../requests/RequestFactory";
-import $ from "jquery";
 import _ from "lodash";
 
 export default {
@@ -206,6 +182,9 @@ export default {
         job: "",
         pay_grade: ""
       },
+      birthday: "Ngày Sinh",
+      joinAt: "Ngày gia nhập",
+      confirmAt: "Ngày xác nhận",
       nationalities: {},
       gender: ["Nam", "Nữ", "Khác"],
       supervisor: {},
@@ -218,7 +197,9 @@ export default {
       errors: []
     };
   },
-  components: {},
+  components: {
+    DatePicker
+  },
   methods: {
     getNationalities() {
       rf.getRequest("Nationality")
@@ -268,13 +249,10 @@ export default {
     submitForm() {
       this.isDisable = true;
       this.errors = [];
-      this.emp.birthday = $("input[name='birthday']").val();
-      this.emp.joined_at = $("input[name='joined_at']").val();
-      this.emp.confirmed_at = $("input[name='confirmed_at']").val();
       const keyNullable = ["indirect_supervisor", "supervisor"];
       _.forEach(this.emp, (val, key) => {
         if (!val && keyNullable.indexOf(key) === -1)
-          this.errors.push({keys: `${key} yêu cầu, không được rỗng.`});
+          this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
       });
       if (this.hasErrors()) {
         this.isDisable = false;
@@ -282,28 +260,18 @@ export default {
       this.addEmployee();
     },
     addEmployee() {
-      rf.getRequest('EmployeeRequest')
+      rf.getRequest("EmployeeRequest")
         .store(this.emp)
         .then(res => {
-          console.log(res.status)
           if (res.status) {
             window.location.reload();
-          }else {
-            this.errors.push({keys: 'Lỗi chưa xác định trên server'});
+          } else {
+            this.errors.push({ keys: "Lỗi chưa xác định trên server" });
           }
         });
-    },
-    initial() {
-      $(this.$refs.birthday).datepicker({ 
-        autoclose: true, 
-        todayHighlight: true
-      }).datepicker('update', new Date());
     }
   },
   mounted() {
-    // this.sleep(1000).then(() => {
-    //   this.init();
-    // });
     this.initial();
   }
 };

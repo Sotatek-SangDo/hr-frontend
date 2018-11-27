@@ -13,7 +13,6 @@
           <a class="nav-link" href="#references" role="tab" data-toggle="tab">references</a>
         </li>
       </ul>
-
       <!-- Tab panes -->
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade active in show" id="profile">
@@ -26,31 +25,24 @@
                     <span><i class="ti-plus"></i>   Thêm mới</span>
                   </a>
                 </div>
-                
-                <div class="data-tables">
-                  <table ref="dataTable" id="dataTable" class="text-center">
-                    <thead class="bg-light text-capitalize">
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start Date</th>
-                            <th>salary</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(emp, index) in employees" :key="index">
-                            <td v-text="emp.name"></td>
-                            <td>Accountant</td>
-                            <td v-text="emp.address"/>
-                            <td v-text="emp.phone"/>
-                            <td v-text="emp.birthday"/>
-                            <td v-text="emp.private_email"/>
-                        </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <data-table :getData="getEmployees" ref="datatable">
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Office</th>
+                  <th>Age</th>
+                  <th>Start Date</th>
+                  <th>salary</th>
+                  <template slot="body" slot-scope="props">
+                    <tr>
+                      <td v-text="props.item.name"></td>
+                      <td>Accountant</td>
+                      <td v-text="props.item.address"/>
+                      <td v-text="props.item.phone"/>
+                      <td v-text="props.item.birthday"/>
+                      <td v-text="props.item.private_email"/>
+                    </tr>
+                  </template>
+                </data-table>
               </div>
             </div>
             <div class="add-form" v-show="addStep">
@@ -66,17 +58,18 @@
 </template>
 
 <script>
+import DataTable from "../../components/commons/DataTable.vue";
 import MasterView from "../MasterView.vue";
 import HomeLayout from "../../components/HomeLayout.vue";
 import AddEmployee from "./AddEmployee.vue";
 import rf from "../../requests/RequestFactory";
-import $ from "jquery";
 
 export default {
   extends: MasterView,
   components: {
     HomeLayout,
-    AddEmployee
+    AddEmployee,
+    DataTable
   },
   data() {
     return {
@@ -101,12 +94,10 @@ export default {
         { title: "Nhan vien", href: "" }
       ],
       addStep: false,
-      listStep: true,
-      employees: {}
+      listStep: true
     };
   },
   created() {
-    console.log('created called.');
     this.getEmployees();
   },
   methods: {
@@ -116,29 +107,17 @@ export default {
       this.listStep = false;
     },
     getEmployees() {
-      rf.getRequest("EmployeeRequest")
-        .getAll()
-        .then(res => {
-          this.employees = res;
-        });
-    },
-    initTable() {
-      $(this.$refs.dataTable).DataTable({
-        responsive: true,
-        destroy: true,
-      });
+      return rf.getRequest("EmployeeRequest").getAll();
     },
     inital() {
       this.getEmployees();
       this.sleep(500).then(() => {
         this.init();
-        this.initTable();
       });
       this.fadeOut();
     }
   },
   mounted() {
-    console.log("mounted")
     this.inital();
   }
 };
