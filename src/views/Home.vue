@@ -1,154 +1,397 @@
 <template>
-  <div>
-    <home-layout :header-title="headerTitle">
-      <template name="home_content">
-        <main class="mdl-layout__content mdl-color--grey-100">
-          <div class="mdl-grid demo-content">
-            <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-              <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1" class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                <use xlink:href="#piechart" mask="url(#piemask)" />
-                <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle" dy="0.1">82<tspan font-size="0.2" dy="-0.07">%</tspan></text>
-              </svg>
-              <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1" class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                <use xlink:href="#piechart" mask="url(#piemask)" />
-                <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle" dy="0.1">82<tspan dy="-0.07" font-size="0.2">%</tspan></text>
-              </svg>
-              <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1" class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                <use xlink:href="#piechart" mask="url(#piemask)" />
-                <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle" dy="0.1">82<tspan dy="-0.07" font-size="0.2">%</tspan></text>
-              </svg>
-              <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 1 1" class="demo-chart mdl-cell mdl-cell--4-col mdl-cell--3-col-desktop">
-                <use xlink:href="#piechart" mask="url(#piemask)" />
-                <text x="0.5" y="0.5" font-family="Roboto" font-size="0.3" fill="#888" text-anchor="middle" dy="0.1">82<tspan dy="-0.07" font-size="0.2">%</tspan></text>
-              </svg>
-            </div>
-            <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-              <svg fill="currentColor" viewBox="0 0 500 250" class="demo-graph">
-                <use xlink:href="#chart" />
-              </svg>
-              <svg fill="currentColor" viewBox="0 0 500 250" class="demo-graph">
-                <use xlink:href="#chart" />
-              </svg>
-            </div>
-            <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
-              <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
-                <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
-                  <h2 class="mdl-card__title-text">Updates</h2>
-                </div>
-                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                  Non dolore elit adipisicing ea reprehenderit consectetur culpa.
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <a href="#" class="mdl-button mdl-js-button mdl-js-ripple-effect">Read More</a>
-                </div>
+  <home-layout>
+    <template slot="main-content">
+      <!-- page title area end -->
+      <div class="main-content-inner">
+          <!-- sales report area start -->
+          <div class="sales-report-area mt-5 mb-5">
+              <div class="row">
+                  <div class="col-md-4">
+                      <div class="single-report mb-xs-30">
+                          <div class="s-report-inner pr--20 pt--30 mb-3">
+                              <div class="icon"><i class="fa fa-btc"></i></div>
+                              <div class="s-report-title d-flex justify-content-between">
+                                  <h4 class="header-title mb-0">Bitcoin</h4>
+                                  <p>24 H</p>
+                              </div>
+                              <div class="d-flex justify-content-between pb-2">
+                                  <h2>$ 4567809,987</h2>
+                                  <span>- 45.87</span>
+                              </div>
+                          </div>
+                          <canvas id="coin_sales1" height="100"></canvas>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="single-report mb-xs-30">
+                          <div class="s-report-inner pr--20 pt--30 mb-3">
+                              <div class="icon"><i class="fa fa-btc"></i></div>
+                              <div class="s-report-title d-flex justify-content-between">
+                                  <h4 class="header-title mb-0">Bitcoin Dash</h4>
+                                  <p>24 H</p>
+                              </div>
+                              <div class="d-flex justify-content-between pb-2">
+                                  <h2>$ 4567809,987</h2>
+                                  <span>- 45.87</span>
+                              </div>
+                          </div>
+                          <canvas id="coin_sales2" height="100"></canvas>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="single-report">
+                          <div class="s-report-inner pr--20 pt--30 mb-3">
+                              <div class="icon"><i class="fa fa-eur"></i></div>
+                              <div class="s-report-title d-flex justify-content-between">
+                                  <h4 class="header-title mb-0">Euthorium</h4>
+                                  <p>24 H</p>
+                              </div>
+                              <div class="d-flex justify-content-between pb-2">
+                                  <h2>$ 4567809,987</h2>
+                                  <span>- 45.87</span>
+                              </div>
+                          </div>
+                          <canvas id="coin_sales3" height="100"></canvas>
+                      </div>
+                  </div>
               </div>
-              <div class="demo-separator mdl-cell--1-col"></div>
-              <div class="demo-options mdl-card mdl-color--deep-purple-500 mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--12-col-desktop">
-                <div class="mdl-card__supporting-text mdl-color-text--blue-grey-50">
-                  <h3>View options</h3>
-                  <ul>
-                    <li>
-                      <label for="chkbox1" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-                        <input type="checkbox" id="chkbox1" class="mdl-checkbox__input">
-                        <span class="mdl-checkbox__label">Click per object</span>
-                      </label>
-                    </li>
-                    <li>
-                      <label for="chkbox2" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-                        <input type="checkbox" id="chkbox2" class="mdl-checkbox__input">
-                        <span class="mdl-checkbox__label">Views per object</span>
-                      </label>
-                    </li>
-                    <li>
-                      <label for="chkbox3" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-                        <input type="checkbox" id="chkbox3" class="mdl-checkbox__input">
-                        <span class="mdl-checkbox__label">Objects selected</span>
-                      </label>
-                    </li>
-                    <li>
-                      <label for="chkbox4" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-                        <input type="checkbox" id="chkbox4" class="mdl-checkbox__input">
-                        <span class="mdl-checkbox__label">Objects viewed</span>
-                      </label>
-                    </li>
-                  </ul>
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <a href="#" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--blue-grey-50">Change location</a>
-                  <div class="mdl-layout-spacer"></div>
-                  <i class="material-icons">location_on</i>
-                </div>
-              </div>
-            </div>
           </div>
-        </main>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="position: fixed; left: -1000px; height: -1000px;">
-          <defs>
-            <mask id="piemask" maskContentUnits="objectBoundingBox">
-              <circle cx=0.5 cy=0.5 r=0.49 fill="white" />
-              <circle cx=0.5 cy=0.5 r=0.40 fill="black" />
-            </mask>
-            <g id="piechart">
-              <circle cx=0.5 cy=0.5 r=0.5 />
-              <path d="M 0.5 0.5 0.5 0 A 0.5 0.5 0 0 1 0.95 0.28 z" stroke="none" fill="rgba(255, 255, 255, 0.75)" />
-            </g>
-          </defs>
-        </svg>
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 250" style="position: fixed; left: -1000px; height: -1000px;">
-          <defs>
-            <g id="chart">
-              <g id="Gridlines">
-                <line fill="#888888" stroke="#888888" stroke-miterlimit="10" x1="0" y1="27.3" x2="468.3" y2="27.3" />
-                <line fill="#888888" stroke="#888888" stroke-miterlimit="10" x1="0" y1="66.7" x2="468.3" y2="66.7" />
-                <line fill="#888888" stroke="#888888" stroke-miterlimit="10" x1="0" y1="105.3" x2="468.3" y2="105.3" />
-                <line fill="#888888" stroke="#888888" stroke-miterlimit="10" x1="0" y1="144.7" x2="468.3" y2="144.7" />
-                <line fill="#888888" stroke="#888888" stroke-miterlimit="10" x1="0" y1="184.3" x2="468.3" y2="184.3" />
-              </g>
-              <g id="Numbers">
-                <text transform="matrix(1 0 0 1 485 29.3333)" fill="#888888" font-family="'Roboto'" font-size="9">500</text>
-                <text transform="matrix(1 0 0 1 485 69)" fill="#888888" font-family="'Roboto'" font-size="9">400</text>
-                <text transform="matrix(1 0 0 1 485 109.3333)" fill="#888888" font-family="'Roboto'" font-size="9">300</text>
-                <text transform="matrix(1 0 0 1 485 149)" fill="#888888" font-family="'Roboto'" font-size="9">200</text>
-                <text transform="matrix(1 0 0 1 485 188.3333)" fill="#888888" font-family="'Roboto'" font-size="9">100</text>
-                <text transform="matrix(1 0 0 1 0 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">1</text>
-                <text transform="matrix(1 0 0 1 78 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">2</text>
-                <text transform="matrix(1 0 0 1 154.6667 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">3</text>
-                <text transform="matrix(1 0 0 1 232.1667 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">4</text>
-                <text transform="matrix(1 0 0 1 309 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">5</text>
-                <text transform="matrix(1 0 0 1 386.6667 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">6</text>
-                <text transform="matrix(1 0 0 1 464.3333 249.0003)" fill="#888888" font-family="'Roboto'" font-size="9">7</text>
-              </g>
-              <g id="Layer_5">
-                <polygon opacity="0.36" stroke-miterlimit="10" points="0,223.3 48,138.5 154.7,169 211,88.5
-                294.5,80.5 380,165.2 437,75.5 469.5,223.3     "/>
-              </g>
-              <g id="Layer_4">
-                <polygon stroke-miterlimit="10" points="469.3,222.7 1,222.7 48.7,166.7 155.7,188.3 212,132.7
-                296.7,128 380.7,184.3 436.7,125   "/>
-              </g>
-            </g>
-          </defs>
-        </svg>
-      </template>
-    </home-layout>
-  </div>
+          <!-- sales report area end -->
+          <!-- overview area start -->
+          <div class="row">
+              <div class="col-xl-9 col-lg-8">
+                  <div class="card">
+                      <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <h4 class="header-title mb-0">Overview</h4>
+                              <select class="custome-select border-0 pr-3">
+                                  <option selected>Last 24 Hours</option>
+                                  <option value="0">01 July 2018</option>
+                              </select>
+                          </div>
+                          <div id="verview-shart"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xl-3 col-lg-4 coin-distribution">
+                  <div class="card h-full">
+                      <div class="card-body">
+                          <h4 class="header-title mb-0">Coin Distribution</h4>
+                          <div id="coin_distribution"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- overview area end -->
+          <!-- market value area start -->
+          <div class="row mt-5 mb-5">
+              <div class="col-12">
+                  <div class="card">
+                      <div class="card-body">
+                          <div class="d-sm-flex justify-content-between align-items-center">
+                              <h4 class="header-title mb-0">Market Value And Trends</h4>
+                              <select class="custome-select border-0 pr-3">
+                                  <option selected>Last 24 Hours</option>
+                                  <option value="0">01 July 2018</option>
+                              </select>
+                          </div>
+                          <div class="market-status-table mt-4">
+                              <div class="table-responsive">
+                                  <table class="dbkit-table">
+                                      <tr class="heading-td">
+                                          <td class="mv-icon">Logo</td>
+                                          <td class="coin-name">Coin Name</td>
+                                          <td class="buy">Buy</td>
+                                          <td class="sell">Sells</td>
+                                          <td class="trends">Trends</td>
+                                          <td class="attachments">Attachments</td>
+                                          <td class="stats-chart">Stats</td>
+                                      </tr>
+                                      <tr>
+                                          <td class="mv-icon"><img src="assets/images/icon/market-value/icon1.png" alt="icon">
+                                          </td>
+                                          <td class="coin-name">Dashcoin</td>
+                                          <td class="buy">30% <img src="assets/images/icon/market-value/triangle-down.png" alt="icon"></td>
+                                          <td class="sell">20% <img src="assets/images/icon/market-value/triangle-up.png" alt="icon"></td>
+                                          <td class="trends"><img src="assets/images/icon/market-value/trends-up-icon.png" alt="icon"></td>
+                                          <td class="attachments">$ 56746,857</td>
+                                          <td class="stats-chart">
+                                              <canvas id="mvaluechart"></canvas>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="mv-icon">
+                                              <div class="mv-icon"><img src="assets/images/icon/market-value/icon2.png" alt="icon"></div>
+                                          </td>
+                                          <td class="coin-name">LiteCoin</td>
+                                          <td class="buy">30% <img src="assets/images/icon/market-value/triangle-down.png" alt="icon"></td>
+                                          <td class="sell">20% <img src="assets/images/icon/market-value/triangle-up.png" alt="icon"></td>
+                                          <td class="trends"><img src="assets/images/icon/market-value/trends-down-icon.png" alt="icon"></td>
+                                          <td class="attachments">$ 56746,857</td>
+                                          <td class="stats-chart">
+                                              <canvas id="mvaluechart2"></canvas>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="mv-icon">
+                                              <div class="mv-icon"><img src="assets/images/icon/market-value/icon3.png" alt="icon"></div>
+                                          </td>
+                                          <td class="coin-name">Euthorium</td>
+                                          <td class="buy">30% <img src="assets/images/icon/market-value/triangle-down.png" alt="icon"></td>
+                                          <td class="sell">20% <img src="assets/images/icon/market-value/triangle-up.png" alt="icon"></td>
+                                          <td class="trends"><img src="assets/images/icon/market-value/trends-up-icon.png" alt="icon"></td>
+                                          <td class="attachments">$ 56746,857</td>
+                                          <td class="stats-chart">
+                                              <canvas id="mvaluechart3"></canvas>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="mv-icon">
+                                              <div class="mv-icon"><img src="assets/images/icon/market-value/icon4.png" alt="icon"></div>
+                                          </td>
+                                          <td class="coin-name">Bitcoindash</td>
+                                          <td class="buy">30% <img src="assets/images/icon/market-value/triangle-down.png" alt="icon"></td>
+                                          <td class="sell">20% <img src="assets/images/icon/market-value/triangle-up.png" alt="icon"></td>
+                                          <td class="trends"><img src="assets/images/icon/market-value/trends-up-icon.png" alt="icon"></td>
+                                          <td class="attachments">$ 56746,857</td>
+                                          <td class="stats-chart">
+                                              <canvas id="mvaluechart4"></canvas>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- market value area end -->
+          <!-- row area start -->
+          <div class="row">
+              <!-- Live Crypto Price area start -->
+              <div class="col-lg-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <h4 class="header-title">Live Crypto Price</h4>
+                          <div class="cripto-live mt-5">
+                              <ul>
+                                  <li>
+                                      <div class="icon b">b</div> Bitcoin<span><i class="fa fa-long-arrow-up"></i>$876909.00</span></li>
+                                  <li>
+                                      <div class="icon l">l</div> Litecoin<span><i class="fa fa-long-arrow-up"></i>$29780.00</span></li>
+                                  <li>
+                                      <div class="icon d">d</div> Dashcoin<span><i class="fa fa-long-arrow-up"></i>$13276.00</span></li>
+                                  <li>
+                                      <div class="icon b">b</div> Bitcoindash<span><i class="fa fa-long-arrow-down"></i>$5684.890</span></li>
+                                  <li>
+                                      <div class="icon e">e</div> Euthorium<span><i class="fa fa-long-arrow-down"></i>$3890.98</span></li>
+                                  <li>
+                                      <div class="icon t">b</div> Tcoin<span><i class="fa fa-long-arrow-up"></i>$750.789</span></li>
+                                  <li>
+                                      <div class="icon b">b</div> Bitcoin<span><i class="fa fa-long-arrow-up"></i>$325.037</span></li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Live Crypto Price area end -->
+              <!-- trading history area start -->
+              <div class="col-lg-8 mt-sm-30 mt-xs-30">
+                  <div class="card">
+                      <div class="card-body">
+                          <div class="d-sm-flex justify-content-between align-items-center">
+                              <h4 class="header-title">Trading History</h4>
+                              <div class="trd-history-tabs">
+                                  <ul class="nav" role="tablist">
+                                      <li>
+                                          <a class="active" data-toggle="tab" href="#buy_order" role="tab">Buy Order</a>
+                                      </li>
+                                      <li>
+                                          <a data-toggle="tab" href="#sell_order" role="tab">Sell Order</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <select class="custome-select border-0 pr-3">
+                                  <option selected>Last 24 Hours</option>
+                                  <option value="0">01 July 2018</option>
+                              </select>
+                          </div>
+                          <div class="trad-history mt-4">
+                              <div class="tab-content" id="myTabContent">
+                                  <div class="tab-pane fade show active" id="buy_order" role="tabpanel">
+                                      <div class="table-responsive">
+                                          <table class="dbkit-table">
+                                              <tr class="heading-td">
+                                                  <td>Trading ID</td>
+                                                  <td>Time</td>
+                                                  <td>Status</td>
+                                                  <td>Amount</td>
+                                                  <td>Last Trade</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>78211</td>
+                                                  <td>4.00 AM</td>
+                                                  <td>Pending</td>
+                                                  <td>$758.90</td>
+                                                  <td>$05245.090</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>782782</td>
+                                                  <td>4.00 AM</td>
+                                                  <td>Pending</td>
+                                                  <td>$77878.90</td>
+                                                  <td>$7778.090</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>89675978</td>
+                                                  <td>4.00 AM</td>
+                                                  <td>Pending</td>
+                                                  <td>$0768.90</td>
+                                                  <td>$0945.090</td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="tab-pane fade" id="sell_order" role="tabpanel">
+                                      <div class="table-responsive">
+                                          <table class="dbkit-table">
+                                              <tr class="heading-td">
+                                                  <td>Trading ID</td>
+                                                  <td>Time</td>
+                                                  <td>Status</td>
+                                                  <td>Amount</td>
+                                                  <td>Last Trade</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>8964978</td>
+                                                  <td>4.00 AM</td>
+                                                  <td>Pending</td>
+                                                  <td>$445.90</td>
+                                                  <td>$094545.090</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>89675978</td>
+                                                  <td>4.00 AM</td>
+                                                  <td>Pending</td>
+                                                  <td>$78.90</td>
+                                                  <td>$074852945.090</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>78527878</td>
+                                                  <td>4.00 AM</td>
+                                                  <td>Pending</td>
+                                                  <td>$0768.90</td>
+                                                  <td>$65465.090</td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- trading history area end -->
+          </div>
+          <!-- row area end -->
+          <div class="row mt-5">
+              <!-- latest news area start -->
+              <div class="col-xl-6">
+                  <div class="card">
+                      <div class="card-body">
+                          <h4 class="header-title">Latest News</h4>
+                          <div class="letest-news mt-5">
+                              <div class="single-post mb-xs-40 mb-sm-40">
+                                  <div class="lts-thumb">
+                                      <img src="assets/images/blog/post-thumb1.jpg" alt="post thumb">
+                                  </div>
+                                  <div class="lts-content">
+                                      <span>Admin Post</span>
+                                      <h2><a href="blog.html">Sed ut perspiciatis unde omnis iste.</a></h2>
+                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some...</p>
+                                  </div>
+                              </div>
+                              <div class="single-post">
+                                  <div class="lts-thumb">
+                                      <img src="assets/images/blog/post-thumb2.jpg" alt="post thumb">
+                                  </div>
+                                  <div class="lts-content">
+                                      <span>Admin Post</span>
+                                      <h2><a href="blog.html">Sed ut perspiciatis unde omnis iste.</a></h2>
+                                      <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some...</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- latest news area end -->
+              <!-- exchange area start -->
+              <div class="col-xl-6 mt-md-30 mt-xs-30 mt-sm-30">
+                  <div class="card">
+                      <div class="card-body">
+                          <h4 class="header-title">Exchange</h4>
+                          <div class="exhcange-rate mt-5">
+                              <form action="#">
+                                  <div class="input-form">
+                                      <input type="text" value="0.76834">
+                                      <span>BTC</span>
+                                  </div>
+                                  <div class="exchange-devider">To</div>
+                                  <div class="input-form">
+                                      <input type="text" value="5689.846">
+                                      <span>USD</span>
+                                  </div>
+                                  <div class="exchange-btn">
+                                      <button type="submit">Exchange Now</button>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- exchange area end -->
+          </div>
+          <!-- row area start-->
+      </div>
+    </template>
+  </home-layout>
 </template>
-
 <script>
-import auth from '../auth.js'
-import HomeLayout from '../components/HomeLayout.vue';
+import auth from "../auth.js";
+import HomeLayout from "@/components/HomeLayout.vue";
+import MasterView from "./MasterView.vue";
 
 export default {
+  extends: MasterView,
   name: "home",
   data() {
     return {
-      headerTitle: 'Dashbroad'
-    }
+      headerTitle: "Dashbroad"
+    };
   },
   components: {
-    HomeLayout,
+    HomeLayout
   },
   methods: {
+    logout() {
+      auth.logout();
+    }
   },
+  mounted() {
+    this.fadeOut(2000);
+  }
 };
 </script>
+<style scoped>
+#loader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  display: flex;
+}
+</style>

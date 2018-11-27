@@ -23,15 +23,15 @@
         }
 
         &::-webkit-scrollbar-track {
-            background: #35454e; 
+            background: #98aee3; 
         }
 
         &::-webkit-scrollbar-thumb {
-            background: #35454e; 
+            background: #98aee3; 
         }
 
         &::-webkit-scrollbar-thumb:hover {
-            background: #222e35;
+            background: rgb(63,81,181);
         }
         .demo-navigation {
             .item-container {
@@ -44,12 +44,16 @@
                     background-color: #5fccfc87 !important;
                     border-top: 1px solid #0003;
                     border-bottom: 1px solid #0003;
+                    .router-link-active {
+                        background-color: #98aee3;
+                    }
                     &.mdl-navigation {
                         padding-top: 0;
                     }
                     a, i {
                         display: flex !important;
                         color: @black !important;
+                        padding: 8px;
                     }
                 }
             }
@@ -57,6 +61,7 @@
                 color: @black !important;
                 font-weight: 600;
                 display: inline-flex !important;
+                cursor: pointer;
             }
             a {
                 &:hover {

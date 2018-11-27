@@ -1,12 +1,17 @@
+require("./config.js");
 import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import config from '../src/config/config.js'
+import config from "../src/config/config.js";
+import "./script.js";
 
-window.config = config
+Vue.use(BootstrapVue);
 
-Vue.config.productionTip = false
+window.config = config;
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,

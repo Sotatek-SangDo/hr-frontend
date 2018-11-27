@@ -1,13 +1,23 @@
-import UserRequest from './UserRequest';
+import UserRequest from "./UserRequest";
+import Nationality from "./NationalityRequest";
+import EmployeeRequest from "./EmployeeRequest";
+import EmployeeStatusRequest from "./EmployeeStatusRequest";
+import JobRequest from "./JobRequest";
+import PayGradeRequest from "./PayGradeRequest";
 
 const requestMap = {
   UserRequest,
+  Nationality,
+  EmployeeRequest,
+  EmployeeStatusRequest,
+  JobRequest,
+  PayGradeRequest
 };
 
 const instances = {};
 
 export default class RequestFactory {
-  static getRequest (classname) {
+  static getRequest(classname) {
     const RequestClass = requestMap[classname];
     if (!RequestClass) {
       throw new Error(`Invalid request class name: ${classname}`);
