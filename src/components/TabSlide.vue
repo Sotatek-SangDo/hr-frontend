@@ -1,9 +1,13 @@
 <template>
-  <div class = "mdl-tabs mdl-js-tabs">
-     <div class="mdl-tabs__tab-bar">
-        <a v-for="(tab, index) in tabs" :href="parseHref(index)" class="mdl-tabs__tab" v-text="tab" :class="!index ? 'is-active' : ''"/>
-     </div>
-     <slot name="tab-content"></slot>
+  <div>
+    <ul class="nav nav-tabs" role="tablist">
+      <li v-for="(tab, index) in tabs" class="nav-item" :key="index">
+        <a class="nav-link" :href="parseHref(tab.href)" role="tab" data-toggle="tab" :class="!index ? 'active' : ''" v-text="tab.title"/>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -12,14 +16,12 @@ export default {
   props: {
     tabs: {
       type: Array
-    },
+    }
   },
   methods: {
-    parseHref(index) {
-      const i = index + 1;
-      return `#tab${i}-panel`;
+    parseHref(id) {
+      return `#${id}`;
     }
   }
 };
 </script>
-

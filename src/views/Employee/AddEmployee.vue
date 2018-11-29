@@ -81,6 +81,13 @@
               </div>
             </div>
             <div class="col-xs-6 col-md-6">
+              <div class="input-group mb-3">
+                <label class="col-form-label one-line">Ảnh</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="avatar" @change="onChooseAvatar">
+                  <label class="custom-file-label" v-text="upload" for="avatar"/>
+                </div>
+              </div>
               <div class="form-group">
                 <label class="col-form-label">Trả lương</label>
                 <select v-model="emp.pay_grade" class="form-control">
@@ -151,8 +158,8 @@
 </template>
 
 <script>
-import MasterView from "../MasterView.vue";
-import DatePicker from "../../components/commons/DatePicker.vue";
+import MasterView from "../MasterView";
+import DatePicker from "../../components/commons/DatePicker";
 import rf from "../../requests/RequestFactory";
 import _ from "lodash";
 
@@ -182,6 +189,8 @@ export default {
         job: "",
         pay_grade: ""
       },
+      formData: "",
+      upload: "Chọn ảnh",
       birthday: "Ngày Sinh",
       joinAt: "Ngày gia nhập",
       confirmAt: "Ngày xác nhận",
@@ -201,6 +210,10 @@ export default {
     DatePicker
   },
   methods: {
+    onChooseAvatar(e) {
+      this.upload = e.target.files[0].name;
+      this.formData.append("file", e.target.files[0]);
+    },
     getNationalities() {
       rf.getRequest("Nationality")
         .getAll()
@@ -256,12 +269,16 @@ export default {
       });
       if (this.hasErrors()) {
         this.isDisable = false;
+        return;
       }
       this.addEmployee();
     },
     addEmployee() {
+      _.forEach(this.emp, (emp, i) => {
+        this.formData.append(`${i}`, emp);
+      });
       rf.getRequest("EmployeeRequest")
-        .store(this.emp)
+        .store(this.formData)
         .then(res => {
           if (res.status) {
             window.location.reload();
@@ -272,11 +289,15 @@ export default {
     }
   },
   mounted() {
+    this.formData = new FormData();
     this.initial();
   }
 };
 </script>
 <style scoped lang="sass">
+.one-line
+  display: block
+  width: 100%
 .container
   h5
     text-align: center

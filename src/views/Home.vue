@@ -359,8 +359,8 @@
 </template>
 <script>
 import auth from "../auth.js";
-import HomeLayout from "@/components/HomeLayout.vue";
-import MasterView from "./MasterView.vue";
+import HomeLayout from "@/components/HomeLayout";
+import MasterView from "./MasterView";
 
 export default {
   extends: MasterView,

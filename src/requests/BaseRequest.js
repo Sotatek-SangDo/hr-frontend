@@ -8,11 +8,19 @@ export default class BaseRequest {
     return `${window.config.API_URL}${PREFIX}`;
   }
   parseParams(params, url, method = "GET") {
+    const api_token = atob(ss.storage(window.config.SS_KEY));
+    const signature = this.sign(url, method);
     const tmp_param = {
-      api_token: atob(ss.storage(window.config.SS_KEY)),
-      signature: this.sign(url, method)
+      api_token: api_token,
+      signature: signature
     };
-    return Object.assign(params, tmp_param);
+    if (params instanceof FormData) {
+      params.append("api_token", api_token);
+      params.append("signature", signature);
+    } else {
+      Object.assign(params, tmp_param);
+    }
+    return params;
   }
   sign(url, method) {
     const sign_url = `${method} ${PREFIX}${url}`;
@@ -51,10 +59,10 @@ export default class BaseRequest {
     });
   }
   post(url, data = {}) {
-    data = this.parseParams(data, url, "POST");
+    const params = this.parseParams(data, url, "POST");
     return new Promise((resolve, reject) => {
       axios
-        .post(this.getPrefix() + url, data)
+        .post(this.getPrefix() + url, params)
         .then(response => {
           resolve(response.data);
         })

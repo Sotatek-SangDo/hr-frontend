@@ -1,28 +1,18 @@
 <template>
   <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
     <template slot="main-content">
-      <!-- data table start -->
-      <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" href="#profile" role="tab" data-toggle="tab">Nha vien </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#buzz" role="tab" data-toggle="tab">buzz</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#references" role="tab" data-toggle="tab">references</a>
-        </li>
-      </ul>
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade active in show" id="profile">
+      <tab-slide :tabs="tabs">
+        <div role="tabpanel" class="tab-pane fade active in show" id="nv">
           <div class="col-12 mt-5">
+            <div v-if="addStep || profileStep">
+              <span class="back" @click="goToAddPage('list')">Quay lại</span>
+            </div>
             <div class="card" v-show="listStep">
               <div class="card-body">
                 <div class="epm-tb-header">
-                  <h4 class="header-title">Danh sach Nhan vien</h4>
-                  <a href="#" @click="goToAddPage">
-                    <span><i class="ti-plus"></i>   Thêm mới</span>
+                  <h4 class="header-title">Danh sách nhân viên</h4>
+                  <a @click="goToAddPage('add')">
+                    <span><i class="ti-plus"></i>Thêm mới</span>
                   </a>
                 </div>
                 <data-table :getData="getEmployees" ref="datatable">
@@ -32,6 +22,7 @@
                   <th>Age</th>
                   <th>Start Date</th>
                   <th>salary</th>
+                  <th>Thao tac</th>
                   <template slot="body" slot-scope="props">
                     <tr>
                       <td v-text="props.item.name"></td>
@@ -40,28 +31,40 @@
                       <td v-text="props.item.phone"/>
                       <td v-text="props.item.birthday"/>
                       <td v-text="props.item.private_email"/>
+                      <td>
+                        <span @click="empProfile(props.item)">Xem chi tiết</span>
+                      </td>
                     </tr>
                   </template>
                 </data-table>
               </div>
             </div>
-            <div class="add-form" v-show="addStep">
+            <div class="add-form" v-if="addStep">
               <add-employee></add-employee>
+            </div>
+            <div class="profile card" v-if="profileStep">
+              <profile-employee :employee="empView"></profile-employee>
             </div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="buzz">bbb</div>
-        <div role="tabpanel" class="tab-pane fade" id="references">ccc</div>
-      </div>
+        <div role="tabpanel" class="tab-pane fade" id="kn">bbb</div>
+        <div role="tabpanel" class="tab-pane fade" id="hv">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="chc">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="ngn">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="pb">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="dbkc">ccc</div>
+      </tab-slide>
     </template>
   </home-layout>
 </template>
 
 <script>
-import DataTable from "../../components/commons/DataTable.vue";
-import MasterView from "../MasterView.vue";
-import HomeLayout from "../../components/HomeLayout.vue";
-import AddEmployee from "./AddEmployee.vue";
+import DataTable from "../../components/commons/DataTable";
+import MasterView from "../MasterView";
+import HomeLayout from "../../components/HomeLayout";
+import AddEmployee from "./AddEmployee";
+import ProfileEmployee from "./ProfileEmployee";
+import TabSlide from "../../components/TabSlide";
 import rf from "../../requests/RequestFactory";
 
 export default {
@@ -69,48 +72,61 @@ export default {
   components: {
     HomeLayout,
     AddEmployee,
-    DataTable
+    DataTable,
+    ProfileEmployee,
+    TabSlide
   },
   data() {
     return {
-      headerTitle: "Nhan vien",
+      headerTitle: "Nhân viên",
       tabs: [
-        "Nhan vien",
-        "Ky nang",
-        "Hoc van",
-        "Chung chi",
-        "Ngon ngu",
-        "Phong ban",
-        "Danh ba khan cap"
-      ],
-      subTabs: [
-        "Thong tin co ban",
-        "Trinh do chuyen mon",
-        "Gia dinh",
-        "Tai lieu"
+        { title: "Nhân viên", href: "nv" },
+        { title: "Kỹ nămg", href: "kn" },
+        { title: "Học vấn", href: "hv" },
+        { title: "Chứng chỉ", href: "chc" },
+        { title: "Ngôn ngữ", href: "ngn" },
+        { title: "Phòng ban", href: "pb" },
+        { title: "Danh bạ khẩn cấp", href: "dbkc" }
       ],
       breadcrumbs: [
         { title: "Home", href: "/" },
-        { title: "Nhan vien", href: "" }
+        { title: "Nhân viên", href: "" }
       ],
       addStep: false,
-      listStep: true
+      listStep: true,
+      profileStep: false,
+      empView: {}
     };
   },
-  created() {
-    this.getEmployees();
-  },
   methods: {
-    goToAddPage(e) {
-      e.preventDefault();
-      this.addStep = true;
+    empProfile(employeee) {
+      this.empView = employeee;
+      this.goToAddPage("profile");
       this.listStep = false;
+      this.profileStep = true;
+    },
+    goToAddPage(type) {
+      this.showLoader();
+      if (type === "list") {
+        this.addStep = false;
+        this.profileStep = false;
+        this.listStep = true;
+      }
+      if (type === "add") {
+        this.addStep = true;
+        this.profileStep = false;
+        this.listStep = false;
+      }
+      if (type === "profile") {
+        this.addStep = false;
+        this.profileStep = true;
+        this.listStep = false;
+      }
     },
     getEmployees() {
-      return rf.getRequest("EmployeeRequest").getAll();
+      return rf.getRequest("EmployeeRequest").getEmpFullInfo();
     },
     inital() {
-      this.getEmployees();
       this.sleep(500).then(() => {
         this.init();
       });
@@ -137,6 +153,9 @@ select
       font-size: 35px
 table 
   margin: 0 auto;
+  td
+    span
+      cursor: pointer
 .header-button 
   a
     color: blue
@@ -209,4 +228,10 @@ table.dataTable
     border-radius: 7px
     font-family: Averta-Bold
     font-weight: 600
+.back
+  color: blue
+  cursor: pointer
+  font-family: Averta-Bold
+  text-decoration: underline
+  text-decoration-color: #4d91ff
 </style>

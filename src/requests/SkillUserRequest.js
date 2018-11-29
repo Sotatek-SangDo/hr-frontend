@@ -1,6 +1,6 @@
 import BaseRequest from "./BaseRequest";
 
-export default class EmployeeRequest extends BaseRequest {
+export default class SkillUserRequest extends BaseRequest {
   getAll(params) {
     const url = this.parseUrl("");
     return this.get(url, params);
@@ -9,14 +9,10 @@ export default class EmployeeRequest extends BaseRequest {
     const url = this.parseUrl("/store");
     return this.post(url, params);
   }
-  getEmpFullInfo(params) {
-    const url = this.parseUrl("/full-info");
-    return this.get(url, params);
+  getModel() {
+    return "/skill-user";
   }
   parseUrl(url) {
     return `${this.getModel()}${url}`;
-  }
-  getModel() {
-    return "/employees";
   }
 }
