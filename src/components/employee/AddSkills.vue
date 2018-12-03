@@ -110,7 +110,7 @@ export default {
     store(e) {
       e.preventDefault();
       this.isDisable = true;
-      const keyNullable = [];
+      const keyNullable = ["id"];
       _.forEach(this.user_skill, (val, key) => {
         if (!val && keyNullable.indexOf(key) === -1)
           this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
