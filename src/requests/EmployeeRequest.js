@@ -13,6 +13,10 @@ export default class EmployeeRequest extends BaseRequest {
     const url = this.parseUrl("/full-info");
     return this.get(url, params);
   }
+  update(params) {
+    const url = this.parseUrl("/update");
+    return this.post(url, params);
+  }
   parseUrl(url) {
     return `${this.getModel()}${url}`;
   }

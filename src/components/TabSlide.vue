@@ -25,3 +25,7 @@ export default {
   }
 };
 </script>
+<style lang="sass">
+.nav
+  padding-left: 20px
+</style>

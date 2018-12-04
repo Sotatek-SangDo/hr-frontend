@@ -59,7 +59,7 @@ export default {
     submitForm() {
       this.isDisable = true;
       this.errors = [];
-      const keyNullable = ["indirect_supervisor", "supervisor"];
+      const keyNullable = [];
       _.forEach(this.depart, (val, key) => {
         if (!val && keyNullable.indexOf(key) === -1)
           this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
@@ -71,13 +71,8 @@ export default {
       this.addDepartment();
     },
     addDepartment() {
-      let params = {
-        name: this.depart.name,
-        email: this.depart.email,
-        phone_number: this.depart.phone_number
-      };
       rf.getRequest("DepartmentRequest")
-        .store(params)
+        .store(this.depart)
         .then(res => {
           if (res.status) {
             window.location.reload();

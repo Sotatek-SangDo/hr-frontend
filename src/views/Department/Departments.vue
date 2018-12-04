@@ -26,7 +26,7 @@
                       <td v-text="props.item.email"/>
                       <td v-text="props.item.phone_number"/>
                       <td>
-                        <span @click="empProfile(props.item)">Xem chi tiết</span>
+                        <span>Xem chi tiết</span>
                       </td>
                     </tr>
                   </template>
@@ -35,9 +35,6 @@
             </div>
             <div class="add-form" v-if="addStep">
               <add-department></add-department>
-            </div>
-            <div class="profile card" v-if="profileStep">
-              <profile-employee :employee="empView"></profile-employee>
             </div>
           </div>
         </div>
@@ -51,7 +48,6 @@ import DataTable from "../../components/commons/DataTable";
 import MasterView from "../MasterView";
 import HomeLayout from "../../components/HomeLayout";
 import AddDepartment from "./AddDepartment";
-// import ProfileEmployee from "./ProfileEmployee";
 import TabSlide from "../../components/TabSlide";
 import rf from "../../requests/RequestFactory";
 
@@ -61,7 +57,6 @@ export default {
     HomeLayout,
     AddDepartment,
     DataTable,
-    // ProfileEmployee,
     TabSlide
   },
   data() {
@@ -82,32 +77,18 @@ export default {
       ],
       addStep: false,
       listStep: true,
-      profileStep: false,
       empView: {}
     };
   },
   methods: {
-    empProfile(employeee) {
-      this.empView = employeee;
-      this.goToAddPage("profile");
-      this.listStep = false;
-      this.profileStep = true;
-    },
     goToAddPage(type) {
       this.showLoader();
       if (type === "list") {
         this.addStep = false;
-        this.profileStep = false;
         this.listStep = true;
       }
       if (type === "add") {
         this.addStep = true;
-        this.profileStep = false;
-        this.listStep = false;
-      }
-      if (type === "profile") {
-        this.addStep = false;
-        this.profileStep = true;
         this.listStep = false;
       }
     },

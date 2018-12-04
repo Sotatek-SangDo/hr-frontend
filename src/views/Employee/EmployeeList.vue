@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="add-form" v-if="addStep">
-              <add-employee></add-employee>
+              <add-employee :employee="emp" :header="header"></add-employee>
             </div>
             <div class="profile card" v-if="profileStep">
               <profile-employee :employee="empView"></profile-employee>
@@ -79,6 +79,7 @@ export default {
   data() {
     return {
       headerTitle: "Nhân viên",
+      header: "Thêm mới nhân viên",
       tabs: [
         { title: "Nhân viên", href: "nv" },
         { title: "Kỹ nămg", href: "kn" },
@@ -95,15 +96,34 @@ export default {
       addStep: false,
       listStep: true,
       profileStep: false,
-      empView: {}
+      empView: {},
+      emp: {
+        full_name: "",
+        nationality_id: "",
+        birthday: "",
+        gender: "",
+        marital_status: "",
+        ethnicity: "",
+        address: "",
+        country: "",
+        phone: "",
+        private_email: "",
+        email: "",
+        joined_at: "",
+        confirmed_at: "",
+        department: "",
+        supervisor: "",
+        indirect_supervisor: "",
+        status: "",
+        job: "",
+        pay_grade: ""
+      }
     };
   },
   methods: {
     empProfile(employeee) {
       this.empView = employeee;
       this.goToAddPage("profile");
-      this.listStep = false;
-      this.profileStep = true;
     },
     goToAddPage(type) {
       this.showLoader();

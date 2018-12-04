@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <div class="container">
-        <h5>{{ title }}</h5>
+        <h5>{{ header }}</h5>
         <form @submit.prevent="submitForm">
           <div class="row">
             <div class="col-xs-6 col-md-6">
@@ -20,7 +20,7 @@
                       v-text="national.name"/>
                 </select>
               </div>
-              <date-picker :title="birthday" v-model="emp.birthday"></date-picker>
+              <date-picker :title="birthday" v-model="emp.birthday" :default="getDate(emp.birthday)"></date-picker>
               <div class="form-group">
                 <label class="col-form-label">Giới tính</label>
                 <select v-model="emp.gender" class="form-control">
@@ -110,8 +110,8 @@
                   <label for="email" class="col-form-label">Email công việc</label>
                   <input class="form-control" type="email" v-model="emp.email" id="email" autocomplete="off" placeholder="Nhập vào email công việc ...">
               </div>
-              <date-picker :title="joinAt" v-model="emp.joined_at"></date-picker>
-              <date-picker :title="confirmAt" v-model="emp.confirmed_at"></date-picker>
+              <date-picker :title="joinAt" v-model="emp.joined_at" :default="getDate(emp.joined_at)"></date-picker>
+              <date-picker :title="confirmAt" v-model="emp.confirmed_at" :default="getDate(emp.confirmed_at)"></date-picker>
               <div class="form-group">
                 <label class="col-form-label">Phòng ban</label>
                 <select v-model="emp.department" class="form-control">
@@ -159,15 +159,24 @@
 
 <script>
 import MasterView from "../MasterView";
+import $ from "jquery";
 import DatePicker from "../../components/commons/DatePicker";
 import rf from "../../requests/RequestFactory";
 import _ from "lodash";
 
 export default {
+  name: "AddEmployee",
   extends: MasterView,
+  props: {
+    employee: {
+      type: Object
+    },
+    header: {
+      type: String
+    }
+  },
   data() {
     return {
-      title: "Thêm mới nhân viên",
       emp: {
         full_name: "",
         nationality_id: "",
@@ -187,7 +196,8 @@ export default {
         indirect_supervisor: "",
         status: "",
         job: "",
-        pay_grade: ""
+        pay_grade: "",
+        id: ""
       },
       formData: "",
       upload: "Chọn ảnh",
@@ -206,6 +216,9 @@ export default {
       errors: []
     };
   },
+  created() {
+    this.emp = this.employee;
+  },
   components: {
     DatePicker
   },
@@ -213,6 +226,9 @@ export default {
     onChooseAvatar(e) {
       this.upload = e.target.files[0].name;
       this.formData.append("file", e.target.files[0]);
+    },
+    getDate(date) {
+      return date ? new Date(date) : new Date();
     },
     getNationalities() {
       rf.getRequest("Nationality")
@@ -250,9 +266,9 @@ export default {
         });
     },
     getDepartments() {
-      rf.getRequest("DepartmentRequest").getAll().then(res => {
-        this.departments = res;
-      });
+      rf.getRequest("DepartmentRequest")
+        .getAll()
+        .then(res => (this.departments = res));
     },
     initial() {
       this.getNationalities();
@@ -277,6 +293,10 @@ export default {
         this.isDisable = false;
         return;
       }
+      if (this.emp.id) {
+        this.updateEmployee();
+        return;
+      }
       this.addEmployee();
     },
     addEmployee() {
@@ -287,7 +307,23 @@ export default {
         .store(this.formData)
         .then(res => {
           if (res.status) {
+            this.formData = "";
             window.location.reload();
+          } else {
+            this.errors.push({ keys: "Lỗi chưa xác định trên server" });
+          }
+        });
+    },
+    updateEmployee() {
+      _.forEach(this.emp, (emp, i) => {
+        this.formData.append(`${i}`, emp);
+      });
+      rf.getRequest("EmployeeRequest")
+        .update(this.formData)
+        .then(res => {
+          if (res.status) {
+            this.formData = "";
+            $(".back").click();
           } else {
             this.errors.push({ keys: "Lỗi chưa xác định trên server" });
           }
