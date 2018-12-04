@@ -118,8 +118,8 @@
                     <option value="">Lựa chọn phòng ban</option>
                     <option v-for="(d, index) in departments"
                       :key="index"
-                      :value="index+1"
-                      v-text="d"/>
+                      :value="d.id"
+                      v-text="d.name"/>
                 </select>
               </div>
               <div class="form-group">
@@ -208,7 +208,7 @@ export default {
       gender: ["Nam", "Nữ", "Khác"],
       supervisor: {},
       maritalStatus: ["Độc thân", "Đã kết hôn", "Li dị", "Khác"],
-      departments: ["Phòng a", "Phòng b", "Phòng c", "Phòng d"],
+      departments: {},
       status: {},
       jobs: {},
       payGrades: {},
@@ -265,12 +265,18 @@ export default {
           this.payGrades = res;
         });
     },
+    getDepartments() {
+      rf.getRequest("DepartmentRequest")
+        .getAll()
+        .then(res => (this.departments = res));
+    },
     initial() {
       this.getNationalities();
       this.getSupervisor();
       this.getEmployeeStatus();
       this.getJobs();
       this.getPayGrades();
+      this.getDepartments();
     },
     hasErrors() {
       return !_.isEmpty(this.errors);

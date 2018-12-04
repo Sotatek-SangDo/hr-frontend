@@ -23,20 +23,21 @@
                         <span>Nhan vien</span>
                       </a>
                       <ul class="collapse">
-                          <li class="active">
-                            <a href="/employees">Danh sach nhan vien</a>
-                          </li>
-                          <li><a href="index2.html">Ecommerce dashboard</a></li>
-                          <li><a href="index3.html">SEO dashboard</a></li>
-                        </ul>
-                      </li>
+                        <li class="active">
+                          <a href="/employees">Danh sach nhan vien</a>
+                        </li>
+                        <li><a href="index2.html">Ecommerce dashboard</a></li>
+                        <li><a href="index3.html">SEO dashboard</a></li>
+                      </ul>
+                    </li>
                       <li>
-                          <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout-sidebar-left"></i><span>Sidebar
-                                  Types
-                              </span></a>
+                          <a href="javascript:void(0)" aria-expanded="true">
+                            <i class="ti-layout-sidebar-left"></i>
+                            <span>Company</span>
+                          </a>
                           <ul class="collapse">
-                              <li><a href="index.html">Left Sidebar</a></li>
-                              <li><a href="index3-horizontalmenu.html">Horizontal Sidebar</a></li>
+                              <li><a href="/company">Company</a></li>
+                              <li><a href="/departments">Departments</a></li>
                           </ul>
                       </li>
                       <li>
@@ -145,6 +146,14 @@ export default {
       const menu = new MetisMenu(this.$refs.metismenu, config);
       menu.init();
     }
+    // isPageActive(routeName) {
+    //   const reg = new RegExp("/" + routeName + '/');
+    //   let path = this.$route.path;
+    //   if (path === PathRoot.path) {
+    //     path = '/' + PathRoot.redirect.name + '/';
+    //   }
+    //   return reg.test(path);
+    // }
   },
   mounted() {
     this.init();
