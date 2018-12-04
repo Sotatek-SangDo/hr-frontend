@@ -25,6 +25,18 @@ export default new Router({
       name: "emp-list",
       component: () => import("@/views/Employee/EmployeeList.vue"),
       beforeEnter: requireAuth
+    },
+    {
+      path: "/company",
+      name: "com-contact",
+      component: () => import("@/views/Company/CompanyContact.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/departments",
+      name: "depar-list",
+      component: () => import("@/views/Department/Departments.vue"),
+      beforeEnter: requireAuth
     }
   ]
 });

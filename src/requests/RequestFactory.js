@@ -6,6 +6,8 @@ import JobRequest from "./JobRequest";
 import PayGradeRequest from "./PayGradeRequest";
 import SkillRequest from "./SkillRequest";
 import SkillUserRequest from "./SkillUserRequest";
+import CompanyRequest from "./CompanyRequest";
+import DepartmentRequest from "./DepartmentRequest";
 
 const requestMap = {
   UserRequest,
@@ -15,7 +17,9 @@ const requestMap = {
   JobRequest,
   PayGradeRequest,
   SkillRequest,
-  SkillUserRequest
+  SkillUserRequest,
+  CompanyRequest,
+  DepartmentRequest
 };
 
 const instances = {};
