@@ -27,7 +27,7 @@ export default {
       const preloader = $("#preloader");
       if (preloader.is(":visible")) {
         this.sleep(milliseconds).then(() => {
-          preloader.fadeOut(7000, "linear", () => {
+          preloader.fadeOut(2000, "linear", () => {
             $(this).remove();
           });
         });

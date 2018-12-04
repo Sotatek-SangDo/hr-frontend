@@ -22,10 +22,15 @@ export default {
     },
     value: {
       type: String
+    },
+    default: {
+      type: Date
     }
   },
   data() {
-    return {};
+    return {
+      date: ""
+    };
   },
   methods: {
     onChange() {},
@@ -36,7 +41,7 @@ export default {
           autoclose: true,
           todayHighlight: true
         })
-        .datepicker("update", new Date())
+        .datepicker("update", self.date)
         .on("changeDate", function(e) {
           const date = e.format("dd-mm-yyyy");
           self.$emit("input", date);
@@ -44,6 +49,7 @@ export default {
     }
   },
   mounted() {
+    this.date = this.default;
     this.init();
   }
 };
