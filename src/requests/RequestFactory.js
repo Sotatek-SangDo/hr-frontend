@@ -8,6 +8,8 @@ import SkillRequest from "./SkillRequest";
 import SkillUserRequest from "./SkillUserRequest";
 import CompanyRequest from "./CompanyRequest";
 import DepartmentRequest from "./DepartmentRequest";
+import EducationRequest from "./EducationRequest";
+import QualificationRequest from "./QualificationRequest";
 
 const requestMap = {
   UserRequest,
@@ -19,7 +21,9 @@ const requestMap = {
   SkillRequest,
   SkillUserRequest,
   CompanyRequest,
-  DepartmentRequest
+  DepartmentRequest,
+  EducationRequest,
+  QualificationRequest
 };
 
 const instances = {};
