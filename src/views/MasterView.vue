@@ -34,16 +34,16 @@ export default {
       }
     },
     showLoader() {
-      const preloader = $("#preloader");
-      if (preloader.length) {
-        preloader.show();
-      } else {
-        const ele = "<div id='preloader'><div class='loader'></div></div>";
-        $("body").append(ele);
-      }
-      this.sleep(500).then(() => {
-        preloader.fadeOut(4000, "linear", () => $(this).remove());
-      });
+      // const preloader = $("#preloader");
+      // if (preloader.length) {
+      //   preloader.show();
+      // } else {
+      //   const ele = "<div id='preloader'><div class='loader'></div></div>";
+      //   $("body").append(ele);
+      // }
+      // this.sleep(500).then(() => {
+      //   preloader.fadeOut(4000, "linear", () => $(this).remove());
+      // });
     }
   },
   mounted() {}
