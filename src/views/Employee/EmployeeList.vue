@@ -126,7 +126,7 @@ export default {
       this.goToAddPage("profile");
     },
     goToAddPage(type) {
-      this.showLoader();
+      //this.showLoader();
       if (type === "list") {
         this.addStep = false;
         this.profileStep = false;

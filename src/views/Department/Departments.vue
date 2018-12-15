@@ -4,7 +4,7 @@
       <tab-slide :tabs="tabs">
         <div role="tabpanel" class="tab-pane fade active in show" id="nv">
           <div class="col-12 mt-5">
-            <div v-if="addStep || profileStep">
+            <div v-if="addStep">
               <span class="back" @click="goToAddPage('list')">Quay lại</span>
             </div>
             <div class="card" v-show="listStep">
