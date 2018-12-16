@@ -2,31 +2,32 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-skill">
+        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-dependents">
           <span class="icon"><i class="ti-plus"></i></span>Dependents
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userSkills">
-          <div class="list-group-item sub-tab-item" v-for="(s, i) in userSkills" :key="i">
-            <h5 class="list-group-item-heading">{{ s.skill}}
-              <button class="but but-del" type="button" tooltip="Delete" @click="removeSkill(s)">
+        <div class="card-body" v-if="userDependents">
+          <div class="list-group-item sub-tab-item" v-for="(dep, i) in userDependents" :key="i">
+            <h5 class="list-group-item-heading">{{ dep.full_name }}
+              <button class="but but-del" type="button" tooltip="Delete" @click="removeDep(dep)">
                 <i class="ti-trash"></i>
               </button>
-              <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(s)">
+              <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(dep)">
                 <i class="ti-marker-alt"></i>
               </button>
             </h5>
-            <p class="list-group-item-text">{{ s.detail }}</p>
+            <p class="list-group-item-text">Relationship: {{ dep.relationship }}</p>
+            <p class="list-group-item-text">Birthday: {{ dep.birthday }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-skill">
+    <div class="modal fade show" ref="add_modal" id="add-dependents">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Thêm mới kỹ năng</h5>
+            <h5 class="modal-title">Thêm mới quan hệ</h5>
             <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
           </div>
           <div class="modal-body">
@@ -36,19 +37,14 @@
                   <div class="card-body">
                     <form @submit.prevent="store">
                       <div class="form-group">
-                        <label for="kni">Kĩ năng</label>
-                        <select v-model="user_skill.skill_id" id="kni" class="form-control">
-                          <option value="">Lựa chọn kỹ năng</option>
-                          <option v-for="(s, index) in skills"
-                            :key="index"
-                            :value="s.id"
-                            v-text="s.skill_name"/>
-                        </select>
+                        <label for="detail-kni">Full Name:</label>
+                        <input type="text" v-model="user_dependents.full_name" class="form-control" id="detail-kni" placeholder="Full Name">
                       </div>
                       <div class="form-group">
-                        <label for="detail-kni">Thông tin chi tiết</label>
-                        <textarea type="text" v-model="user_skill.detail" class="form-control" id="detail-kni" placeholder="Thông tin chi tiết"></textarea>
+                        <label for="detail-kni">Relationship:</label>
+                        <input type="text" v-model="user_dependents.relationship" class="form-control" id="detail-kni" placeholder="Relationship">
                       </div>
+                      <date-picker :title="birthDay" v-model="user_dependents.birthday" :default="getDate(user_dependents.birthday)"></date-picker>
                       <div v-if="hasErrors()" class="errors">
                         <span v-text="errors[0].keys"/>
                       </div>
@@ -68,24 +64,29 @@
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
+import DatePicker from "../commons/DatePicker";
 import $ from "jquery";
 import _ from "lodash";
 
 export default {
-  name: "AddSkill",
+  name: "AddDependenst",
   extends: MasterView,
+  components: {
+    DatePicker
+  },
   data() {
     return {
-      skills: {},
-      user_skill: {
-        skill_id: "",
-        detail: "",
+      user_dependents: {
+        full_name: "",
+        relationship: "",
+        birthday: "",
         emp_id: this.empId,
         id: ""
       },
+      birthDay: "Birth Day",
       errors: [],
       isDisable: false,
-      userSkills: []
+      userDependents: []
     };
   },
   props: {
@@ -94,15 +95,19 @@ export default {
     }
   },
   methods: {
-    getSkill() {
-      rf.getRequest("SkillRequest")
-        .getAll()
-        .then(res => (this.skills = res));
+    getDate(date) {
+      return date ? new Date(date) : new Date();
     },
-    getUserSkill() {
-      rf.getRequest("SkillUserRequest")
-        .getAll()
-        .then(res => (this.userSkills = res));
+    getDependents() {
+      const param = {
+        emp_id: this.empId
+      };
+
+      rf.getRequest("DependentsRequest")
+        .getAll(param)
+        .then(res => {
+          this.userDependents = res;
+        });
     },
     hasErrors() {
       return !_.isEmpty(this.errors);
@@ -111,69 +116,62 @@ export default {
       e.preventDefault();
       this.isDisable = true;
       const keyNullable = ["id"];
-      _.forEach(this.user_skill, (val, key) => {
+      _.forEach(this.user_dependents, (val, key) => {
         if (!val && keyNullable.indexOf(key) === -1)
           this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
+        this.isDisable = false;
       });
       if (this.errors.length) {
         this.isDisable = false;
         return;
       }
-      if (this.user_skill.id) {
+      if (this.user_dependents.id) {
         return rf
-          .getRequest("SkillUserRequest")
-          .update(this.user_skill)
+          .getRequest("DependentsRequest")
+          .update(this.user_dependents)
           .then(res => {
             if (res.status) {
-              const index = this.userSkills.findIndex(
-                s => s.id === this.user_skill.id
-              );
-              this.userSkills[index] = res.data;
               this.clearData();
               $(this.$refs.add_modal).modal("hide");
+              this.getDependents();
             }
           });
       }
-      rf.getRequest("SkillUserRequest")
-        .store(this.user_skill)
+      rf.getRequest("DependentsRequest")
+        .store(this.user_dependents)
         .then(res => {
           if (res.status) {
             this.clearData();
             $(this.$refs.add_modal).modal("hide");
-            this.userSkills.push(res.data);
+            this.getDependents();
           }
         });
     },
-    showModalUpdate(skill) {
-      this.user_skill.skill_id = skill.skill_id;
-      this.user_skill.detail = skill.detail;
-      this.user_skill.id = skill.id;
+    showModalUpdate(dependent) {
+      this.user_dependents.full_name = dependent.full_name;
+      this.user_dependents.relationship = dependent.relationship;
+      this.user_dependents.birthday = dependent.birthday;
+      this.user_dependents.id = dependent.id;
       $(this.$refs.add_modal).modal("show");
     },
-    removeSkill(skill) {
-      rf.getRequest("SkillUserRequest")
-        .destroy({ id: skill.id })
+    removeDep(dependent) {
+      rf.getRequest("DependentsRequest")
+        .destroy({ id: dependent.id })
         .then(res => {
           if (res.status) {
-            this.userSkills.splice(this.userSkills.indexOf(skill), 1);
+            this.getDependents();
           }
         });
     },
     clearData() {
-      this.user_skill.skill_id = "";
-      this.user_skill.detail = "";
-      this.user_skill.id = "";
+      this.user_dependents.full_name = "";
+      this.user_dependents.relationship = "";
+      this.user_dependents.birthday = "";
+      this.user_dependents.id = "";
       this.isDisable = false;
     },
     init() {
-      this.getSkill();
-      this.getUserSkill();
-      $(this.$refs.add_modal).on(
-        "hidden.bs.modal",
-        function() {
-          this.clearData();
-        }.bind(this)
-      );
+      this.getDependents();
     }
   },
   mounted() {

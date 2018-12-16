@@ -110,18 +110,22 @@ export default {
       return date ? new Date(date) : new Date();
     },
     getQuatifications() {
-      rf.getRequest("QualificationRequest").getAll().then(res => {
-        this.qualifications = res;
-      });
+      rf.getRequest("QualificationRequest")
+        .getAll()
+        .then(res => {
+          this.qualifications = res;
+        });
     },
     getEducations() {
       const param = {
         emp_id: this.empId
       };
-      
-      rf.getRequest("EducationRequest").getAll(param).then(res => {
-        this.userEducations = res;
-      });
+
+      rf.getRequest("EducationRequest")
+        .getAll(param)
+        .then(res => {
+          this.userEducations = res;
+        });
     },
     hasErrors() {
       return !_.isEmpty(this.errors);
@@ -133,7 +137,7 @@ export default {
       _.forEach(this.user_educations, (val, key) => {
         if (!val && keyNullable.indexOf(key) === -1)
           this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-          this.isDisable = false;
+        this.isDisable = false;
       });
       if (this.errors.length) {
         this.isDisable = false;
@@ -145,12 +149,9 @@ export default {
           .update(this.user_educations)
           .then(res => {
             if (res.status) {
-              const index = this.userEducations.findIndex(
-                s => s.id === this.user_educations.id
-              );
-              this.userEducations[index] = res.data;
               this.clearData();
               $(this.$refs.add_modal).modal("hide");
+              this.getEducations();
             }
           });
       }
@@ -160,7 +161,7 @@ export default {
           if (res.status) {
             this.clearData();
             $(this.$refs.add_modal).modal("hide");
-            this.userEducations.push(res.data);
+            this.getEducations();
           }
         });
     },
@@ -177,13 +178,13 @@ export default {
         .destroy({ id: qualification.id })
         .then(res => {
           if (res.status) {
-            this.userEducations.splice(this.userEducations.indexOf(qualification), 1);
+            this.getEducations();
           }
         });
     },
     clearData() {
       this.user_educations.qualification_id = "";
-      this.user_educations.detail = "";
+      this.user_educations.institute = "";
       this.user_educations.id = "";
       this.isDisable = false;
     },
