@@ -209,7 +209,7 @@
                     <add-educations :emp-id="scopeEmp.id"></add-educations>
                   </div>
                   <div class="col-lg-3 col-md-6">
-                    <add-dependents :emp-id="scopeEmp.id"></add-dependents>
+                    <add-certifications :emp-id="scopeEmp.id"></add-certifications>
                   </div>
                   <div class="col-lg-3 col-md-6">
                     <add-languages :emp-id="scopeEmp.id"></add-languages>
@@ -224,8 +224,11 @@
             <div class="card">
               <div class="card-body">
                 <div class="row">
-                  <div class="col-lg-3 col-md-6">
+                  <div class="col-lg-6 col-md-6">
                     <add-family :emp-id="scopeEmp.id"></add-family>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <add-dependents :emp-id="scopeEmp.id"></add-dependents>
                   </div>
                 </div>
               </div>
@@ -261,6 +264,7 @@ import AddDocuments from "../../components/employee/AddDocuments";
 import AddEducations from "../../components/employee/AddEducations";
 import AddLanguages from "../../components/employee/AddLanguages";
 import AddDependents from "../../components/employee/AddDependents";
+import AddCertifications from "../../components/employee/AddCertifications";
 import AddEmployee from "./AddEmployee.vue";
 
 export default {
@@ -273,7 +277,8 @@ export default {
     AddDocuments,
     AddEducations,
     AddLanguages,
-    AddDependents
+    AddDependents,
+    AddCertifications
   },
   props: {
     employee: {

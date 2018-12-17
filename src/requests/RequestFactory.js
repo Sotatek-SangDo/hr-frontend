@@ -11,6 +11,8 @@ import DepartmentRequest from "./DepartmentRequest";
 import EducationRequest from "./EducationRequest";
 import QualificationRequest from "./QualificationRequest";
 import DependentsRequest from "./DependentsRequest";
+import CertificationRequest from "./CertificationRequest";
+import CertificationUserRequest from "./CertificationUserRequest";
 
 const requestMap = {
   UserRequest,
@@ -25,7 +27,9 @@ const requestMap = {
   DepartmentRequest,
   EducationRequest,
   QualificationRequest,
-  DependentsRequest
+  DependentsRequest,
+  CertificationRequest,
+  CertificationUserRequest
 };
 
 const instances = {};
