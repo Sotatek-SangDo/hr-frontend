@@ -13,6 +13,7 @@ import QualificationRequest from "./QualificationRequest";
 import DependentsRequest from "./DependentsRequest";
 import CertificationRequest from "./CertificationRequest";
 import CertificationUserRequest from "./CertificationUserRequest";
+import EmergencyContactsRequest from "./EmergencyContactsRequest";
 
 const requestMap = {
   UserRequest,
@@ -29,7 +30,8 @@ const requestMap = {
   QualificationRequest,
   DependentsRequest,
   CertificationRequest,
-  CertificationUserRequest
+  CertificationUserRequest,
+  EmergencyContactsRequest
 };
 
 const instances = {};

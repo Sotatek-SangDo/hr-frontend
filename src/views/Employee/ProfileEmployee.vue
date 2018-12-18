@@ -225,7 +225,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-lg-6 col-md-6">
-                    <add-family :emp-id="scopeEmp.id"></add-family>
+                    <add-emergency-contacts :emp-id="scopeEmp.id"></add-emergency-contacts>
                   </div>
                   <div class="col-lg-6 col-md-6">
                     <add-dependents :emp-id="scopeEmp.id"></add-dependents>
@@ -259,7 +259,7 @@
 <script>
 import TabSlide from "../../components/TabSlide";
 import AddSkills from "../../components/employee/AddSkills";
-import AddFamily from "../../components/employee/AddFamily";
+import AddEmergencyContacts from "../../components/employee/AddEmergencyContacts";
 import AddDocuments from "../../components/employee/AddDocuments";
 import AddEducations from "../../components/employee/AddEducations";
 import AddLanguages from "../../components/employee/AddLanguages";
@@ -273,7 +273,7 @@ export default {
     TabSlide,
     AddSkills,
     AddEmployee,
-    AddFamily,
+    AddEmergencyContacts,
     AddDocuments,
     AddEducations,
     AddLanguages,

@@ -2,31 +2,32 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-skill">
-          <span class="icon"><i class="ti-plus"></i></span>Family
+        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-contact">
+          <span class="icon"><i class="ti-plus"></i></span>Emergency Contacts
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userSkills">
-          <div class="list-group-item sub-tab-item" v-for="(s, i) in userSkills" :key="i">
-            <h5 class="list-group-item-heading">{{ s.skill}}
-              <button class="but but-del" type="button" tooltip="Delete" @click="removeSkill(s)">
+        <div class="card-body" v-if="userContacts">
+          <div class="list-group-item sub-tab-item" v-for="(con, i) in userContacts" :key="i">
+            <h5 class="list-group-item-heading">{{ con.full_name }}
+              <button class="but but-del" type="button" tooltip="Delete" @click="removeContact(con)">
                 <i class="ti-trash"></i>
               </button>
-              <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(s)">
+              <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(con)">
                 <i class="ti-marker-alt"></i>
               </button>
             </h5>
-            <p class="list-group-item-text">{{ s.detail }}</p>
+            <p class="list-group-item-text">Relationship: {{ con.relationship }}</p>
+            <p class="list-group-item-text">Contact phone: {{ con.contact_phone }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-skill">
+    <div class="modal fade show" ref="add_modal" id="add-contact">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Thêm mới kỹ năng</h5>
+            <h5 class="modal-title">Thêm mới contact</h5>
             <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
           </div>
           <div class="modal-body">
@@ -36,18 +37,17 @@
                   <div class="card-body">
                     <form @submit.prevent="store">
                       <div class="form-group">
-                        <label for="kni">Kĩ năng</label>
-                        <select v-model="user_skill.skill_id" id="kni" class="form-control">
-                          <option value="">Lựa chọn kỹ năng</option>
-                          <option v-for="(s, index) in skills"
-                            :key="index"
-                            :value="s.id"
-                            v-text="s.skill_name"/>
-                        </select>
+                        <label for="detail-kni">Full Name:</label>
+                        <input type="text" v-model="user_contacts.full_name" class="form-control" id="detail-kni" placeholder="Full Name">
                       </div>
                       <div class="form-group">
-                        <label for="detail-kni">Thông tin chi tiết</label>
-                        <textarea type="text" v-model="user_skill.detail" class="form-control" id="detail-kni" placeholder="Thông tin chi tiết"></textarea>
+                        <label for="detail-kni">Relationship:</label>
+                        <input type="text" v-model="user_contacts.relationship" class="form-control" id="detail-kni" placeholder="Relationship">
+                      </div>
+                      <div class="form-gruop">
+                        <label for="">Contact Phone:</label>
+                        <input type="text" v-model="user_contacts.contact_phone" class="form-control"
+                        placeholder="Contact Phone">
                       </div>
                       <div v-if="hasErrors()" class="errors">
                         <span v-text="errors[0].keys"/>
@@ -72,20 +72,20 @@ import $ from "jquery";
 import _ from "lodash";
 
 export default {
-  name: "AddSkill",
+  name: "AddEmergencyContact",
   extends: MasterView,
   data() {
     return {
-      skills: {},
-      user_skill: {
-        skill_id: "",
-        detail: "",
+      user_contacts: {
+        full_name: "",
+        relationship: "",
+        contact_phone: "",
         emp_id: this.empId,
         id: ""
       },
       errors: [],
       isDisable: false,
-      userSkills: []
+      userContacts: []
     };
   },
   props: {
@@ -94,15 +94,16 @@ export default {
     }
   },
   methods: {
-    getSkill() {
-      rf.getRequest("SkillRequest")
-        .getAll()
-        .then(res => (this.skills = res));
-    },
-    getUserSkill() {
-      rf.getRequest("SkillUserRequest")
-        .getAll()
-        .then(res => (this.userSkills = res));
+    getEmergencyContacts() {
+      const param = {
+        emp_id: this.empId
+      };
+
+      rf.getRequest("EmergencyContactsRequest")
+        .getAll(param)
+        .then(res => {
+          this.userContacts = res;
+        });
     },
     hasErrors() {
       return !_.isEmpty(this.errors);
@@ -111,69 +112,62 @@ export default {
       e.preventDefault();
       this.isDisable = true;
       const keyNullable = ["id"];
-      _.forEach(this.user_skill, (val, key) => {
+      _.forEach(this.user_contacts, (val, key) => {
         if (!val && keyNullable.indexOf(key) === -1)
           this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
+        this.isDisable = false;
       });
       if (this.errors.length) {
         this.isDisable = false;
         return;
       }
-      if (this.user_skill.id) {
+      if (this.user_contacts.id) {
         return rf
-          .getRequest("SkillUserRequest")
-          .update(this.user_skill)
+          .getRequest("EmergencyContactsRequest")
+          .update(this.user_contacts)
           .then(res => {
             if (res.status) {
-              const index = this.userSkills.findIndex(
-                s => s.id === this.user_skill.id
-              );
-              this.userSkills[index] = res.data;
               this.clearData();
               $(this.$refs.add_modal).modal("hide");
+              this.getEmergencyContacts();
             }
           });
       }
-      rf.getRequest("SkillUserRequest")
-        .store(this.user_skill)
+      rf.getRequest("EmergencyContactsRequest")
+        .store(this.user_contacts)
         .then(res => {
           if (res.status) {
             this.clearData();
             $(this.$refs.add_modal).modal("hide");
-            this.userSkills.push(res.data);
+            this.getEmergencyContacts();
           }
         });
     },
-    showModalUpdate(skill) {
-      this.user_skill.skill_id = skill.skill_id;
-      this.user_skill.detail = skill.detail;
-      this.user_skill.id = skill.id;
+    showModalUpdate(emergency) {
+      this.user_contacts.full_name = emergency.full_name;
+      this.user_contacts.relationship = emergency.relationship;
+      this.user_contacts.contact_phone = emergency.contact_phone;
+      this.user_contacts.id = emergency.id;
       $(this.$refs.add_modal).modal("show");
     },
-    removeSkill(skill) {
-      rf.getRequest("SkillUserRequest")
-        .destroy({ id: skill.id })
+    removeContact(emergency) {
+      rf.getRequest("EmergencyContactsRequest")
+        .destroy({ id: emergency.id })
         .then(res => {
           if (res.status) {
-            this.userSkills.splice(this.userSkills.indexOf(skill), 1);
+            this.getEmergencyContacts();
           }
         });
     },
     clearData() {
-      this.user_skill.skill_id = "";
-      this.user_skill.detail = "";
-      this.user_skill.id = "";
+      this.user_contacts.full_name = "";
+      this.user_contacts.relationship = "";
+      this.user_contacts.contact_phone = "";
+      this.user_contacts.id = "";
       this.isDisable = false;
     },
     init() {
-      this.getSkill();
-      this.getUserSkill();
-      $(this.$refs.add_modal).on(
-        "hidden.bs.modal",
-        function() {
-          this.clearData();
-        }.bind(this)
-      );
+      this.getEmergencyContacts();
     }
   },
   mounted() {
