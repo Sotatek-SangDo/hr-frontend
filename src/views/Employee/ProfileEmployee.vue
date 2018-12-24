@@ -205,16 +205,49 @@
                   <div class="col-lg-3 col-md-6">
                     <add-skills :emp-id="scopeEmp.id"></add-skills>
                   </div>
-                  <div class="col-lg-3 col-md-6">2</div>
-                  <div class="col-lg-3 col-md-6">3</div>
-                  <div class="col-lg-3 col-md-6">4</div>
+                  <div class="col-lg-3 col-md-6">
+                    <add-educations :emp-id="scopeEmp.id"></add-educations>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                    <add-certifications :emp-id="scopeEmp.id"></add-certifications>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                    <add-languages :emp-id="scopeEmp.id"></add-languages>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="gd">ccc</div>
-        <div role="tabpanel" class="tab-pane fade" id="tl">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="gd">
+          <div class="col-12 mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6">
+                    <add-emergency-contacts :emp-id="scopeEmp.id"></add-emergency-contacts>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <add-dependents :emp-id="scopeEmp.id"></add-dependents>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tl">
+          <div class="col-12 mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12">
+                    <add-documents :emp-id="scopeEmp.id"></add-documents>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </tab-slide>
     </div>
     <div v-if="isEdit">
@@ -226,6 +259,12 @@
 <script>
 import TabSlide from "../../components/TabSlide";
 import AddSkills from "../../components/employee/AddSkills";
+import AddEmergencyContacts from "../../components/employee/AddEmergencyContacts";
+import AddDocuments from "../../components/employee/AddDocuments";
+import AddEducations from "../../components/employee/AddEducations";
+import AddLanguages from "../../components/employee/AddLanguages";
+import AddDependents from "../../components/employee/AddDependents";
+import AddCertifications from "../../components/employee/AddCertifications";
 import AddEmployee from "./AddEmployee.vue";
 
 export default {
@@ -233,7 +272,13 @@ export default {
   components: {
     TabSlide,
     AddSkills,
-    AddEmployee
+    AddEmployee,
+    AddEmergencyContacts,
+    AddDocuments,
+    AddEducations,
+    AddLanguages,
+    AddDependents,
+    AddCertifications
   },
   props: {
     employee: {

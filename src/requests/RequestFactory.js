@@ -8,6 +8,14 @@ import SkillRequest from "./SkillRequest";
 import SkillUserRequest from "./SkillUserRequest";
 import CompanyRequest from "./CompanyRequest";
 import DepartmentRequest from "./DepartmentRequest";
+import EducationRequest from "./EducationRequest";
+import QualificationRequest from "./QualificationRequest";
+import DependentsRequest from "./DependentsRequest";
+import CertificationRequest from "./CertificationRequest";
+import CertificationUserRequest from "./CertificationUserRequest";
+import EmergencyContactsRequest from "./EmergencyContactsRequest";
+import LanguagesRequest from "./LanguagesRequest";
+import UserLanguagesRequest from "./UserLanguagesRequest";
 
 const requestMap = {
   UserRequest,
@@ -19,7 +27,15 @@ const requestMap = {
   SkillRequest,
   SkillUserRequest,
   CompanyRequest,
-  DepartmentRequest
+  DepartmentRequest,
+  EducationRequest,
+  QualificationRequest,
+  DependentsRequest,
+  CertificationRequest,
+  CertificationUserRequest,
+  EmergencyContactsRequest,
+  LanguagesRequest,
+  UserLanguagesRequest
 };
 
 const instances = {};
