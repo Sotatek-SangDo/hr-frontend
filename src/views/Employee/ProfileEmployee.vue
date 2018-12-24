@@ -349,4 +349,10 @@ export default {
     margin: 0
     padding: 0
     padding-left: 20px
+.list-group-item
+  h5
+    max-width: 225px;
+  p
+    margin: 0
+    padding: 0
 </style>
