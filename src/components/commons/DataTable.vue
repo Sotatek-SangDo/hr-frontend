@@ -26,7 +26,8 @@ export default {
   data() {
     return {
       rows: [],
-      errors: {}
+      errors: {},
+      table: ""
     };
   },
   watch: {},
@@ -40,13 +41,16 @@ export default {
       this.errors = err;
     },
     initTable() {
-      $(this.$refs.dataTable).DataTable({
+      this.table = $(this.$refs.dataTable).DataTable({
         responsive: true,
         destroy: true
       });
     },
     sleep(milliseconds) {
       return new Promise(resolve => setTimeout(resolve, milliseconds));
+    },
+    refresh() {
+      this.fetch();
     }
   },
   created() {
@@ -58,5 +62,24 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="sass">
+.dataTable
+  thead
+    .sorting,
+    .sorting_desc,
+    .sorting_asc
+      background-image: none
+  .btn
+    margin-right: 10px;
+    padding: 5px 10px
+    outline: none
+    border: none
+    font-size: 18px
+    color: #fff
+    &.btn-del
+      background-color: red
+    &.btn-edit
+      background-color: green
+    &.btn-add
+      background-color: pink
 </style>

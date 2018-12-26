@@ -47,8 +47,12 @@
             </div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="kn">bbb</div>
-        <div role="tabpanel" class="tab-pane fade" id="hv">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="kn">
+          <employee-skill></employee-skill>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="hv">
+          <employee-education></employee-education>
+        </div>
         <div role="tabpanel" class="tab-pane fade" id="chc">ccc</div>
         <div role="tabpanel" class="tab-pane fade" id="ngn">ccc</div>
         <div role="tabpanel" class="tab-pane fade" id="pb">ccc</div>
@@ -64,6 +68,8 @@ import MasterView from "../MasterView";
 import HomeLayout from "../../components/HomeLayout";
 import AddEmployee from "./AddEmployee";
 import ProfileEmployee from "./ProfileEmployee";
+import EmployeeSkill from "../../components/employee/EmployeeSkill";
+import EmployeeEducation from "../../components/employee/EmployeeEducation";
 import TabSlide from "../../components/TabSlide";
 import rf from "../../requests/RequestFactory";
 
@@ -74,7 +80,9 @@ export default {
     AddEmployee,
     DataTable,
     ProfileEmployee,
-    TabSlide
+    TabSlide,
+    EmployeeSkill,
+    EmployeeEducation
   },
   data() {
     return {
@@ -82,7 +90,7 @@ export default {
       header: "Thêm mới nhân viên",
       tabs: [
         { title: "Nhân viên", href: "nv" },
-        { title: "Kỹ nămg", href: "kn" },
+        { title: "Kỹ năng", href: "kn" },
         { title: "Học vấn", href: "hv" },
         { title: "Chứng chỉ", href: "chc" },
         { title: "Ngôn ngữ", href: "ngn" },

@@ -2,85 +2,42 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-education">
-          <span class="icon"><i class="ti-plus"></i></span>Education
+        <a href="#" class="card-link icon-p" @click="addEducation">
+          <span class="icon"><i class="ti-plus"></i></span>Trình độ chuyên môn
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
         <div class="card-body" v-if="userEducations">
           <div class="list-group-item sub-tab-item" v-for="(edu, i) in userEducations" :key="i">
-            <h5 class="list-group-item-heading">{{ edu.name }}
-              <button class="but but-del" type="button" tooltip="Delete" @click="removeSkill(edu)">
+            <h5 class="list-group-item-heading">{{ edu.qualification_name }}
+              <button class="but but-del" type="button" tooltip="Delete" @click="removeEducation(edu)">
                 <i class="ti-trash"></i>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(edu)">
                 <i class="ti-marker-alt"></i>
               </button>
             </h5>
-            <p class="list-group-item-text">Start: {{ edu.started_at }}</p>
-            <p class="list-group-item-text">Completed: {{ edu.ended_at }}</p>
-            <p class="list-group-item-text">Institute: {{ edu.institute }}</p>
+            <p class="list-group-item-text">Ngaỳ bắt đầu: {{ edu.started_at }}</p>
+            <p class="list-group-item-text">Ngày hoàn thành: {{ edu.ended_at }}</p>
+            <p class="list-group-item-text">Học tại: {{ edu.institute }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-education">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Thêm mới học vấn</h5>
-            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12 mt-12">
-                <div class="card">
-                  <div class="card-body">
-                    <form @submit.prevent="store">
-                      <div class="form-group">
-                        <label for="kni">Qualification</label>
-                        <select v-model="user_educations.qualification_id" id="kni" class="form-control">
-                          <option value="">Lựa chọn Qualification</option>
-                          <option v-for="(qua, index) in qualifications"
-                            :key="index"
-                            :value="qua.id"
-                            v-text="qua.name"/>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Institute</label>
-                        <input type="text" v-model="user_educations.institute" class="form-control" id="detail-kni" placeholder="institute">
-                      </div>
-                      <date-picker :title="startedAt" v-model="user_educations.started_at" :default="getDate(user_educations.started_at)"></date-picker>
-                      <date-picker :title="endedAt" v-model="user_educations.ended_at" :default="getDate(user_educations.ended_at)"></date-picker>
-                      <div v-if="hasErrors()" class="errors">
-                        <span v-text="errors[0].keys"/>
-                      </div>
-                      <button type="submit" :disabled="isDisable" class="btn btn-primary mt-4 pr-4 pl-4"><i class="ti-save"></i> Lưu</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <education-modal :education="user_educations" :is-create="isCreate" :emp-id="empId" v-if="isShow"></education-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
-import DatePicker from "../commons/DatePicker";
-import $ from "jquery";
-import _ from "lodash";
+import EducationModal from "../commons/EducationModal";
 
 export default {
   name: "AddEducations",
   extends: MasterView,
   components: {
-    DatePicker
+    EducationModal
   },
   data() {
     return {
@@ -93,10 +50,8 @@ export default {
         emp_id: this.empId,
         id: ""
       },
-      startedAt: "Start Date",
-      endedAt: "Completed On",
-      errors: [],
-      isDisable: false,
+      isShow: false,
+      isCreate: true,
       userEducations: []
     };
   },
@@ -106,91 +61,81 @@ export default {
     }
   },
   methods: {
-    getDate(date) {
-      return date ? new Date(date) : new Date();
-    },
-    getQuatifications() {
-      rf.getRequest("QualificationRequest")
-        .getAll()
-        .then(res => {
-          this.qualifications = res;
-        });
-    },
     getEducations() {
-      const param = {
-        emp_id: this.empId
-      };
-
       rf.getRequest("EducationRequest")
-        .getAll(param)
+        .getEmployeeEducation({ id: this.empId })
         .then(res => {
           this.userEducations = res;
         });
     },
-    hasErrors() {
-      return !_.isEmpty(this.errors);
-    },
-    store(e) {
+    addEducation(e) {
       e.preventDefault();
-      this.isDisable = true;
-      const keyNullable = ["id"];
-      _.forEach(this.user_educations, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1)
-          this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-        this.isDisable = false;
-      });
-      if (this.errors.length) {
-        this.isDisable = false;
-        return;
-      }
-      if (this.user_educations.id) {
-        return rf
-          .getRequest("EducationRequest")
-          .update(this.user_educations)
-          .then(res => {
-            if (res.status) {
-              this.clearData();
-              $(this.$refs.add_modal).modal("hide");
-              this.getEducations();
-            }
-          });
-      }
-      rf.getRequest("EducationRequest")
-        .store(this.user_educations)
-        .then(res => {
-          if (res.status) {
+      this.isCreate = true;
+      this.isShow = true;
+      this.sleep(500).then(() => {
+        this.showModal("education-modal");
+        this.onHiddenModal(
+          "education-modal",
+          function() {
             this.clearData();
-            $(this.$refs.add_modal).modal("hide");
-            this.getEducations();
-          }
-        });
+            this.isShow = false;
+          }.bind(this)
+        );
+      });
     },
     showModalUpdate(qualification) {
+      this.isCreate = false;
       this.user_educations.qualification_id = qualification.qualification_id;
       this.user_educations.institute = qualification.institute;
       this.user_educations.started_at = qualification.started_at;
       this.user_educations.ended_at = qualification.ended_at;
       this.user_educations.id = qualification.id;
-      $(this.$refs.add_modal).modal("show");
+      this.isShow = true;
+      this.sleep(500).then(() => {
+        this.showModal("education-modal");
+        this.onHiddenModal(
+          "education-modal",
+          function() {
+            this.clearData();
+            this.isShow = false;
+          }.bind(this)
+        );
+      });
     },
-    removeSkill(qualification) {
-      rf.getRequest("EducationRequest")
-        .destroy({ id: qualification.id })
-        .then(res => {
-          if (res.status) {
-            this.getEducations();
-          }
-        });
+    removeEducation(qualification) {
+      if (confirm("Bạn có chắc muốn khóa trình đọ chuyên môn này?")) {
+        rf.getRequest("EducationRequest")
+          .destroy({ id: qualification.id })
+          .then(res => {
+            if (res.status) {
+              this.userEducations.splice(
+                this.userEducations.indexOf(qualification),
+                1
+              );
+            }
+          });
+      }
     },
     clearData() {
       this.user_educations.qualification_id = "";
       this.user_educations.institute = "";
       this.user_educations.id = "";
-      this.isDisable = false;
+      this.user_educations.started_at = "";
+      this.user_educations.ended_at = "";
     },
     init() {
-      this.getQuatifications();
       this.getEducations();
+      this.onEventEducation();
+    },
+    onEventEducation() {
+      window.EventBus.$on("update-eEducation", eEdu => {
+        const index = this.userEducations.findIndex(s => s.id === eEdu.id);
+        this.userEducations[index] = eEdu;
+        this.$forceUpdate();
+      });
+      window.EventBus.$on("add-eEducation", eEdu => {
+        this.userEducations.push(eEdu);
+      });
     }
   },
   mounted() {

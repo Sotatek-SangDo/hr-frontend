@@ -9,6 +9,10 @@ export default class SkillUserRequest extends BaseRequest {
     const url = this.parseUrl("/store");
     return this.post(url, params);
   }
+  getEmpSkill(params) {
+    const url = this.parseUrl("/get-emp-skill");
+    return this.get(url, params);
+  }
   update(params) {
     const url = this.parseUrl("/update");
     return this.post(url, params);

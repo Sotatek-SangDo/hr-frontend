@@ -435,4 +435,6 @@ export default {
 .page-title-area
   border-bottom: 1px solid #dae4e8
   margin-bottom: 20px
+.page-title
+  line-height: 43px
 </style>

@@ -2,7 +2,7 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-skill">
+        <a href="#" class="card-link icon-p" @click="addSkill">
           <span class="icon"><i class="ti-plus"></i></span>Kỹ Năng
         </a>
       </div>
@@ -22,69 +22,32 @@
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-skill">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Thêm mới kỹ năng</h5>
-            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12 mt-12">
-                <div class="card">
-                  <div class="card-body">
-                    <form @submit.prevent="store">
-                      <div class="form-group">
-                        <label for="kni">Kĩ năng</label>
-                        <select v-model="user_skill.skill_id" id="kni" class="form-control">
-                          <option value="">Lựa chọn kỹ năng</option>
-                          <option v-for="(s, index) in skills"
-                            :key="index"
-                            :value="s.id"
-                            v-text="s.skill_name"/>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Thông tin chi tiết</label>
-                        <textarea type="text" v-model="user_skill.detail" class="form-control" id="detail-kni" placeholder="Thông tin chi tiết"></textarea>
-                      </div>
-                      <div v-if="hasErrors()" class="errors">
-                        <span v-text="errors[0].keys"/>
-                      </div>
-                      <button type="submit" :disabled="isDisable" class="btn btn-primary mt-4 pr-4 pl-4"><i class="ti-save"></i> Lưu</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <skill-modal :skill="user_skill" :is-create="isCreate" :emp-id="empId" v-show="isShow"></skill-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
+import SkillModal from "../commons/SkillModal";
 import $ from "jquery";
-import _ from "lodash";
 
 export default {
   name: "AddSkill",
   extends: MasterView,
+  components: {
+    SkillModal
+  },
   data() {
     return {
-      skills: {},
       user_skill: {
         skill_id: "",
         detail: "",
         emp_id: this.empId,
         id: ""
       },
-      errors: [],
-      isDisable: false,
+      isCreate: true,
+      isShow: false,
       userSkills: []
     };
   },
@@ -94,86 +57,61 @@ export default {
     }
   },
   methods: {
-    getSkill() {
-      rf.getRequest("SkillRequest")
-        .getAll()
-        .then(res => (this.skills = res));
-    },
     getUserSkill() {
       rf.getRequest("SkillUserRequest")
-        .getAll()
+        .getEmpSkill({ id: this.empId })
         .then(res => (this.userSkills = res));
     },
-    hasErrors() {
-      return !_.isEmpty(this.errors);
-    },
-    store(e) {
+    addSkill(e) {
       e.preventDefault();
-      this.isDisable = true;
-      const keyNullable = ["id"];
-      _.forEach(this.user_skill, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1)
-          this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-      });
-      if (this.errors.length) {
-        this.isDisable = false;
-        return;
-      }
-      if (this.user_skill.id) {
-        return rf
-          .getRequest("SkillUserRequest")
-          .update(this.user_skill)
-          .then(res => {
-            if (res.status) {
-              const index = this.userSkills.findIndex(
-                s => s.id === this.user_skill.id
-              );
-              this.userSkills[index] = res.data;
-              this.clearData();
-              $(this.$refs.add_modal).modal("hide");
-            }
-          });
-      }
-      rf.getRequest("SkillUserRequest")
-        .store(this.user_skill)
-        .then(res => {
-          if (res.status) {
-            this.clearData();
-            $(this.$refs.add_modal).modal("hide");
-            this.userSkills.push(res.data);
-          }
-        });
+      this.isCreate = true;
+      this.isShow = true;
+      this.showModal("skill-modal");
     },
     showModalUpdate(skill) {
+      this.show = false;
+      this.isCreate = false;
       this.user_skill.skill_id = skill.skill_id;
       this.user_skill.detail = skill.detail;
       this.user_skill.id = skill.id;
-      $(this.$refs.add_modal).modal("show");
+      this.show = true;
+      this.showModal("skill-modal");
     },
     removeSkill(skill) {
-      rf.getRequest("SkillUserRequest")
-        .destroy({ id: skill.id })
-        .then(res => {
-          if (res.status) {
-            this.userSkills.splice(this.userSkills.indexOf(skill), 1);
-          }
-        });
+      if (confirm("Bạn có chắc muốn xóa kỹ năng này")) {
+        rf.getRequest("SkillUserRequest")
+          .destroy({ id: skill.id })
+          .then(res => {
+            if (res.status) {
+              this.userSkills.splice(this.userSkills.indexOf(skill), 1);
+            }
+          });
+      }
     },
     clearData() {
       this.user_skill.skill_id = "";
       this.user_skill.detail = "";
       this.user_skill.id = "";
-      this.isDisable = false;
     },
     init() {
-      this.getSkill();
       this.getUserSkill();
-      $(this.$refs.add_modal).on(
+      $("#skill-modal").on(
         "hidden.bs.modal",
         function() {
           this.clearData();
         }.bind(this)
       );
+      this.onEventSkill();
+    },
+    onEventSkill() {
+      window.EventBus.$on("update-eskill", eskill => {
+        const index = this.userSkills.findIndex(s => s.id === eskill.id);
+        this.userSkills[index] = eskill;
+        this.$forceUpdate();
+      });
+      window.EventBus.$on("add-eskill", eskill => {
+        this.userSkills.push(eskill);
+      });
     }
   },
   mounted() {
