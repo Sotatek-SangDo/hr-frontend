@@ -22,15 +22,14 @@
         </div>
       </div>
     </div>
-    <skill-modal :skill="user_skill" :is-create="isCreate" :emp-id="empId" v-show="isShow"></skill-modal>
+    <skill-modal :skill="user_skill" :is-create="isCreate" :emp-id="empId" v-if="isShow"></skill-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
-import SkillModal from "../commons/SkillModal";
-import $ from "jquery";
+import SkillModal from "../commons/EmployeeModal/SkillModal";
 
 export default {
   name: "AddSkill",
@@ -48,7 +47,8 @@ export default {
       },
       isCreate: true,
       isShow: false,
-      userSkills: []
+      userSkills: [],
+      modal_id: "skill-modal"
     };
   },
   props: {
@@ -65,17 +65,15 @@ export default {
     addSkill(e) {
       e.preventDefault();
       this.isCreate = true;
+      this.user_skill.emp_id = this.empId;
       this.isShow = true;
-      this.showModal("skill-modal");
+      this.addEventShowModal();
     },
     showModalUpdate(skill) {
-      this.show = false;
       this.isCreate = false;
-      this.user_skill.skill_id = skill.skill_id;
-      this.user_skill.detail = skill.detail;
-      this.user_skill.id = skill.id;
-      this.show = true;
-      this.showModal("skill-modal");
+      Object.assign(this.user_skill, this.setData(this.user_skill, skill));
+      this.isShow = true;
+      this.addEventShowModal();
     },
     removeSkill(skill) {
       if (confirm("Bạn có chắc muốn xóa kỹ năng này")) {
@@ -83,24 +81,16 @@ export default {
           .destroy({ id: skill.id })
           .then(res => {
             if (res.status) {
-              this.userSkills.splice(this.userSkills.indexOf(skill), 1);
+              window.EventBus.$emit("delete-eskill", skill);
             }
           });
       }
     },
     clearData() {
-      this.user_skill.skill_id = "";
-      this.user_skill.detail = "";
-      this.user_skill.id = "";
+      this.user_skill = this.emptyData(this.user_skill);
     },
     init() {
       this.getUserSkill();
-      $("#skill-modal").on(
-        "hidden.bs.modal",
-        function() {
-          this.clearData();
-        }.bind(this)
-      );
       this.onEventSkill();
     },
     onEventSkill() {
@@ -109,8 +99,10 @@ export default {
         this.userSkills[index] = eskill;
         this.$forceUpdate();
       });
-      window.EventBus.$on("add-eskill", eskill => {
-        this.userSkills.push(eskill);
+      window.EventBus.$on("add-eskill", eskill => this.userSkills.push(eskill));
+      window.EventBus.$on("delete-eskill", eskill => {
+        const index = this.userSkills.findIndex(s => s.id === eskill.id);
+        this.userSkills.splice(index, 1);
       });
     }
   },

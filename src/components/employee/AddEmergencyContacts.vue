@@ -2,8 +2,8 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-contact">
-          <span class="icon"><i class="ti-plus"></i></span>Emergency Contacts
+        <a href="#" class="card-link icon-p" @click="addContact">
+          <span class="icon"><i class="ti-plus"></i></span>Danh bạ khẩn cấp
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
@@ -17,66 +17,30 @@
                 <i class="ti-marker-alt"></i>
               </button>
             </h5>
-            <p class="list-group-item-text">Relationship: {{ con.relationship }}</p>
-            <p class="list-group-item-text">Contact phone: {{ con.contact_phone }}</p>
+            <p class="list-group-item-text">Quan hệ: {{ con.relationship }}</p>
+            <p class="list-group-item-text">Số điện thoại: {{ con.contact_phone }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-contact">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Thêm mới contact</h5>
-            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12 mt-12">
-                <div class="card">
-                  <div class="card-body">
-                    <form @submit.prevent="store">
-                      <div class="form-group">
-                        <label for="detail-kni">Full Name:</label>
-                        <input type="text" v-model="user_contacts.full_name" class="form-control" id="detail-kni" placeholder="Full Name">
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Relationship:</label>
-                        <input type="text" v-model="user_contacts.relationship" class="form-control" id="detail-kni" placeholder="Relationship">
-                      </div>
-                      <div class="form-gruop">
-                        <label for="">Contact Phone:</label>
-                        <input type="text" v-model="user_contacts.contact_phone" class="form-control"
-                        placeholder="Contact Phone">
-                      </div>
-                      <div v-if="hasErrors()" class="errors">
-                        <span v-text="errors[0].keys"/>
-                      </div>
-                      <button type="submit" :disabled="isDisable" class="btn btn-primary mt-4 pr-4 pl-4"><i class="ti-save"></i> Lưu</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <emergency-contact-modal v-if="isShow" :contact="user_contact" :isCreate="isCreate" :emp-id="empId"></emergency-contact-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
-import $ from "jquery";
-import _ from "lodash";
+import EmergencyContactModal from "../commons/EmployeeModal/EmergencyContactModal";
 
 export default {
   name: "AddEmergencyContact",
   extends: MasterView,
+  components: {
+    EmergencyContactModal
+  },
   data() {
     return {
-      user_contacts: {
+      user_contact: {
         full_name: "",
         relationship: "",
         contact_phone: "",
@@ -85,7 +49,9 @@ export default {
       },
       errors: [],
       isDisable: false,
-      userContacts: []
+      userContacts: [],
+      isShow: false,
+      modal_id: "contact-modal"
     };
   },
   props: {
@@ -95,79 +61,59 @@ export default {
   },
   methods: {
     getEmergencyContacts() {
-      const param = {
-        emp_id: this.empId
-      };
-
       rf.getRequest("EmergencyContactsRequest")
-        .getAll(param)
+        .getEEmergencyContact({ id: this.empId })
         .then(res => {
           this.userContacts = res;
         });
     },
-    hasErrors() {
-      return !_.isEmpty(this.errors);
-    },
-    store(e) {
+    addContact(e) {
       e.preventDefault();
-      this.isDisable = true;
-      const keyNullable = ["id"];
-      _.forEach(this.user_contacts, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1)
-          this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-        this.isDisable = false;
-      });
-      if (this.errors.length) {
-        this.isDisable = false;
-        return;
-      }
-      if (this.user_contacts.id) {
-        return rf
-          .getRequest("EmergencyContactsRequest")
-          .update(this.user_contacts)
+      this.isCreate = true;
+      this.user_contact.emp_id = this.empId;
+      this.isShow = true;
+      this.addEventShowModal();
+    },
+    showModalUpdate(contact) {
+      this.isCreate = false;
+      Object.assign(
+        this.user_contact,
+        this.setData(this.user_contact, contact)
+      );
+      this.isShow = true;
+      this.addEventShowModal();
+    },
+    removeContact(contact) {
+      if (confirm("Bạn có chắc muốn xóa liên lạc này?")) {
+        rf.getRequest("EmergencyContactsRequest")
+          .destroy({ id: contact.id })
           .then(res => {
             if (res.status) {
-              this.clearData();
-              $(this.$refs.add_modal).modal("hide");
-              this.getEmergencyContacts();
+              window.EventBus.$emit("delete-eContact", contact);
             }
           });
       }
-      rf.getRequest("EmergencyContactsRequest")
-        .store(this.user_contacts)
-        .then(res => {
-          if (res.status) {
-            this.clearData();
-            $(this.$refs.add_modal).modal("hide");
-            this.getEmergencyContacts();
-          }
-        });
-    },
-    showModalUpdate(emergency) {
-      this.user_contacts.full_name = emergency.full_name;
-      this.user_contacts.relationship = emergency.relationship;
-      this.user_contacts.contact_phone = emergency.contact_phone;
-      this.user_contacts.id = emergency.id;
-      $(this.$refs.add_modal).modal("show");
-    },
-    removeContact(emergency) {
-      rf.getRequest("EmergencyContactsRequest")
-        .destroy({ id: emergency.id })
-        .then(res => {
-          if (res.status) {
-            this.getEmergencyContacts();
-          }
-        });
     },
     clearData() {
-      this.user_contacts.full_name = "";
-      this.user_contacts.relationship = "";
-      this.user_contacts.contact_phone = "";
-      this.user_contacts.id = "";
-      this.isDisable = false;
+      this.user_contact = this.emptyData(this.user_contact);
+    },
+    onEventContact() {
+      window.EventBus.$on("update-eContact", eContact => {
+        const index = this.userContacts.findIndex(c => c.id === eContact.id);
+        this.userContacts[index] = eContact;
+        this.$forceUpdate();
+      });
+      window.EventBus.$on("add-eContact", eContact =>
+        this.userContacts.push(eContact)
+      );
+      window.EventBus.$on("delete-eContact", eContact => {
+        const index = this.userContacts.findIndex(c => c.id === eContact.id);
+        this.userContacts.splice(index, 1);
+      });
     },
     init() {
       this.getEmergencyContacts();
+      this.onEventContact();
     }
   },
   mounted() {

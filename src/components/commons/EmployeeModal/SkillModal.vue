@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import MasterView from "../../views/MasterView";
+import rf from "../../../requests/RequestFactory";
+import MasterView from "../../../views/MasterView";
 import _ from "lodash";
 
 export default {
@@ -65,7 +65,8 @@ export default {
       },
       isDisable: false,
       skills: {},
-      errors: {}
+      errors: [],
+      modal_id: "skill-modal"
     };
   },
   props: {
@@ -107,29 +108,23 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest("SkillUserRequest")
-          .update(this.user_skill)
+          .update({ data: this.user_skill })
           .then(res => {
             if (res.status) {
-              this.clearData();
-              window.EventBus.$emit("update-eskill", res.data);
-              this.hideModal("skill-modal");
+              this.emitEvent("update-eskill", res.data);
             }
           });
       }
       rf.getRequest("SkillUserRequest")
-        .store(this.user_skill)
+        .store({ data: this.user_skill })
         .then(res => {
           if (res.status) {
-            this.clearData();
-            this.hideModal("skill-modal");
-            window.EventBus.$emit("add-eskill", res.data);
+            this.emitEvent("add-eskill", res.data);
           }
         });
     },
     clearData() {
-      this.user_skill.skill_id = "";
-      this.user_skill.detail = "";
-      this.user_skill.id = "";
+      this.user_skill = this.emptyData(this.user_skill);
       this.isDisable = false;
     }
   },

@@ -5,6 +5,10 @@ export default class DependentsRequest extends BaseRequest {
     const url = this.parseUrl("");
     return this.get(url, params);
   }
+  getEDependents(params) {
+    const url = this.parseUrl("/get-eDependents");
+    return this.get(url, params);
+  }
   store(params) {
     const url = this.parseUrl("/store");
     return this.post(url, params);

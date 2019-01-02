@@ -10,29 +10,33 @@
             <div class="card" v-show="listStep">
               <div class="card-body">
                 <div class="epm-tb-header">
-                  <h4 class="header-title">Danh sách nhân viên</h4>
-                  <a @click="goToAddPage('add')">
-                    <span><i class="ti-plus"></i>Thêm mới</span>
+                  <h4 class="header-title header-underline">Danh sách nhân viên</h4>
+                  <a class="button-add button" @click="goToAddPage('add')">
+                    <span>Thêm mới</span>
                   </a>
                 </div>
                 <data-table :getData="getEmployees" ref="datatable">
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start Date</th>
-                  <th>salary</th>
-                  <th>Thao tac</th>
+                  <template slot="head" slot-scope="props">
+                    <th class="sort sorting_asc" @click="props.sort('name', $event)">Họ và tên</th>
+                    <th>Công việc</th>
+                    <th>Địa chỉ</th>
+                    <th>Số ĐT</th>
+                    <th>Ngày sinh</th>
+                    <th>Email công việc</th>
+                    <th>Thao tác</th>
+                  </template>
                   <template slot="body" slot-scope="props">
                     <tr>
                       <td v-text="props.item.name"></td>
-                      <td>Accountant</td>
+                      <td v-text="props.item.job.title"></td>
                       <td v-text="props.item.address"/>
                       <td v-text="props.item.phone"/>
                       <td v-text="props.item.birthday"/>
                       <td v-text="props.item.private_email"/>
                       <td>
-                        <span @click="empProfile(props.item)">Xem chi tiết</span>
+                        <span @click="empProfile(props.item)">
+                          <i class="ti-search"></i>
+                        </span>
                       </td>
                     </tr>
                   </template>
@@ -53,10 +57,18 @@
         <div role="tabpanel" class="tab-pane fade" id="hv">
           <employee-education></employee-education>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="chc">ccc</div>
-        <div role="tabpanel" class="tab-pane fade" id="ngn">ccc</div>
-        <div role="tabpanel" class="tab-pane fade" id="pb">ccc</div>
-        <div role="tabpanel" class="tab-pane fade" id="dbkc">ccc</div>
+        <div role="tabpanel" class="tab-pane fade" id="chc">
+          <employee-certification></employee-certification>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="ngn">
+          <employee-language></employee-language>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="dbkc">
+          <employee-emergency-contact></employee-emergency-contact>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="pb">
+          <employee-department></employee-department>
+        </div>
       </tab-slide>
     </template>
   </home-layout>
@@ -70,6 +82,10 @@ import AddEmployee from "./AddEmployee";
 import ProfileEmployee from "./ProfileEmployee";
 import EmployeeSkill from "../../components/employee/EmployeeSkill";
 import EmployeeEducation from "../../components/employee/EmployeeEducation";
+import EmployeeCertification from "../../components/employee/EmployeeCertification";
+import EmployeeLanguage from "../../components/employee/EmployeeLanguage";
+import EmployeeEmergencyContact from "../../components/employee/EmployeeEmergencyContact";
+import EmployeeDepartment from "../../components/employee/EmployeeDepartment";
 import TabSlide from "../../components/TabSlide";
 import rf from "../../requests/RequestFactory";
 
@@ -82,7 +98,11 @@ export default {
     ProfileEmployee,
     TabSlide,
     EmployeeSkill,
-    EmployeeEducation
+    EmployeeEducation,
+    EmployeeCertification,
+    EmployeeLanguage,
+    EmployeeEmergencyContact,
+    EmployeeDepartment
   },
   data() {
     return {
@@ -94,13 +114,10 @@ export default {
         { title: "Học vấn", href: "hv" },
         { title: "Chứng chỉ", href: "chc" },
         { title: "Ngôn ngữ", href: "ngn" },
-        { title: "Phòng ban", href: "pb" },
-        { title: "Danh bạ khẩn cấp", href: "dbkc" }
+        { title: "Danh bạ khẩn cấp", href: "dbkc" },
+        { title: "Phòng ban", href: "pb" }
       ],
-      breadcrumbs: [
-        { title: "Home", href: "/" },
-        { title: "Nhân viên", href: "" }
-      ],
+      breadcrumbs: [{ title: "Nhân viên", href: "" }],
       addStep: false,
       listStep: true,
       profileStep: false,
@@ -134,7 +151,6 @@ export default {
       this.goToAddPage("profile");
     },
     goToAddPage(type) {
-      //this.showLoader();
       if (type === "list") {
         this.addStep = false;
         this.profileStep = false;
@@ -246,20 +262,16 @@ table.dataTable
   justify-content: flex-start
   margin-bottom: 20px
   align-item: center
+  margin: 25px auto
   a
     margin-left: auto
-    font-size: 20px
-    border: 1px solid #f1f1f1
-    background: #8525ff
-    color: white
-    padding: 10px 15px
-    border-radius: 7px
-    font-family: Averta-Bold
-    font-weight: 600
 .back
   color: blue
   cursor: pointer
   font-family: Averta-Bold
   text-decoration: underline
   text-decoration-color: #4d91ff
+.header-title
+  text-transform: inherit;
+  font-size: 22px
 </style>

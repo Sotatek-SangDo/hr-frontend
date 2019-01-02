@@ -2,16 +2,20 @@
   <div class="card">
     <div class="card-body">
       <div class="epm-tb-header">
-        <h4 class="header-title">Kỹ Năng</h4>
+        <h4 class="header-title header-underline">Kỹ Năng</h4>
       </div>
       <data-table :getData="getEmpSkills" ref="datatable">
-        <th>Tên Nhân viên</th>
-        <th>Kỹ Năng</th>
-        <th>Chi tiết</th>
-        <th>Thao tác</th>
+        <template slot="head">
+          <th>Tên Nhân viên</th>
+          <th>Kỹ Năng</th>
+          <th>Chi tiết</th>
+          <th>Thao tác</th>
+        </template>
         <template slot="body" slot-scope="props">
           <tr>
-            <td v-text="props.item.name" />
+            <td v-text="props.item.name"
+              v-if="(!props.index || props.data[props.index].name !== props.data[props.index-1].name)"
+              v-bind:rowspan="props.item.employee.count_skill"/>
             <td v-text="props.item.skill" />
             <td v-text="props.item.detail"/>
             <td>
@@ -28,7 +32,7 @@
           </tr>
         </template>
       </data-table>
-      <skill-modal :skill="user_skill" :is-create="isCreate" :emp-id="empId" v-show="isShow"></skill-modal>
+      <skill-modal :skill="user_skill" :is-create="isCreate" :emp-id="empId" v-if="isShow"></skill-modal>
     </div>
   </div>
 </template>
@@ -37,7 +41,7 @@
 import rf from "../../requests/RequestFactory";
 import DataTable from "../commons/DataTable";
 import MasterView from "../../views/MasterView";
-import SkillModal from "../commons/SkillModal";
+import SkillModal from "../commons/EmployeeModal/SkillModal";
 
 export default {
   name: "EmployeeSkill",
@@ -56,7 +60,8 @@ export default {
       },
       isCreate: true,
       isShow: false,
-      empId: 0
+      empId: 0,
+      modal_id: "skill-modal"
     };
   },
   methods: {
@@ -68,17 +73,13 @@ export default {
       this.empId = skill.emp_id;
       this.isCreate = true;
       this.isShow = true;
-      this.showModal("skill-modal");
+      this.addEventShowModal();
     },
     showModalUpdate(skill) {
-      this.show = false;
       this.isCreate = false;
-      this.user_skill.skill_id = skill.skill_id;
-      this.user_skill.emp_id = skill.emp_id;
-      this.user_skill.detail = skill.detail;
-      this.user_skill.id = skill.id;
-      this.show = true;
-      this.showModal("skill-modal");
+      Object.assign(this.user_skill, this.setData(this.user_skill, skill));
+      this.isShow = true;
+      this.addEventShowModal();
     },
     removeSkill(skill) {
       if (confirm("Bạn có chắc muốn xóa kỹ năng này?")) {
@@ -92,9 +93,7 @@ export default {
       }
     },
     clearData() {
-      this.user_skill.skill_id = "";
-      this.user_skill.detail = "";
-      this.user_skill.id = "";
+      this.user_skill = this.emptyData(this.user_skill);
     },
     tableRefresh() {
       this.$refs.datatable.refresh();
@@ -122,4 +121,6 @@ table
     td
       text-align: left
       padding-left: 20px !important
+.epm-tb-header
+  margin: 20px auto
 </style>

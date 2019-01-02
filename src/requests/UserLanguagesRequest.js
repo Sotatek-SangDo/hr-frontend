@@ -5,6 +5,10 @@ export default class UserLanguagesRequest extends BaseRequest {
     const url = this.parseUrl("");
     return this.get(url, params);
   }
+  getELanguages(params) {
+    const url = this.parseUrl("/get-eLanguage");
+    return this.get(url, params);
+  }
   store(params) {
     const url = this.parseUrl("/store");
     return this.post(url, params);

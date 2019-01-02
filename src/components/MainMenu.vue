@@ -12,13 +12,13 @@
               <nav>
                   <ul class="metismenu" id="menu" ref="metismenu">
                     <li>
-                      <a href="/">
+                      <a class="no-sub" href="/">
                         <i class="ti-home"></i>
                         <span>Trang chu</span>
                       </a>
                     </li>
                     <li class="active">
-                      <a href="javascript:void(0)" aria-expanded="true">
+                      <a href="javascript:void(0)" class="has-sub" aria-expanded="true">
                         <i class="ti-dashboard"></i>
                         <span>Nhan vien</span>
                       </a>
@@ -26,8 +26,6 @@
                         <li class="active">
                           <a href="/employees">Danh sach nhan vien</a>
                         </li>
-                        <li><a href="index2.html">Ecommerce dashboard</a></li>
-                        <li><a href="index3.html">SEO dashboard</a></li>
                       </ul>
                     </li>
                       <li>
@@ -160,3 +158,19 @@ export default {
   }
 };
 </script>
+
+<style lang="sass" scoped>
+.metismenu
+  li
+    a
+      padding: 0
+      line-height: 55px
+      span
+        font-size: 18px
+      i
+        font-size: 23px
+      &.has-sub:after
+        top: 0
+      &.no-sub:after
+        content: ""
+</style>

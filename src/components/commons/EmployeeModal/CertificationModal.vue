@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade show" id="education-modal">
+  <div class="modal fade show" ref="add_modal" id="certification-modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -14,20 +14,20 @@
                   <form @submit.prevent="storeOrUpdate">
                     <div class="form-group">
                       <label for="kni">Trình độ chuyên môn</label>
-                      <select v-model="user_educations.qualification_id" id="kni" class="form-control">
+                      <select v-model="user_certification.certification_id" id="kni" class="form-control">
                         <option value="">Lựa chọn trình độ chuyên môn</option>
-                        <option v-for="(qua, index) in qualifications"
+                        <option v-for="(cer, index) in certifications"
                           :key="index"
-                          :value="qua.id"
-                          v-text="qua.name"/>
+                          :value="cer.id"
+                          v-text="cer.name"/>
                       </select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Học viện</label>
-                      <input type="text" v-model="user_educations.institute" class="form-control" id="detail-kni" placeholder="Học viện">
+                      <label for="detail-kni">Nơi học</label>
+                      <input type="text" v-model="user_certification.institute" class="form-control" id="detail-kni" placeholder="Nơi học">
                     </div>
-                    <date-picker :title="startedAt" v-model="user_educations.started_at" :default="getDate(user_educations.started_at)" v-if="delay"></date-picker>
-                    <date-picker :title="endedAt" v-model="user_educations.ended_at" :default="getDate(user_educations.ended_at)" v-if="delay"></date-picker>
+                    <date-picker :title="grantedOn" v-model="user_certification.granted_on" :default="getDate(user_certification.granted_on)" v-if="delay"></date-picker>
+                    <date-picker :title="validTo" v-model="user_certification.valid_to" :default="getDate(user_certification.valid_to)" v-if="delay"></date-picker>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
                     </div>
@@ -46,44 +46,45 @@
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import DatePicker from "../commons/DatePicker";
-import MasterView from "../../views/MasterView";
+import rf from "../../../requests/RequestFactory";
+import DatePicker from "../DatePicker";
+import MasterView from "../../../views/MasterView";
 import _ from "lodash";
 
 export default {
-  name: "EducationModal",
+  name: "CertificationModal",
   extends: MasterView,
   components: {
     DatePicker
   },
   data() {
     return {
-      createTitle: "Thêm học vấn",
-      updateTitle: "Chỉnh sửa học vấn",
+      createTitle: "Thêm chứng chỉ",
+      updateTitle: "Chỉnh sửa chứng chỉ",
       btnCreate: "Lưu",
       btnUpdate: "Cập nhập",
-      qualifications: {},
-      user_educations: {
-        qualification_id: "",
+      certifications: {},
+      user_certification: {
+        certification_id: "",
         institute: "",
-        started_at: "",
-        ended_at: "",
+        granted_on: "",
+        valid_to: "",
         emp_id: this.empId,
         id: ""
       },
       isDisable: false,
-      errors: {},
-      startedAt: "Ngày bắt đầù",
-      endedAt: "Ngày hoàn thành",
-      delay: false
+      errors: [],
+      grantedOn: "Ngày cấp",
+      validTo: "Ngày hết hạn",
+      delay: false,
+      modal_id: "certification-modal"
     };
   },
   props: {
     empId: {
       type: Number
     },
-    education: {
+    certification: {
       type: Object
     },
     isCreate: {
@@ -94,11 +95,11 @@ export default {
     getDate(date) {
       return date ? new Date(date) : new Date();
     },
-    getQuatifications() {
-      rf.getRequest("QualificationRequest")
+    getCertifications() {
+      rf.getRequest("CertificationRequest")
         .getAll()
         .then(res => {
-          this.qualifications = res;
+          this.certifications = res;
         });
     },
     hasErrors() {
@@ -108,49 +109,41 @@ export default {
       e.preventDefault();
       this.isDisable = true;
       const keyNullable = ["id"];
-      _.forEach(this.user_educations, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1)
+      _.forEach(this.user_certification, (val, key) => {
+        if (!val && keyNullable.indexOf(key) === -1) {
           this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-        this.isDisable = false;
+        }
       });
-      if (this.errors.length) {
+      if (this.hasErrors()) {
         this.isDisable = false;
         return;
       }
       if (!this.isCreate) {
         return rf
-          .getRequest("EducationRequest")
-          .update(this.user_educations)
+          .getRequest("CertificationUserRequest")
+          .update({ data: this.user_certification })
           .then(res => {
             if (res.status) {
-              this.clearData();
-              this.hideModal("education-modal");
-              window.EventBus.$emit("update-eEducation", res.data);
+              this.emitEvent("update-eCertification", res.data);
             }
           });
       }
-      rf.getRequest("EducationRequest")
-        .store(this.user_educations)
+      rf.getRequest("CertificationUserRequest")
+        .store({ data: this.user_certification })
         .then(res => {
           if (res.status) {
-            this.clearData();
-            this.hideModal("education-modal");
-            window.EventBus.$emit("add-eEducation", res.data);
+            this.emitEvent("add-eCertification", res.data);
           }
         });
     },
     clearData() {
-      this.user_educations.qualification_id = "";
-      this.user_educations.institute = "";
-      this.user_educations.id = "";
-      this.user_educations.started_at = "";
-      this.user_educations.ended_at = "";
+      this.user_dependent = this.emptyData(this.user_dependent);
       this.isDisable = false;
     },
     init() {
-      this.user_educations = this.education;
+      this.user_certification = this.certification;
       this.delay = true;
-      this.getQuatifications();
+      this.getCertifications();
     }
   },
   mounted() {
@@ -158,4 +151,6 @@ export default {
   }
 };
 </script>
-<style lang="sass" scoped></style>
+
+<style lang="sass" scoped>
+</style>

@@ -2,14 +2,14 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-language">
-          <span class="icon"><i class="ti-plus"></i></span>Languages
+        <a href="#" class="card-link icon-p" @click="addLanguage">
+          <span class="icon"><i class="ti-plus"></i></span>Ngôn ngữ
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
         <div class="card-body" v-if="userLanguages">
           <div class="list-group-item sub-tab-item" v-for="(lang, i) in userLanguages" :key="i">
-            <h5 class="list-group-item-heading">{{ lang.title }}
+            <h5 class="list-group-item-heading" style="text-transform: uppercase">{{ lang.language }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeLang(lang)">
                 <i class="ti-trash"></i>
               </button>
@@ -25,74 +25,24 @@
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-language">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Thêm mới ngôn ngữ</h5>
-            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12 mt-12">
-                <div class="card">
-                  <div class="card-body">
-                    <form @submit.prevent="store">
-                      <div class="form-group">
-                        <label for="kni">Language</label>
-                        <select v-model="user_languages.lang_id" id="kni" class="form-control">
-                          <option value="">Lựa chọn Language</option>
-                          <option v-for="(lang, index) in languages"
-                            :key="index"
-                            :value="lang.id"
-                            v-text="lang.title"/>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Listen</label>
-                        <input type="text" v-model="user_languages.listen" class="form-control" id="detail-kni" placeholder="institute">
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Speak</label>
-                        <input type="text" v-model="user_languages.speak" class="form-control" id="detail-kni" placeholder="institute">
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Read</label>
-                        <input type="text" v-model="user_languages.read" class="form-control" id="detail-kni" placeholder="institute">
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Write</label>
-                        <input type="text" v-model="user_languages.write" class="form-control" id="detail-kni" placeholder="institute">
-                      </div>
-                      <div v-if="hasErrors()" class="errors">
-                        <span v-text="errors[0].keys"/>
-                      </div>
-                      <button type="submit" :disabled="isDisable" class="btn btn-primary mt-4 pr-4 pl-4"><i class="ti-save"></i> Lưu</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <language-modal v-if="isShow" :emp-id="empId" :e-language="user_language" :is-create="isCreate"></language-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
-import $ from "jquery";
-import _ from "lodash";
+import LanguageModal from "../commons/EmployeeModal/LanguageModal";
 
 export default {
   name: "AddEducations",
   extends: MasterView,
+  components: {
+    LanguageModal
+  },
   data() {
     return {
-      languages: {},
-      user_languages: {
+      user_language: {
         lang_id: "",
         listen: "",
         speak: "",
@@ -101,9 +51,10 @@ export default {
         emp_id: this.empId,
         id: ""
       },
-      errors: [],
-      isDisable: false,
-      userLanguages: []
+      isCreate: true,
+      userLanguages: [],
+      isShow: false,
+      modal_id: "language-modal"
     };
   },
   props: {
@@ -112,92 +63,57 @@ export default {
     }
   },
   methods: {
-    getLanguages() {
-      rf.getRequest("LanguagesRequest")
-        .getAll()
-        .then(res => {
-          this.languages = res;
-        });
-    },
     getUserLanguages() {
-      const param = {
-        emp_id: this.empId
-      };
-
       rf.getRequest("UserLanguagesRequest")
-        .getAll(param)
+        .getELanguages({ id: this.empId })
         .then(res => {
           this.userLanguages = res;
         });
     },
-    hasErrors() {
-      return !_.isEmpty(this.errors);
-    },
-    store(e) {
+    addLanguage(e) {
       e.preventDefault();
-      this.isDisable = true;
-      const keyNullable = ["id"];
-      _.forEach(this.user_languages, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1)
-          this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-        this.isDisable = false;
-      });
-      if (this.errors.length) {
-        this.isDisable = false;
-        return;
-      }
-      if (this.user_languages.id) {
-        return rf
-          .getRequest("UserLanguagesRequest")
-          .update(this.user_languages)
+      this.isCreate = true;
+      this.user_language.emp_id = this.empId;
+      this.isShow = true;
+      this.addEventShowModal();
+    },
+    showModalUpdate(lang) {
+      this.isCreate = false;
+      Object.assign(this.user_language, this.setData(this.user_language, lang));
+      this.isShow = true;
+      this.addEventShowModal();
+    },
+    removeLang(lang) {
+      if (confirm("Bạn có chắc muốn xóa ngôn ngữ này khỏi danh sách?")) {
+        rf.getRequest("UserLanguagesRequest")
+          .destroy({ id: lang.id })
           .then(res => {
             if (res.status) {
-              this.clearData();
-              $(this.$refs.add_modal).modal("hide");
-              this.getUserLanguages();
+              window.EventBus.$emit("delete-eLanguage", lang);
             }
           });
       }
-      rf.getRequest("UserLanguagesRequest")
-        .store(this.user_languages)
-        .then(res => {
-          if (res.status) {
-            this.clearData();
-            $(this.$refs.add_modal).modal("hide");
-            this.getUserLanguages();
-          }
-        });
-    },
-    showModalUpdate(lang) {
-      this.user_languages.lang_id = lang.lang_id;
-      this.user_languages.listen = lang.listen;
-      this.user_languages.speak = lang.speak;
-      this.user_languages.read = lang.read;
-      this.user_languages.write = lang.write;
-      this.user_languages.id = lang.id;
-      $(this.$refs.add_modal).modal("show");
-    },
-    removeLang(lang) {
-      rf.getRequest("UserLanguagesRequest")
-        .destroy({ id: lang.id })
-        .then(res => {
-          if (res.status) {
-            this.getUserLanguages();
-          }
-        });
     },
     clearData() {
-      this.user_languages.lang_id = "";
-      this.user_languages.listen = "";
-      this.user_languages.speak = "";
-      this.user_languages.read = "";
-      this.user_languages.write = "";
-      this.user_languages.id = "";
-      this.isDisable = false;
+      this.user_language = this.emptyData(this.user_language);
+    },
+    onEventLanguage() {
+      window.EventBus.$on("update-eLanguage", eLang => {
+        const index = this.userLanguages.findIndex(l => l.id === eLang.id);
+        this.userLanguages[index] = eLang;
+        this.$forceUpdate();
+      });
+      window.EventBus.$on("add-eLanguage", eLang =>
+        this.userLanguages.push(eLang)
+      );
+      window.EventBus.$on("delete-eLanguage", eLang => {
+        const index = this.userLanguages.findIndex(l => l.id === eLang.id);
+        this.userLanguages.splice(index, 1);
+      });
     },
     init() {
-      this.getLanguages();
       this.getUserLanguages();
+      this.onEventLanguage();
     }
   },
   mounted() {
@@ -206,7 +122,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 button::disabled
   cursor: not-allowed
 #detail-kni

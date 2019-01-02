@@ -355,4 +355,11 @@ export default {
   p
     margin: 0
     padding: 0
+#accordion3
+  .card-body
+    background-color: #fff
+.according
+  .card-body
+    border: 1px solid #bcbec0
+    border-top: none
 </style>

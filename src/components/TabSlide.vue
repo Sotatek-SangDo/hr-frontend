@@ -28,4 +28,15 @@ export default {
 <style lang="sass">
 .nav
   padding-left: 20px
+  li.nav-item
+    a.nav-link
+      border: 1px solid #dee2e6
+      &.active
+        background-color: #38a83b
+        color: #fff
+      @media screen and (max-width: 415px)
+        font-size: 12px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-bottom: 1px solid #dee2e6
 </style>

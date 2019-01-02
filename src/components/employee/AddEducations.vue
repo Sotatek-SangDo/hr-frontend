@@ -24,14 +24,14 @@
         </div>
       </div>
     </div>
-    <education-modal :education="user_educations" :is-create="isCreate" :emp-id="empId" v-if="isShow"></education-modal>
+    <education-modal :education="user_education" :is-create="isCreate" :emp-id="empId" v-if="isShow"></education-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
-import EducationModal from "../commons/EducationModal";
+import EducationModal from "../commons/EmployeeModal/EducationModal";
 
 export default {
   name: "AddEducations",
@@ -41,8 +41,7 @@ export default {
   },
   data() {
     return {
-      qualifications: {},
-      user_educations: {
+      user_education: {
         qualification_id: "",
         institute: "",
         started_at: "",
@@ -52,7 +51,8 @@ export default {
       },
       isShow: false,
       isCreate: true,
-      userEducations: []
+      userEducations: [],
+      modal_id: "education-modal"
     };
   },
   props: {
@@ -71,57 +71,32 @@ export default {
     addEducation(e) {
       e.preventDefault();
       this.isCreate = true;
+      this.user_education.emp_id = this.empId;
       this.isShow = true;
-      this.sleep(500).then(() => {
-        this.showModal("education-modal");
-        this.onHiddenModal(
-          "education-modal",
-          function() {
-            this.clearData();
-            this.isShow = false;
-          }.bind(this)
-        );
-      });
+      this.addEventShowModal();
     },
     showModalUpdate(qualification) {
       this.isCreate = false;
-      this.user_educations.qualification_id = qualification.qualification_id;
-      this.user_educations.institute = qualification.institute;
-      this.user_educations.started_at = qualification.started_at;
-      this.user_educations.ended_at = qualification.ended_at;
-      this.user_educations.id = qualification.id;
+      Object.assign(
+        this.user_education,
+        this.setData(this.user_education, qualification)
+      );
       this.isShow = true;
-      this.sleep(500).then(() => {
-        this.showModal("education-modal");
-        this.onHiddenModal(
-          "education-modal",
-          function() {
-            this.clearData();
-            this.isShow = false;
-          }.bind(this)
-        );
-      });
+      this.addEventShowModal();
     },
     removeEducation(qualification) {
-      if (confirm("Bạn có chắc muốn khóa trình đọ chuyên môn này?")) {
+      if (confirm("Bạn có chắc muốn xóa trình đọ chuyên môn này?")) {
         rf.getRequest("EducationRequest")
           .destroy({ id: qualification.id })
           .then(res => {
             if (res.status) {
-              this.userEducations.splice(
-                this.userEducations.indexOf(qualification),
-                1
-              );
+              window.EventBus.$emit("delete-eEducation", qualification);
             }
           });
       }
     },
     clearData() {
-      this.user_educations.qualification_id = "";
-      this.user_educations.institute = "";
-      this.user_educations.id = "";
-      this.user_educations.started_at = "";
-      this.user_educations.ended_at = "";
+      this.user_education = this.emptyData(this.user_education);
     },
     init() {
       this.getEducations();
@@ -133,8 +108,12 @@ export default {
         this.userEducations[index] = eEdu;
         this.$forceUpdate();
       });
-      window.EventBus.$on("add-eEducation", eEdu => {
-        this.userEducations.push(eEdu);
+      window.EventBus.$on("add-eEducation", eEdu =>
+        this.userEducations.push(eEdu)
+      );
+      window.EventBus.$on("delete-eEducation", eEdu => {
+        const index = this.userEducations.findIndex(s => s.id === eEdu.id);
+        this.userEducations.splice(index, 1);
       });
     }
   },

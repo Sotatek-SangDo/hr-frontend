@@ -367,7 +367,7 @@ export default {
   name: "home",
   data() {
     return {
-      headerTitle: "Dashbroad"
+      headerTitle: "Trang quản lý"
     };
   },
   components: {

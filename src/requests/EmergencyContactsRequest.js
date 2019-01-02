@@ -5,6 +5,10 @@ export default class EmergencyContactsRequest extends BaseRequest {
     const url = this.parseUrl("");
     return this.get(url, params);
   }
+  getEEmergencyContact(params) {
+    const url = this.parseUrl("/get-eEmergency-contact");
+    return this.get(url, params);
+  }
   store(params) {
     const url = this.parseUrl("/store");
     return this.post(url, params);

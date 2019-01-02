@@ -58,7 +58,7 @@ export default {
 .input-group-addon
   padding: 8px 14px
   background-color: #eaedf0
-  border-left: 1px solid #f3d9d9
+  border: 1px solid #f3d9d9
   border-radius: 0 5px 5px 0
   font-size: 26px
 </style>

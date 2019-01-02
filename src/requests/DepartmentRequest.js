@@ -5,6 +5,10 @@ export default class DepartmentRequest extends BaseRequest {
     const url = this.parseUrl("");
     return this.get(url, params);
   }
+  getEDepartment(params) {
+    const url = this.parseUrl("/get-eDepartment");
+    return this.get(url, params);
+  }
   store(params) {
     const url = this.parseUrl("/store");
     return this.post(url, params);

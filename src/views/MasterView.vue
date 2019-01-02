@@ -5,8 +5,12 @@
 
 <script>
 import $ from "jquery";
+import _ from "lodash";
 
 export default {
+  data() {
+    return {};
+  },
   methods: {
     init() {
       document.querySelectorAll(".script").forEach(script => {
@@ -33,17 +37,47 @@ export default {
         });
       }
     },
-    showModal(id) {
-      $(`#${id}`).modal("show");
+    showModal() {
+      $(`#${this.modal_id}`).modal("show");
     },
-    hideModal(id) {
-      $(`#${id}`).modal("hide");
+    hideModal() {
+      $(`#${this.modal_id}`).modal("hide");
     },
-    onHiddenModal(id, callback) {
-      $(`#${id}`).on("hidden.bs.modal", callback);
+    onHiddenModal(callback) {
+      $(`#${this.modal_id}`).on("hidden.bs.modal", callback);
+    },
+    addEventShowModal(milliseconds = 1000) {
+      this.sleep(milliseconds).then(() => {
+        this.showModal();
+        this.onHiddenModal(() => {
+          this.clearData();
+          this.isShow = false;
+        });
+      });
+    },
+    emptyData(data) {
+      return _.mapValues(data, () => "");
+    },
+    setData(arg1, arg2) {
+      return _.mapValues(arg1, (v, k) => {
+        if (arg2.hasOwnProperty(k)) {
+          return arg2[k];
+        }
+      });
+    },
+    emitEvent(eventName, eventData) {
+      this.clearData();
+      window.EventBus.$emit(eventName, eventData);
+      this.hideModal();
     },
     showLoader() {}
   },
   mounted() {}
 };
 </script>
+
+<style lang="sass">
+button
+  i.ti-save
+    margin-right: 10px
+</style>

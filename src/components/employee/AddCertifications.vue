@@ -2,90 +2,46 @@
   <div id="accordion6" class="according gradiant-bg">
     <div class="card">
       <div class="card-header">
-        <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-certification">
-          <span class="icon"><i class="ti-plus"></i></span>Education
+        <a href="#" class="card-link icon-p" @click="addCertification">
+          <span class="icon"><i class="ti-plus"></i></span>Chứng chỉ
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
         <div class="card-body" v-if="userCertifications">
           <div class="list-group-item sub-tab-item" v-for="(cer, i) in userCertifications" :key="i">
-            <h5 class="list-group-item-heading">{{ cer.name }}
-              <button class="but but-del" type="button" tooltip="Delete" @click="remove(cer)">
+            <h5 class="list-group-item-heading">{{ cer.certification_name }}
+              <button class="but but-del" type="button" tooltip="Delete" @click="removeCertification(cer)">
                 <i class="ti-trash"></i>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(cer)">
                 <i class="ti-marker-alt"></i>
               </button>
             </h5>
-            <p class="list-group-item-text">Granted On: {{ cer.granted_on }}</p>
-            <p class="list-group-item-text">Valid To: {{ cer.valid_to }}</p>
-            <p class="list-group-item-text">Institute: {{ cer.institute }}</p>
+            <p class="list-group-item-text">Ngày cấp: {{ cer.granted_on }}</p>
+            <p class="list-group-item-text">Có giá trị đến: {{ cer.valid_to }}</p>
+            <p class="list-group-item-text">Học tại: {{ cer.institute }}</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade show" ref="add_modal" id="add-certification">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Thêm mới học vấn</h5>
-            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12 mt-12">
-                <div class="card">
-                  <div class="card-body">
-                    <form @submit.prevent="store">
-                      <div class="form-group">
-                        <label for="kni">Certification</label>
-                        <select v-model="user_certifications.certification_id" id="kni" class="form-control">
-                          <option value="">Lựa chọn Certifications</option>
-                          <option v-for="(cer, index) in certifications"
-                            :key="index"
-                            :value="cer.id"
-                            v-text="cer.name"/>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="detail-kni">Institute</label>
-                        <input type="text" v-model="user_certifications.institute" class="form-control" id="detail-kni" placeholder="institute">
-                      </div>
-                      <date-picker :title="grantedOn" v-model="user_certifications.granted_on" :default="getDate(user_certifications.started_at)"></date-picker>
-                      <date-picker :title="validTo" v-model="user_certifications.valid_to" :default="getDate(user_certifications.ended_at)"></date-picker>
-                      <div v-if="hasErrors()" class="errors">
-                        <span v-text="errors[0].keys"/>
-                      </div>
-                      <button type="submit" :disabled="isDisable" class="btn btn-primary mt-4 pr-4 pl-4"><i class="ti-save"></i> Lưu</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <certification-modal v-if="isShow" :emp-id="empId" :isCreate="isCreate" :certification="user_certification"></certification-modal>
   </div>
 </template>
 
 <script>
 import rf from "../../requests/RequestFactory";
 import MasterView from "../../views/MasterView";
-import DatePicker from "../commons/DatePicker";
-import $ from "jquery";
-import _ from "lodash";
+import CertificationModal from "../../components/commons/EmployeeModal/CertificationModal";
 
 export default {
   name: "AddCertification",
   extends: MasterView,
   components: {
-    DatePicker
+    CertificationModal
   },
   data() {
     return {
-      certifications: {},
-      user_certifications: {
+      user_certification: {
         certification_id: "",
         institute: "",
         granted_on: "",
@@ -93,11 +49,9 @@ export default {
         emp_id: this.empId,
         id: ""
       },
-      grantedOn: "Granted On",
-      validTo: "Valid To",
-      errors: [],
-      isDisable: false,
-      userCertifications: []
+      userCertifications: [],
+      isShow: false,
+      modal_id: "certification-modal"
     };
   },
   props: {
@@ -106,92 +60,60 @@ export default {
     }
   },
   methods: {
-    getDate(date) {
-      return date ? new Date(date) : new Date();
-    },
-    getCertifications() {
-      rf.getRequest("CertificationRequest")
-        .getAll()
-        .then(res => {
-          this.certifications = res;
-        });
-    },
     getCertificationsUser() {
-      const param = {
-        emp_id: this.empId
-      };
-
       rf.getRequest("CertificationUserRequest")
-        .getAll(param)
+        .getECertification({ id: this.empId })
         .then(res => {
           this.userCertifications = res;
         });
     },
-    hasErrors() {
-      return !_.isEmpty(this.errors);
-    },
-    store(e) {
+    addCertification(e) {
       e.preventDefault();
-      this.isDisable = true;
-      const keyNullable = ["id"];
-      _.forEach(this.user_certifications, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1)
-          this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` });
-        this.isDisable = false;
-      });
-      if (this.errors.length) {
-        this.isDisable = false;
-        return;
-      }
-      if (this.user_certifications.id) {
-        return rf
-          .getRequest("CertificationUserRequest")
-          .update(this.user_certifications)
+      this.isCreate = true;
+      this.user_certification.emp_id = this.empId;
+      this.isShow = true;
+      this.addEventShowModal();
+    },
+    showModalUpdate(certification) {
+      this.isCreate = false;
+      Object.assign(
+        this.user_certification,
+        this.setData(this.user_certification, certification)
+      );
+      this.isShow = true;
+      this.addEventShowModal();
+    },
+    removeCertification(certification) {
+      if (confirm("Bạn có chắc muốn xóa chứng chỉ này?")) {
+        rf.getRequest("CertificationUserRequest")
+          .destroy({ id: certification.id })
           .then(res => {
             if (res.status) {
-              this.clearData();
-              $(this.$refs.add_modal).modal("hide");
-              this.getCertificationsUser();
+              window.EventBus.$emit("delete-eCertification", certification);
             }
           });
       }
-      rf.getRequest("CertificationUserRequest")
-        .store(this.user_certifications)
-        .then(res => {
-          if (res.status) {
-            this.clearData();
-            $(this.$refs.add_modal).modal("hide");
-            this.getCertificationsUser();
-          }
-        });
-    },
-    showModalUpdate(certification) {
-      this.user_certifications.qualification_id =
-        certification.certification_id;
-      this.user_certifications.institute = certification.institute;
-      this.user_certifications.started_at = certification.granted_on;
-      this.user_certifications.ended_at = certification.valid_to;
-      this.user_certifications.id = certification.id;
-      $(this.$refs.add_modal).modal("show");
-    },
-    remove(certification) {
-      rf.getRequest("CertificationUserRequest")
-        .destroy({ id: certification.id })
-        .then(res => {
-          if (res.status) {
-            this.getCertificationsUser();
-          }
-        });
     },
     clearData() {
-      this.user_certifications.certification_id = "";
-      this.user_certifications.institute = "";
-      this.user_certifications.id = "";
-      this.isDisable = false;
+      this.user_certification = this.emptyData(this.user_certification);
+    },
+    onEventCertification() {
+      window.EventBus.$on("update-eCertification", eCer => {
+        const index = this.userCertifications.findIndex(c => c.id === eCer.id);
+        this.userCertifications[index] = eCer;
+        this.$forceUpdate();
+      });
+      window.EventBus.$on("add-eCertification", eCer =>
+        this.userCertifications.push(eCer)
+      );
+      window.EventBus.$on("delete-eCertification", eCer => {
+        const index = this.userCertifications.findIndex(c => c.id === eCer.id);
+        this.userCertifications.splice(index, 1);
+      });
     },
     init() {
-      this.getCertifications();
       this.getCertificationsUser();
+      this.onEventCertification();
     }
   },
   mounted() {

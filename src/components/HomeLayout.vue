@@ -19,12 +19,6 @@
                         <span></span>
                         <span></span>
                     </div>
-                    <div class="search-box pull-left">
-                        <form action="#">
-                            <input type="text" name="search" placeholder="Search..." required>
-                            <i class="ti-search"></i>
-                        </form>
-                    </div>
                 </div>
                 <!-- profile info & task notification -->
                 <div class="col-md-6 col-sm-4 clearfix">
@@ -181,6 +175,9 @@
                     <div class="breadcrumbs-area clearfix">
                         <h4 class="page-title pull-left">{{ headerTitle }}</h4>
                         <ul class="breadcrumbs pull-left">
+                            <li>
+                                <a href="/">Trang chủ</a>
+                            </li>
                             <li v-for="(breadcrumb, index) in breadcrumbs" :key="index">
                               <a v-if="breadcrumb.href" :href="breadcrumb.href" v-text="breadcrumb.title"/>
                               <span v-else v-text="breadcrumb.title"/>
@@ -207,7 +204,7 @@
       <!-- footer area start-->
       <footer>
           <div class="footer-area">
-              <p>© Copyright 2018. All right reserved. Template by <a href="https://colorlib.com/wp/">Colorlib</a>.</p>
+              <p>© Copyright 2018. All right reserved. Template by <a href="#">Sang Do</a>.</p>
           </div>
       </footer>
       <!-- footer area end-->
@@ -437,4 +434,7 @@ export default {
   margin-bottom: 20px
 .page-title
   line-height: 43px
+.header-area
+  .notification-area
+    margin-bottom: 0
 </style>
