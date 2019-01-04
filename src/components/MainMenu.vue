@@ -24,7 +24,7 @@
                       </a>
                       <ul class="collapse">
                         <li class="active">
-                          <a href="/employees">Danh sach nhan vien</a>
+                          <a href="/employees">Danh sách nhân viên</a>
                         </li>
                       </ul>
                     </li>
@@ -47,25 +47,10 @@
                           </ul>
                       </li>
                       <li>
-                          <a href="javascript:void(0)" aria-expanded="true"><i class="ti-palette"></i><span>UI Features</span></a>
+                          <a href="javascript:void(0)" aria-expanded="true"><i class="ti-palette"></i><span>Bảo hiểm</span></a>
                           <ul class="collapse">
-                              <li><a href="accordion.html">Accordion</a></li>
-                              <li><a href="alert.html">Alert</a></li>
-                              <li><a href="badge.html">Badge</a></li>
-                              <li><a href="button.html">Button</a></li>
-                              <li><a href="button-group.html">Button Group</a></li>
-                              <li><a href="cards.html">Cards</a></li>
-                              <li><a href="dropdown.html">Dropdown</a></li>
-                              <li><a href="list-group.html">List Group</a></li>
-                              <li><a href="media-object.html">Media Object</a></li>
-                              <li><a href="modal.html">Modal</a></li>
-                              <li><a href="pagination.html">Pagination</a></li>
-                              <li><a href="popovers.html">Popover</a></li>
-                              <li><a href="progressbar.html">Progressbar</a></li>
-                              <li><a href="tab.html">Tab</a></li>
-                              <li><a href="typography.html">Typography</a></li>
-                              <li><a href="form.html">Form</a></li>
-                              <li><a href="grid.html">grid system</a></li>
+                              <li><a href="/insurances">Hồ sơ bảo hiểm</a></li>
+                              <li><a href="/insurance-payment">Thanh toán bảo hiểm</a></li>
                           </ul>
                       </li>
                       <li>

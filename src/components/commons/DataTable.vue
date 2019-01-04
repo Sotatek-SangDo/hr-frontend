@@ -10,7 +10,7 @@
         <slot name="body" v-for="(row, i) in sortRows" :item="row" :data="sortRows" :index="i"></slot>
       </tbody>
     </table>
-    <div class="dataTables_paginate" v-if="hasPagination">
+    <div class="dataTables_paginate" v-if="hasPagination && pageNumber">
       <ul class="pagination">
         <li class="paginate_button page-item" :class="!canPrev() ? 'disabled' : ''">
           <a class="page-link" href="#" @click="prevPage">&laquo;</a>

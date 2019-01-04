@@ -37,6 +37,25 @@ export default new Router({
       name: "depar-list",
       component: () => import("@/views/Department/Departments.vue"),
       beforeEnter: requireAuth
+    },
+    {
+      path: "/insurances",
+      name: "insurances",
+      component: () => import("@/views/Insurances/Insurances.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/insurance-payment",
+      name: "insurance-payment",
+      component: () => import("@/views/Insurances/InsurancePayment.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/insurance-payment-detail",
+      name: "insurance-payment-detail",
+      props: route => ({ id: route.query.id }),
+      component: () => import("@/views/Insurances/IPDetail.vue"),
+      beforeEnter: requireAuth
     }
   ]
 });
