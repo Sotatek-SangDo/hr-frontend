@@ -19,6 +19,10 @@
               <i class="material-icons">error_outline</i>
               <span class="mess">{{ passError || 'Mật khẩu ít nhất 6 kí tự' }}</span>
             </div>
+            <div class="error" v-if="hasErrorRequest('request_auth')">
+              <i class="material-icons">error_outline</i>
+              <span class="mess">{{ errors['request_auth'] }}</span>
+            </div>
             <div class="submit-btn-area">
                 <button id="form_submit" :disable="isDisable()">Đăng Nhập <i class="ti-arrow-right"></i></button>
             </div>
@@ -30,8 +34,12 @@
 
 <script>
 import auth from "../auth";
+import rf from "../requests/RequestFactory";
+import MasterView from "../views/MasterView";
 
 export default {
+  name: "LoginForm",
+  extends: MasterView,
   data() {
     return {
       params: {
@@ -39,7 +47,8 @@ export default {
         password: ""
       },
       passError: "",
-      validatePass: true
+      validatePass: true,
+      errors: []
     };
   },
   watch: {
@@ -57,7 +66,12 @@ export default {
         if (!res.authenticated) {
           this.passError = res.error;
         } else {
-          this.$router.replace(this.$route.query.redirect || "/");
+          rf.getRequest("UserRequest")
+            .authenticate()
+            .then(res => {
+              localStorage.setItem("user", JSON.stringify(res));
+              this.$router.replace(this.$route.query.redirect || "/");
+            });
         }
       });
     },
@@ -73,7 +87,10 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() {
+    //this.init();
+    this.onErrorRequest();
+  }
 };
 </script>
 <style scoped lang="sass">

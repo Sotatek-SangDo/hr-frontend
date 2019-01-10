@@ -5,8 +5,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import config from "../src/config/config.js";
-import "./script.js";
 import EventBus from "./event-bus";
+import "./script.js";
 
 Vue.use(BootstrapVue);
 

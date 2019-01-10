@@ -12,18 +12,7 @@ export default {
     return {};
   },
   methods: {
-    init() {
-      document.querySelectorAll(".script").forEach(script => {
-        const src = script.getAttribute("src");
-        if (src.indexOf("code.highcharts") === -1) {
-          const parent = script.parentElement;
-          script.remove();
-          const newTag = document.createElement("script");
-          newTag.src = src;
-          parent.append(newTag);
-        }
-      });
-    },
+    init() {},
     sleep(milliseconds) {
       return new Promise(resolve => setTimeout(resolve, milliseconds));
     },
@@ -55,8 +44,20 @@ export default {
         });
       });
     },
+    hasErrorRequest(type) {
+      return !_.isEmpty(this.errors[type]);
+    },
     emptyData(data) {
       return _.mapValues(data, () => "");
+    },
+    onErrorRequest() {
+      window.EventBus.$on("errors", data => {
+        this.errors[data.type] = data.error;
+        this.$forceUpdate();
+      });
+    },
+    clearData(type) {
+      delete this.errors[type];
     },
     setData(arg1, arg2) {
       return _.mapValues(arg1, (v, k) => {

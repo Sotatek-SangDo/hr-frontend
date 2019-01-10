@@ -20,11 +20,11 @@ export default {
   },
   data() {
     return {
-        headerTitle: "Danh sách thanh toán bảo hiểm",
-        breadcrumbs: [
-          { title: "Đợt thanh toán", href: "/insurance-payment" },
-          { title: "Danh sách thanh toán bảo hiểm", href: "" }
-        ],
+      headerTitle: "Danh sách thanh toán bảo hiểm",
+      breadcrumbs: [
+        { title: "Đợt thanh toán", href: "/insurance-payment" },
+        { title: "Danh sách thanh toán bảo hiểm", href: "" }
+      ]
     };
   },
   methods: {
@@ -38,7 +38,7 @@ export default {
   mounted() {
     this.inital();
   }
-}
+};
 </script>
 
 <style lang="sass" scoped>

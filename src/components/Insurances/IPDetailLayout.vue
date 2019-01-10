@@ -68,7 +68,7 @@ export default {
       isShow: false,
       isCreate: true,
       modal_id: "detail-modal"
-    }
+    };
   },
   methods: {
     getInsurancePayment() {
@@ -83,10 +83,7 @@ export default {
     },
     updateInsurancePayment(ipDetail) {
       this.isCreate = false;
-      Object.assign(
-        this.ipDetail,
-        this.setData(this.ipDetail, ipDetail)
-      );
+      Object.assign(this.ipDetail, this.setData(this.ipDetail, ipDetail));
       this.isShow = true;
       this.addEventShowModal();
     },

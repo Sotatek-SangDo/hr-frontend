@@ -113,16 +113,15 @@ export default {
   },
   methods: {
     getEmployees() {
-      rf.getRequest('EmployeeRequest')
+      rf.getRequest("EmployeeRequest")
         .getAll()
         .then(res => (this.emps = res));
     },
     getInsurancePayments() {
-      return rf.getRequest("InsurancePaymentRequest")
+      return rf
+        .getRequest("InsurancePaymentRequest")
         .getAll()
-        .then(res => 
-          this.insurancePayments = res
-        );
+        .then(res => (this.insurancePayments = res));
     },
     hasErrors() {
       return !_.isEmpty(this.errors);

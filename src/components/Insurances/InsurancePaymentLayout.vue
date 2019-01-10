@@ -52,11 +52,14 @@ export default {
       isShow: false,
       isCreate: true,
       modal_id: "insurance-payment-modal"
-    }
+    };
   },
   methods: {
     detailPage(param) {
-        return this.$router.push({ name: 'insurance-payment-detail', query: { id: param } });
+      return this.$router.push({
+        name: "insurance-payment-detail",
+        query: { id: param }
+      });
     },
     getInsurancePayments() {
       return rf.getRequest("InsurancePaymentRequest").getAll();

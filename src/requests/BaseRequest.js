@@ -1,55 +1,23 @@
 import axios from "axios";
-import ss from "../config";
-import crypto from "crypto";
 const PREFIX = "api/v1";
+import EventBus from "../event-bus";
 
 export default class BaseRequest {
   getPrefix() {
     return `${window.config.API_URL}${PREFIX}`;
   }
-  parseParams(params, url, method = "GET") {
-    const api_token = atob(ss.storage(window.config.SS_KEY));
-    const signature = this.sign(url, method);
-    const tmp_param = {
-      api_token: api_token,
-      signature: signature
-    };
-    if (params instanceof FormData) {
-      params.append("api_token", api_token);
-      params.append("signature", signature);
-    } else {
-      Object.assign(params, tmp_param);
-    }
-    return params;
+  getAuthorization() {
+    return `Bearer ${localStorage.getItem("access_token")}`;
   }
-  sign(url, method) {
-    const sign_url = `${method} ${PREFIX}${url}`;
-    return crypto
-      .createHmac("sha256", `${atob(ss.storage(window.config.SS_KEY))}`)
-      .update(sign_url)
-      .digest("hex");
-  }
-  get(url, params = {}, cancelToken) {
-    params = this.parseParams(params, url);
+  get(url, params = {}) {
     return new Promise((resolve, reject) => {
       axios
         .get(this.getPrefix() + url, {
           params,
-          cancelToken: cancelToken ? cancelToken.token : undefined
+          headers: {
+            Authorization: this.getAuthorization()
+          }
         })
-        .then(response => {
-          resolve(response.data);
-        })
-        .catch(error => {
-          this._errorHandler(reject, error);
-        });
-    });
-  }
-  put(url, data = {}) {
-    data = this.parseParams(data, url, "PUT");
-    return new Promise((resolve, reject) => {
-      axios
-        .put(this.getPrefix() + url, data)
         .then(response => {
           resolve(response.data);
         })
@@ -59,23 +27,14 @@ export default class BaseRequest {
     });
   }
   post(url, data = {}) {
-    const params = this.parseParams(data, url, "POST");
+    const params = data;
     return new Promise((resolve, reject) => {
       axios
-        .post(this.getPrefix() + url, params)
-        .then(response => {
-          resolve(response.data);
+        .post(this.getPrefix() + url, params, {
+          headers: {
+            Authorization: this.getAuthorization()
+          }
         })
-        .catch(error => {
-          this._errorHandler(reject, error);
-        });
-    });
-  }
-  del(url, params = {}) {
-    params = this.parseParams(params, url, "DELETE");
-    return new Promise((resolve, reject) => {
-      axios
-        .delete(this.getPrefix() + url, { params })
         .then(response => {
           resolve(response.data);
         })
@@ -90,10 +49,13 @@ export default class BaseRequest {
   _errorHandler(reject, err) {
     //window.app.$broadcast('EVENT_COMMON_ERROR', err);
     if (err.response && err.response.status === 401) {
-      // window.location.reload();
+      //window.location.reload();
     }
     if (err.response && err.response.status === 503) {
       // window.location.reload();
+    }
+    if (err.response && err.response.status === 400) {
+      EventBus.$emit("errors", { type: "request_auth", error: err.message });
     }
     return reject(err);
   }
