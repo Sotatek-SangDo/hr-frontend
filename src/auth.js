@@ -1,6 +1,11 @@
 import ss from "./config";
-import config from "../src/config/config.js";
+import config from "./config.js";
 import OAuth from "./auth/OAuth";
+import Vue from 'vue'
+import App from './App.vue'
+import { createRouter } from './router'
+import { createStore } from "./store"
+
 
 export default {
   login(params, cb) {

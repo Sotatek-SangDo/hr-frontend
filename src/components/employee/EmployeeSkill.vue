@@ -42,6 +42,7 @@ import rf from "../../requests/RequestFactory";
 import DataTable from "../commons/DataTable";
 import MasterView from "../../views/MasterView";
 import SkillModal from "../commons/EmployeeModal/SkillModal";
+import { EventBus } from '../../event-bus.js';
 
 export default {
   name: "EmployeeSkill",
@@ -87,7 +88,7 @@ export default {
           .destroy({ id: skill.id })
           .then(res => {
             if (res.status) {
-              window.EventBus.$emit("delete-eskill", skill);
+              this.$emit("delete-eskill", skill);
             }
           });
       }
@@ -100,9 +101,9 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-eskill", () => this.tableRefresh());
-      window.EventBus.$on("update-eskill", () => this.tableRefresh());
-      window.EventBus.$on("delete-eskill", () => this.tableRefresh());
+      this.$on("add-eskill", () => this.tableRefresh());
+      this.$on("update-eskill", () => this.tableRefresh());
+      this.$on("delete-eskill", () => this.tableRefresh());
     }
   },
   mounted() {

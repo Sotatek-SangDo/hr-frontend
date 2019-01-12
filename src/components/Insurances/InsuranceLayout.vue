@@ -92,7 +92,7 @@ export default {
           .destroy({ id: insurance.id })
           .then(res => {
             if (res.status) {
-              window.EventBus.$emit("delete-eInsurance", insurance);
+              this.$emit("delete-eInsurance", insurance);
             }
           });
       }
@@ -114,9 +114,9 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-eInsurance", () => this.tableRefresh());
-      window.EventBus.$on("update-eInsurance", () => this.tableRefresh());
-      window.EventBus.$on("delete-eInsurance", () => this.tableRefresh());
+      this.$on("add-eInsurance", () => this.tableRefresh());
+      this.$on("update-eInsurance", () => this.tableRefresh());
+      this.$on("delete-eInsurance", () => this.tableRefresh());
     }
   },
   mounted() {

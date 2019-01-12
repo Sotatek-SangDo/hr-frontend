@@ -99,7 +99,7 @@ export default {
           .destroy({ id: lang.id })
           .then(res => {
             if (res.status) {
-              window.EventBus.$emit("delete-eLanguage", lang);
+              this.$emit("delete-eLanguage", lang);
             }
           });
       }
@@ -112,9 +112,9 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-eLanguage", () => this.tableRefresh());
-      window.EventBus.$on("update-eLanguage", () => this.tableRefresh());
-      window.EventBus.$on("delete-eLanguage", () => this.tableRefresh());
+      this.$on("add-eLanguage", () => this.tableRefresh());
+      this.$on("update-eLanguage", () => this.tableRefresh());
+      this.$on("delete-eLanguage", () => this.tableRefresh());
     }
   },
   mounted() {

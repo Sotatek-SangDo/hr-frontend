@@ -94,7 +94,7 @@ export default {
           .destroy({ id: certification.id })
           .then(res => {
             if (res.status) {
-              window.EventBus.$emit("delete-eCertification", certification);
+              this.$emit("delete-eCertification", certification);
             }
           });
       }
@@ -107,9 +107,9 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-eCertification", () => this.tableRefresh());
-      window.EventBus.$on("update-eCertification", () => this.tableRefresh());
-      window.EventBus.$on("delete-eCertification", () => this.tableRefresh());
+      this.$on("add-eCertification", () => this.tableRefresh());
+      this.$on("update-eCertification", () => this.tableRefresh());
+      this.$on("delete-eCertification", () => this.tableRefresh());
     }
   },
   mounted() {

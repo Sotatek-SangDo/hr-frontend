@@ -93,7 +93,7 @@ export default {
           .destroy({ id: contact.id })
           .then(res => {
             if (res.status) {
-              window.EventBus.$emit("delete-eContact", contact);
+              this.$emit("delete-eContact", contact);
             }
           });
       }
@@ -106,9 +106,9 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-eContact", () => this.tableRefresh());
-      window.EventBus.$on("update-eContact", () => this.tableRefresh());
-      window.EventBus.$on("delete-eContact", () => this.tableRefresh());
+      this.$on("add-eContact", () => this.tableRefresh());
+      this.$on("update-eContact", () => this.tableRefresh());
+      this.$on("delete-eContact", () => this.tableRefresh());
     }
   },
   mounted() {

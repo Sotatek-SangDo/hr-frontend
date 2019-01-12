@@ -51,7 +51,7 @@ export default {
       return _.mapValues(data, () => "");
     },
     onErrorRequest() {
-      window.EventBus.$on("errors", data => {
+      this.$on("errors", data => {
         this.errors[data.type] = data.error;
         this.$forceUpdate();
       });
@@ -68,7 +68,7 @@ export default {
     },
     emitEvent(eventName, eventData) {
       this.clearData();
-      window.EventBus.$emit(eventName, eventData);
+      this.$emit(eventName, eventData);
       this.hideModal();
     },
     showLoader() {}

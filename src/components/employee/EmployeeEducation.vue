@@ -96,7 +96,7 @@ export default {
           .then(res => {
             if (res.status) {
               this.isShow = false;
-              window.EventBus.$emit("delete-eEducation", eEdu);
+              this.$emit("delete-eEducation", eEdu);
             }
           });
       }
@@ -109,9 +109,9 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-eEducation", () => this.tableRefresh());
-      window.EventBus.$on("update-eEducation", () => this.tableRefresh());
-      window.EventBus.$on("delete-eEducation", () => this.tableRefresh());
+      this.$on("add-eEducation", () => this.tableRefresh());
+      this.$on("update-eEducation", () => this.tableRefresh());
+      this.$on("delete-eEducation", () => this.tableRefresh());
     }
   },
   mounted() {

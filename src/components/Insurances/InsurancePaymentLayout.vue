@@ -87,8 +87,8 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-ip", () => this.tableRefresh());
-      window.EventBus.$on("update-ip", () => this.tableRefresh());
+      this.$on("add-ip", () => this.tableRefresh());
+      this.$on("update-ip", () => this.tableRefresh());
     }
   },
   mounted() {

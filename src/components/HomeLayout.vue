@@ -415,8 +415,8 @@ export default {
       auth.logout();
     },
     init() {
-      const user = window.config.getUser();
-      this.username = user.email;
+      // const user = window.config.getUser();
+      this.username = "admin@erptech.vn";
     }
   },
   mounted() {

@@ -95,8 +95,8 @@ export default {
       this.isShow = false;
     },
     onListener() {
-      window.EventBus.$on("add-ipDetail", () => this.tableRefresh());
-      window.EventBus.$on("update-ipDetail", () => this.tableRefresh());
+      this.$on("add-ipDetail", () => this.tableRefresh());
+      this.$on("update-ipDetail", () => this.tableRefresh());
     }
   },
   mounted() {
