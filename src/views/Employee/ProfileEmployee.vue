@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="profile-body" v-show="isProfile">
+    <div v-show="isProfile" class="profile-body">
       <div class="row">
         <div class="col-xs-12 col-md-2">
           <div class="row-fluid">
@@ -16,20 +16,20 @@
           <div class="row-fluid">
             <div class="col-md-12">
               <p>
-                <i class="fa fa-phone"></i> <span id="mobile_phone">&nbsp; +84{{ scopeEmp.phone }}</span>&nbsp;&nbsp;
-                <i class="fa fa-envelope"></i> <span id="work_email">&nbsp; {{ scopeEmp.work_email }}</span>
+                <i class="fa fa-phone"/> <span id="mobile_phone">&nbsp; +84{{ scopeEmp.phone }}</span>&nbsp;&nbsp;
+                <i class="fa fa-envelope"/> <span id="work_email">&nbsp; {{ scopeEmp.work_email }}</span>
               </p>
             </div>
           </div>
           <div class="row-fluid">
             <div class="col-xs-12" style="font-size:18px;border-bottom: 1px solid #DDD;margin-bottom: 10px;padding-bottom: 10px;">
-              <button @click="editProfile" class="btn btn-small btn-success" style="margin-right:10px;"><i class="fa fa-edit"></i> Thay đổi thông tin</button>
+              <button class="btn btn-small btn-success" style="margin-right:10px;" @click="editProfile"><i class="fa fa-edit"/> Thay đổi thông tin</button>
             </div>
           </div>
         </div>
       </div>
       <tab-slide :tabs="tabs">
-        <div role="tabpanel" class="tab-pane fade active in show" id="ttcb">
+        <div id="ttcb" role="tabpanel" class="tab-pane fade active in show">
           <div class="col-12 mt-5">
             <div class="card">
               <div class="card-body">
@@ -45,49 +45,49 @@
                         <div class="row">
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Quốc tịch:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Quốc tịch:</b></span><br>
                               <span class="info">{{ scopeEmp.nationality.name }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Mã nhân viên:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Mã nhân viên:</b></span><br>
                               <span class="info">{{ scopeEmp.id }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Giới tính:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Giới tính:</b></span><br>
                               <span class="info">{{ scopeEmp.gender }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Tình trạng hôn nhân:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Tình trạng hôn nhân:</b></span><br>
                               <span class="info">{{ scopeEmp.marital_status }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Ngày Sinh:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Ngày Sinh:</b></span><br>
                               <span class="info">{{ scopeEmp.birthday | date }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Ngày Gia nhập:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Ngày Gia nhập:</b></span><br>
                               <span class="info">{{ scopeEmp.joined_at | date }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Email cá nhân:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Email cá nhân:</b></span><br>
                               <span class="info">{{ scopeEmp.private_email }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Dân tộc:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Dân tộc:</b></span><br>
                               <span class="info">{{ scopeEmp.ethnicity }}</span>
                             </p>
                           </div>
@@ -106,34 +106,34 @@
                         <div class="row">
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Địa chỉ: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Địa chỉ: </b></span><br>
                               <span class="info">{{ scopeEmp.address }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Quốc gia:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Quốc gia:</b></span><br>
                               <span class="info">{{ scopeEmp.nationality.name }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Email: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Email: </b></span><br>
                               <span class="info">{{ scopeEmp.private_email }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Email công việc:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Email công việc:</b></span><br>
                               <span class="info">{{ scopeEmp.work_email }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Số điện thoại: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Số điện thoại: </b></span><br>
                               <span class="info">{{ scopeEmp.phone }}</span>
                             </p>
                           </div>
@@ -152,39 +152,39 @@
                         <div class="row">
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Chức danh: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Chức danh: </b></span><br>
                               <span class="info">{{ scopeEmp.pay_grade.title }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Phòng:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Phòng:</b></span><br>
                               <span class="info">{{ scopeEmp.department_id }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Công việc: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Công việc: </b></span><br>
                               <span class="info">{{ scopeEmp.job.title }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Tình trạng việc làm: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Tình trạng việc làm: </b></span><br>
                               <span class="info">{{ scopeEmp.employee_status.status }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Giám sát trực tiếp:</b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Giám sát trực tiếp:</b></span><br>
                               <span class="info">{{ scopeEmp.supervisor_name }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"></i>&nbsp;
-                              <span><b>Giám sát gián tiếp: </b></span><br/>
+                              <i class="ti-info"/>&nbsp;
+                              <span><b>Giám sát gián tiếp: </b></span><br>
                               <span class="info">{{ scopeEmp.indirect_supervisor_name }}</span>
                             </p>
                           </div>
@@ -197,51 +197,51 @@
             </div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="tdcm">
+        <div id="tdcm" role="tabpanel" class="tab-pane fade">
           <div class="col-12 mt-5">
             <div class="card">
               <div class="card-body">
                 <div class="row">
                   <div class="col-lg-3 col-md-6">
-                    <add-skills :emp-id="scopeEmp.id"></add-skills>
+                    <add-skills :emp-id="scopeEmp.id"/>
                   </div>
                   <div class="col-lg-3 col-md-6">
-                    <add-educations :emp-id="scopeEmp.id"></add-educations>
+                    <add-educations :emp-id="scopeEmp.id"/>
                   </div>
                   <div class="col-lg-3 col-md-6">
-                    <add-certifications :emp-id="scopeEmp.id"></add-certifications>
+                    <add-certifications :emp-id="scopeEmp.id"/>
                   </div>
                   <div class="col-lg-3 col-md-6">
-                    <add-languages :emp-id="scopeEmp.id"></add-languages>
+                    <add-languages :emp-id="scopeEmp.id"/>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="gd">
+        <div id="gd" role="tabpanel" class="tab-pane fade">
           <div class="col-12 mt-5">
             <div class="card">
               <div class="card-body">
                 <div class="row">
                   <div class="col-lg-6 col-md-6">
-                    <add-emergency-contacts :emp-id="scopeEmp.id"></add-emergency-contacts>
+                    <add-emergency-contacts :emp-id="scopeEmp.id"/>
                   </div>
                   <div class="col-lg-6 col-md-6">
-                    <add-dependents :emp-id="scopeEmp.id"></add-dependents>
+                    <add-dependents :emp-id="scopeEmp.id"/>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="tl">
+        <div id="tl" role="tabpanel" class="tab-pane fade">
           <div class="col-12 mt-5">
             <div class="card">
               <div class="card-body">
                 <div class="row">
                   <div class="col-lg-12 col-md-12">
-                    <add-documents :emp-id="scopeEmp.id"></add-documents>
+                    <add-documents :emp-id="scopeEmp.id"/>
                   </div>
                 </div>
               </div>
@@ -251,24 +251,24 @@
       </tab-slide>
     </div>
     <div v-if="isEdit">
-      <add-employee :header="header" :employee="emp"></add-employee>
+      <add-employee :header="header" :employee="emp"/>
     </div>
   </div>
 </template>
 
 <script>
-import TabSlide from "../../components/TabSlide";
-import AddSkills from "../../components/employee/AddSkills";
-import AddEmergencyContacts from "../../components/employee/AddEmergencyContacts";
-import AddDocuments from "../../components/employee/AddDocuments";
-import AddEducations from "../../components/employee/AddEducations";
-import AddLanguages from "../../components/employee/AddLanguages";
-import AddDependents from "../../components/employee/AddDependents";
-import AddCertifications from "../../components/employee/AddCertifications";
-import AddEmployee from "./AddEmployee.vue";
+import TabSlide from '../../components/TabSlide'
+import AddSkills from '../../components/employee/AddSkills'
+import AddEmergencyContacts from '../../components/employee/AddEmergencyContacts'
+import AddDocuments from '../../components/employee/AddDocuments'
+import AddEducations from '../../components/employee/AddEducations'
+import AddLanguages from '../../components/employee/AddLanguages'
+import AddDependents from '../../components/employee/AddDependents'
+import AddCertifications from '../../components/employee/AddCertifications'
+import AddEmployee from './AddEmployee.vue'
 
 export default {
-  name: "ProfileEmployee",
+  name: 'ProfileEmployee',
   components: {
     TabSlide,
     AddSkills,
@@ -288,16 +288,16 @@ export default {
   data() {
     return {
       tabs: [
-        { title: "Thông tin cơ bản", href: "ttcb" },
-        { title: "Trình độ chuyên môn", href: "tdcm" },
-        { title: "Gia đình", href: "gd" },
-        { title: "Tài liệu", href: "tl" }
+        { title: 'Thông tin cơ bản', href: 'ttcb' },
+        { title: 'Trình độ chuyên môn', href: 'tdcm' },
+        { title: 'Gia đình', href: 'gd' },
+        { title: 'Tài liệu', href: 'tl' }
       ],
       isProfile: true,
       isEdit: false,
-      header: "Thông tin nhân viên",
+      header: 'Thông tin nhân viên',
       emp: {
-        id: "",
+        id: '',
         full_name: this.employee.name,
         nationality_id: this.employee.nationality_id,
         birthday: this.employee.birthday,
@@ -315,30 +315,30 @@ export default {
         supervisor: this.employee.supervisor_id,
         indirect_supervisor: this.employee.indirect_supervisor
           ? this.employee.indirect_supervisor
-          : "",
+          : '',
         status: this.employee.status,
         job: this.employee.job_id,
         pay_grade: this.employee.paygrade_id
       }
-    };
+    }
   },
   computed: {
     scopeEmp() {
-      return this.employee;
-    }
-  },
-  methods: {
-    editProfile() {
-      this.isProfile = false;
-      this.isEdit = true;
+      return this.employee
     }
   },
   mounted() {
     if (this.employee.id) {
-      this.emp.id = this.employee.id;
+      this.emp.id = this.employee.id
+    }
+  },
+  methods: {
+    editProfile() {
+      this.isProfile = false
+      this.isEdit = true
     }
   }
-};
+}
 </script>
 <style lang="sass">
 .profile

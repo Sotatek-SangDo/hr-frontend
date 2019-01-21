@@ -2,27 +2,27 @@
   <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
     <template slot="main-content">
       <tab-slide :tabs="tabs">
-        <div role="tabpanel" class="tab-pane fade active in show" id="nv">
+        <div id="nv" role="tabpanel" class="tab-pane fade active in show">
           <div class="col-12 mt-5">
             <div v-if="addStep">
               <span class="back" @click="goToAddPage('list')">Quay lại</span>
             </div>
-            <div class="card" v-show="listStep">
+            <div v-show="listStep" class="card">
               <div class="card-body">
                 <div class="epm-tb-header">
                   <h4 class="header-title">Danh sách phòng ban</h4>
                   <a @click="goToAddPage('add')">
-                    <span><i class="ti-plus"></i>Thêm mới</span>
+                    <span><i class="ti-plus"/>Thêm mới</span>
                   </a>
                 </div>
-                <data-table :getData="getDepartments" ref="datatable">
+                <data-table ref="datatable" :get-data="getDepartments">
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Action</th>
                   <template slot="body" slot-scope="props">
                     <tr>
-                      <td v-text="props.item.name"></td>
+                      <td v-text="props.item.name"/>
                       <td v-text="props.item.email"/>
                       <td v-text="props.item.phone_number"/>
                       <td>
@@ -33,8 +33,8 @@
                 </data-table>
               </div>
             </div>
-            <div class="add-form" v-if="addStep">
-              <add-department></add-department>
+            <div v-if="addStep" class="add-form">
+              <add-department/>
             </div>
           </div>
         </div>
@@ -44,74 +44,74 @@
 </template>
 
 <script>
-import DataTable from "../../components/commons/DataTable";
-import MasterView from "../MasterView";
-import HomeLayout from "../../components/HomeLayout";
-import AddDepartment from "./AddDepartment";
-import TabSlide from "../../components/TabSlide";
-import rf from "../../requests/RequestFactory";
+import DataTable from '../../components/commons/DataTable'
+import MasterView from '../MasterView'
+import HomeLayout from '../../components/HomeLayout'
+import AddDepartment from './AddDepartment'
+import TabSlide from '../../components/TabSlide'
+import rf from '../../requests/RequestFactory'
 
 export default {
-  extends: MasterView,
   components: {
     HomeLayout,
     AddDepartment,
     DataTable,
     TabSlide
   },
+  extends: MasterView,
   data() {
     return {
-      headerTitle: "Nhân viên",
+      headerTitle: 'Nhân viên',
       tabs: [
-        { title: "Nhân viên", href: "nv" },
-        { title: "Kỹ nămg", href: "kn" },
-        { title: "Học vấn", href: "hv" },
-        { title: "Chứng chỉ", href: "chc" },
-        { title: "Ngôn ngữ", href: "ngn" },
-        { title: "Phòng ban", href: "pb" },
-        { title: "Danh bạ khẩn cấp", href: "dbkc" }
+        { title: 'Nhân viên', href: 'nv' },
+        { title: 'Kỹ nămg', href: 'kn' },
+        { title: 'Học vấn', href: 'hv' },
+        { title: 'Chứng chỉ', href: 'chc' },
+        { title: 'Ngôn ngữ', href: 'ngn' },
+        { title: 'Phòng ban', href: 'pb' },
+        { title: 'Danh bạ khẩn cấp', href: 'dbkc' }
       ],
       breadcrumbs: [
-        { title: "Home", href: "/" },
-        { title: "Nhân viên", href: "" }
+        { title: 'Home', href: '/' },
+        { title: 'Nhân viên', href: '' }
       ],
       addStep: false,
       listStep: true,
       empView: {}
-    };
-  },
-  methods: {
-    goToAddPage(type) {
-      this.showLoader();
-      if (type === "list") {
-        this.addStep = false;
-        this.listStep = true;
-      }
-      if (type === "add") {
-        this.addStep = true;
-        this.listStep = false;
-      }
-    },
-    getDepartments() {
-      return rf.getRequest("DepartmentRequest").getAll();
-    },
-    inital() {
-      this.sleep(500).then(() => {
-        this.init();
-      });
-      this.fadeOut();
     }
   },
   mounted() {
-    this.inital();
+    this.inital()
+  },
+  methods: {
+    goToAddPage(type) {
+      this.showLoader()
+      if (type === 'list') {
+        this.addStep = false
+        this.listStep = true
+      }
+      if (type === 'add') {
+        this.addStep = true
+        this.listStep = false
+      }
+    },
+    getDepartments() {
+      return rf.getRequest('DepartmentRequest').getAll()
+    },
+    inital() {
+      this.sleep(500).then(() => {
+        this.init()
+      })
+      this.fadeOut()
+    }
   }
-};
+}
 </script>
 <style scoped lang="sass">
 @import url("https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
 select
   display: none
-.content 
+.content
   min-height: 86vh
 .header-button
   padding: 20px 0 10px 20px
@@ -120,12 +120,12 @@ select
   a
     i
       font-size: 35px
-table 
+table
   margin: 0 auto;
   td
     span
       cursor: pointer
-.header-button 
+.header-button
   a
     color: blue
     cursor: pointer
@@ -135,7 +135,7 @@ table
   a
     i
       transition: all 0.5s ease-in-out
-.header-button 
+.header-button
   a:hover i
     transform: scale(1.4)
 .content-tab

@@ -2,23 +2,23 @@
   <div class="data-tables">
     <table ref="dataTable" class="dataTable text-center">
       <thead class="bg-light text-capitalize">
-          <tr>
-            <slot name="head" :sort="sort"></slot>
-          </tr>
+        <tr>
+          <slot :sort="sort" name="head"/>
+        </tr>
       </thead>
       <tbody>
-        <slot name="body" v-for="(row, i) in sortRows" :item="row" :data="sortRows" :index="i"></slot>
+        <slot v-for="(row, i) in sortRows" :item="row" :data="sortRows" :index="i" name="body"/>
       </tbody>
     </table>
-    <div class="dataTables_paginate" v-if="hasPagination && pageNumber">
+    <div v-if="hasPagination && pageNumber" class="dataTables_paginate">
       <ul class="pagination">
-        <li class="paginate_button page-item" :class="!canPrev() ? 'disabled' : ''">
+        <li :class="!canPrev() ? 'disabled' : ''" class="paginate_button page-item">
           <a class="page-link" href="#" @click="prevPage">&laquo;</a>
         </li>
-        <li class="paginate_button page-item" :class="i !== currentPage || 'active'" v-for="i in (1, pageNumber)" :key="i">
+        <li v-for="i in (1, pageNumber)" :class="i !== currentPage || 'active'" :key="i" class="paginate_button page-item">
           <a class="page-link" href="#" @click="goToPage(i, $event)" v-text="i"/>
         </li>
-        <li class="paginate_button page-item" :class="!canNext() ? 'disabled' : ''">
+        <li :class="!canNext() ? 'disabled' : ''" class="paginate_button page-item">
           <a class="page-link" href="#" @click="nextPage">&raquo;</a>
         </li>
       </ul>
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import $ from "jquery";
-import _ from "lodash";
+import $ from 'jquery'
+import _ from 'lodash'
 
 export default {
-  name: "DataTable",
+  name: 'DataTable',
   props: {
     getData: {
       type: Function
@@ -47,122 +47,121 @@ export default {
     return {
       rows: [],
       errors: {},
-      table: "",
+      table: '',
       defaultOption: {
         responsive: true,
         destroy: true,
         language: {
-          lengthMenu: "Hiển thị _MENU_ dữ liệu",
-          sZeroRecords: "Không có dữ liệu",
-          sInfoEmpty: "Không có dữ liệu hiển thị",
-          sInfo: "Hiển thị _START_ đến _END_ của _TOTAL_ dữ liệu",
-          sSearch: "Tìm kiếm:",
+          lengthMenu: 'Hiển thị _MENU_ dữ liệu',
+          sZeroRecords: 'Không có dữ liệu',
+          sInfoEmpty: 'Không có dữ liệu hiển thị',
+          sInfo: 'Hiển thị _START_ đến _END_ của _TOTAL_ dữ liệu',
+          sSearch: 'Tìm kiếm:',
           oPaginate: {
-            sNext: "Sau",
-            sPrevious: "Trước"
+            sNext: 'Sau',
+            sPrevious: 'Trước'
           }
         }
       },
-      DESC: "desc",
-      ASC: "asc",
-      currentSort: "name",
-      currentSortDir: "desc",
+      DESC: 'desc',
+      ASC: 'asc',
+      currentSort: 'name',
+      currentSortDir: 'desc',
       pageSize: 10,
       currentPage: 1
-    };
+    }
   },
   computed: {
     optionTable() {
-      return _.isEmpty(this.options) ? this.defaultOption : this.options;
+      return _.isEmpty(this.options) ? this.defaultOption : this.options
     },
     sortRows() {
       return this.rows
         .filter((row, index) => {
           if (this.hasPagination) {
-            let start = (this.currentPage - 1) * this.pageSize;
-            let end = this.currentPage * this.pageSize;
-            if (index >= start && index < end) return true;
+            const start = (this.currentPage - 1) * this.pageSize
+            const end = this.currentPage * this.pageSize
+            if (index >= start && index < end) return true
           } else {
-            return true;
+            return true
           }
         })
         .sort((a, b) => {
-          let modifier = 1;
-          if (this.currentSortDir === this.DESC) modifier = -1;
-          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-          return 0;
-        });
+          let modifier = 1
+          if (this.currentSortDir === this.DESC) modifier = -1
+          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier
+          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier
+          return 0
+        })
     },
     pageNumber() {
       if (!(this.rows.length % this.pageSize)) {
-        return this.rows.length / this.pageSize;
+        return this.rows.length / this.pageSize
       }
-      return parseInt(this.rows.length / this.pageSize + 1);
+      return parseInt(this.rows.length / this.pageSize + 1)
     }
+  },
+  created() {
+    this.fetch()
+  },
+  mounted() {
+    // this.sleep(1000).then(() => this.initTable());
   },
   methods: {
     fetch() {
       this.getData()
         .then(res => ([...this.rows] = res))
-        .catch(err => this.handleErr(err));
+        .catch(err => this.handleErr(err))
     },
     canNext() {
-      return this.currentPage + 1 <= this.pageNumber;
+      return this.currentPage + 1 <= this.pageNumber
     },
     canPrev() {
-      return this.currentPage - 1;
+      return this.currentPage - 1
     },
     handleErr(err) {
-      this.errors = err;
+      this.errors = err
     },
     initTable() {
-      //this.table = $(this.$refs.dataTable).DataTable(this.optionTable);
+      // this.table = $(this.$refs.dataTable).DataTable(this.optionTable);
     },
     sleep(milliseconds) {
-      return new Promise(resolve => setTimeout(resolve, milliseconds));
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
     },
     refresh() {
-      this.fetch();
+      this.fetch()
     },
     sort(s, $event) {
-      this.handleSortEvent($event);
+      this.handleSortEvent($event)
       if (s === this.currentSort) {
         this.currentSortDir =
-          this.currentSortDir === this.ASC ? this.DESC : this.ASC;
+          this.currentSortDir === this.ASC ? this.DESC : this.ASC
       }
-      this.currentSort = s;
+      this.currentSort = s
     },
     handleSortEvent(e) {
-      const th = $(e.target);
+      const th = $(e.target)
       const className =
-        this.currentSortDir === this.ASC ? "sorting_desc" : "sorting_asc";
+        this.currentSortDir === this.ASC ? 'sorting_desc' : 'sorting_asc'
       const removeClass =
-        this.currentSortDir === this.ASC ? "sorting_asc" : "sorting_desc";
-      th.removeClass(removeClass).addClass(className);
+        this.currentSortDir === this.ASC ? 'sorting_asc' : 'sorting_desc'
+      th.removeClass(removeClass).addClass(className)
     },
     goToPage(page, event) {
-      event.preventDefault();
-      if (this.currentPage === page) return;
-      this.currentPage = page;
+      event.preventDefault()
+      if (this.currentPage === page) return
+      this.currentPage = page
     },
     nextPage(e) {
-      e.preventDefault();
-      if (this.currentPage * this.pageSize < this.rows.length)
-        this.currentPage++;
+      e.preventDefault()
+      if (this.currentPage * this.pageSize < this.rows.length) { this.currentPage++ }
     },
     prevPage(e) {
-      e.preventDefault();
-      if (this.currentPage > 1) this.currentPage--;
+      e.preventDefault()
+      if (this.currentPage > 1) this.currentPage--
     }
-  },
-  created() {
-    this.fetch();
-  },
-  mounted() {
-    //this.sleep(1000).then(() => this.initTable());
   }
-};
+}
 </script>
 
 <style scoped lang="sass">

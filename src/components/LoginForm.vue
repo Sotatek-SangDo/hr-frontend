@@ -1,97 +1,97 @@
 <template>
   <div class="container">
     <div class="login-box ptb--100">
-        <form @submit.prevent="login">
-          <div class="login-form-head">
-              <h4>Đăng nhập</h4>
-              <p>Hãy đăng nhập và bắt đầu với việc quản lý trong hệ thống Admin</p>
+      <form @submit.prevent="login">
+        <div class="login-form-head">
+          <h4>Đăng nhập</h4>
+          <p>Hãy đăng nhập và bắt đầu với việc quản lý trong hệ thống Admin</p>
+        </div>
+        <div class="login-form-body">
+          <div class="form-gp">
+            <input v-model="params.email" type="email" placeholder="Tai khoan" autofocus autocomplete="off" required>
+            <i class="ti-email"/>
           </div>
-          <div class="login-form-body">
-            <div class="form-gp">
-                <input type="email" placeholder="Tai khoan" v-model="params.email" autofocus autocomplete="off" required>
-                <i class="ti-email"></i>
-            </div>
-            <div class="form-gp" :class="passError || !validatePass ? 'is-invalid' : ''">
-                <input type="password" placeholder="Mat Khau" v-model="params.password" required>
-                <i class="ti-lock"></i>
-            </div>
-            <div class="error" v-if="passError || !validatePass">
-              <i class="material-icons">error_outline</i>
-              <span class="mess">{{ passError || 'Mật khẩu ít nhất 6 kí tự' }}</span>
-            </div>
-            <div class="error" v-if="hasErrorRequest('request_auth')">
-              <i class="material-icons">error_outline</i>
-              <span class="mess">{{ errors['request_auth'] }}</span>
-            </div>
-            <div class="submit-btn-area">
-                <button id="form_submit" :disable="isDisable()">Đăng Nhập <i class="ti-arrow-right"></i></button>
-            </div>
+          <div :class="passError || !validatePass ? 'is-invalid' : ''" class="form-gp">
+            <input v-model="params.password" type="password" placeholder="Mat Khau" required>
+            <i class="ti-lock"/>
           </div>
-        </form>
+          <div v-if="passError || !validatePass" class="error">
+            <i class="material-icons">error_outline</i>
+            <span class="mess">{{ passError || 'Mật khẩu ít nhất 6 kí tự' }}</span>
+          </div>
+          <div v-if="hasErrorRequest('request_auth')" class="error">
+            <i class="material-icons">error_outline</i>
+            <span class="mess">{{ errors['request_auth'] }}</span>
+          </div>
+          <div class="submit-btn-area">
+            <button id="form_submit" :disable="isDisable()">Đăng Nhập <i class="ti-arrow-right"/></button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
-import auth from "../auth";
-import rf from "../requests/RequestFactory";
-import MasterView from "../views/MasterView";
+import auth from '../auth'
+import rf from '../requests/RequestFactory'
+import MasterView from '../views/MasterView'
 
 export default {
-  name: "LoginForm",
+  name: 'LoginForm',
   extends: MasterView,
   data() {
     return {
       params: {
-        email: "",
-        password: ""
+        email: '',
+        password: ''
       },
-      passError: "",
+      passError: '',
       validatePass: true,
       errors: []
-    };
+    }
   },
   watch: {
-    "params.password": function(newVal) {
-      if (!newVal) return;
-      this.validatePass = newVal.length >= 6;
+    'params.password': function(newVal) {
+      if (!newVal) return
+      this.validatePass = newVal.length >= 6
     }
+  },
+  mounted() {
+    // this.init();
+    this.onErrorRequest()
   },
   methods: {
     isDisable() {
-      return this.validatePass;
+      return this.validatePass
     },
     login() {
       auth.login(this.params, res => {
         if (!res.authenticated) {
-          this.passError = res.error;
+          this.passError = res.error
         } else {
-          rf.getRequest("UserRequest")
+          rf.getRequest('UserRequest')
             .authenticate()
             .then(res => {
-              localStorage.setItem("user", JSON.stringify(res));
-              this.$router.replace(this.$route.query.redirect || "/");
-            });
+              localStorage.setItem('user', JSON.stringify(res))
+              this.$router.replace(this.$route.query.redirect || '/')
+            })
         }
-      });
+      })
     },
     onPassFocus() {
       if (this.params.password.length < 6) {
-        this.validatePass = false;
+        this.validatePass = false
       }
     },
     init() {},
     checkAndSubmit(e) {
       if (e.keyCode === 13) {
-        !this.isDisable() || this.login();
+        !this.isDisable() || this.login()
       }
     }
-  },
-  mounted() {
-    //this.init();
-    this.onErrorRequest();
   }
-};
+}
 </script>
 <style scoped lang="sass">
 h4

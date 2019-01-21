@@ -1,17 +1,17 @@
-<template>
+<!-- <template>
   <div>
     <div id="loading">
-      <div class="loader"></div>
+      <div class="loader"/>
     </div>
     <div class="login-area login-s2">
-      <login-form></login-form>
+      <login-form/>
     </div>
   </div>
 </template>
 
 <script>
-import LoginForm from "../components/LoginForm";
-import $ from "jquery";
+import LoginForm from '../components/LoginForm'
+import $ from 'jquery'
 
 export default {
   components: {
@@ -19,25 +19,25 @@ export default {
   },
   data() {
     return {
-      email: "",
-      pass: "",
+      email: '',
+      pass: '',
       error: false
-    };
-  },
-  methods: {
-    init() {
-      const preloader = $("#loading");
-      $(window).on("load", function() {
-        preloader.fadeOut(3000, "linear", function() {
-          $(this).remove();
-        });
-      });
     }
   },
   mounted() {
-    this.init();
+    this.init()
+  },
+  methods: {
+    init() {
+      const preloader = $('#loading')
+      $(window).on('load', function() {
+        preloader.fadeOut(3000, 'linear', function() {
+          $(this).remove()
+        })
+      })
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -123,3 +123,4 @@ input {
   }
 }
 </style>
+ -->

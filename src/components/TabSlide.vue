@@ -1,12 +1,12 @@
 <template>
   <div>
     <ul class="nav nav-tabs" role="tablist">
-      <li v-for="(tab, index) in tabs" class="nav-item" :key="index">
-        <a class="nav-link" :href="parseHref(tab.href)" role="tab" data-toggle="tab" :class="!index ? 'active' : ''" v-text="tab.title"/>
+      <li v-for="(tab, index) in tabs" :key="index" class="nav-item">
+        <a :href="parseHref(tab.href)" :class="!index ? 'active' : ''" class="nav-link" role="tab" data-toggle="tab" v-text="tab.title"/>
       </li>
     </ul>
     <div class="tab-content">
-      <slot></slot>
+      <slot/>
     </div>
   </div>
 </template>
@@ -20,10 +20,10 @@ export default {
   },
   methods: {
     parseHref(id) {
-      return `#${id}`;
+      return `#${id}`
     }
   }
-};
+}
 </script>
 <style lang="sass">
 .nav
