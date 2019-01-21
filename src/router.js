@@ -27,6 +27,26 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
+      path: "/profile",
+      name: "employee-profile",
+      props: route => ({ id: route.query.id }),
+      component: () => import("@/views/Employee/ProfileEmployee.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/employee",
+      name: "employee-edit",
+      props: route => ({ id: route.query.id }),
+      component: () => import("@/views/Employee/EmployeeEdit.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/employee-add",
+      name: "employee-add",
+      component: () => import("@/views/Employee/AddEmployee.vue"),
+      beforeEnter: requireAuth
+    },
+    {
       path: "/company",
       name: "com-contact",
       component: () => import("@/views/Company/CompanyContact.vue"),
@@ -55,6 +75,31 @@ export default new Router({
       name: "insurance-payment-detail",
       props: route => ({ id: route.query.id }),
       component: () => import("@/views/Insurances/IPDetail.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/recruitment",
+      name: "recruitment",
+      component: () => import("@/views/Recruitment/Recruitment.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/recruitment-detail",
+      name: "recruitment-detail",
+      props: route => ({ id: route.query.id }),
+      component: () => import("@/views/Recruitment/RecruitmentDetail.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/candidates",
+      name: "candidates",
+      component: () => import("@/views/Recruitment/Candidate.vue"),
+      beforeEnter: requireAuth
+    },
+    {
+      path: "/interviews",
+      name: "interviews",
+      component: () => import("@/views/Recruitment/Interview.vue"),
       beforeEnter: requireAuth
     }
   ]

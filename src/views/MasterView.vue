@@ -45,14 +45,14 @@ export default {
       });
     },
     hasErrorRequest(type) {
-      return !_.isEmpty(this.errors[type]);
+      return !_.isEmpty(this.errorsModal[type]);
     },
     emptyData(data) {
       return _.mapValues(data, () => "");
     },
     onErrorRequest() {
       window.EventBus.$on("errors", data => {
-        this.errors[data.type] = data.error;
+        this.errorsModal[data.type] = data.error;
         this.$forceUpdate();
       });
     },

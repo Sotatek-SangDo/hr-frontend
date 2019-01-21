@@ -1958,12 +1958,14 @@ label {
     height: calc(2.25rem + 7px);
     padding: 10.8px 12px;
     padding: .675rem .75rem;
+    z-index: unset !important;
 }
 
 .custom-file-label:after {
     height: calc(calc(2.25rem + 7px) - 1px * 2);
     padding: 10.8px 12px;
     padding: .675rem .75rem;
+    z-index: unset !important;;
 }
 
 .grid-col {

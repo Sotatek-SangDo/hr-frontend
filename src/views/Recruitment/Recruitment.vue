@@ -1,7 +1,7 @@
 <template>
   <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
     <template slot="main-content">
-      <e-profile :id="empId"></e-profile>
+      <recruitment-layout></recruitment-layout>
     </template>
   </home-layout>
 </template>
@@ -9,25 +9,20 @@
 <script>
 import MasterView from "../MasterView.vue";
 import HomeLayout from "../../components/HomeLayout";
-import EProfile from "../../components/employee/EProfile";
+import RecruitmentLayout from "../../components/Recruitment/RecruitmentLayout";
 
 export default {
-  name: "Profile",
+  name: "Recruitment",
   extends: MasterView,
   components: {
     HomeLayout,
-    EProfile
+    RecruitmentLayout
   },
   data() {
     return {
-      headerTitle: "Thông tin cá nhân",
-      breadcrumbs: [{ title: "Thông tin cá nhân", href: "" }],
-      empId: "",
-      employee: {}
+        headerTitle: "Đợt tuyển dụng",
+        breadcrumbs: [{ title: "Đợt tuyển dụng", href: "" }],
     };
-  },
-  created() {
-    this.empId = this.$route.query.id;
   },
   methods: {
     inital() {
@@ -40,7 +35,7 @@ export default {
   mounted() {
     this.inital();
   }
-};
+}
 </script>
 
 <style lang="sass" scoped>

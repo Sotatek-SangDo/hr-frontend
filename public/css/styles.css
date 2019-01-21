@@ -200,6 +200,9 @@ _:-ms-input-placeholder, :root .demo-graph {
 .demo-options li {
   margin: 4px 0;
 }
+card-body {
+  max-width: 100%;
+}
 .demo-options .material-icons {
   color: rgba(255, 255, 255, 0.89);
 }

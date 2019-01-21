@@ -30,6 +30,9 @@ export default {
   },
   loggedIn() {
     return !!ss.storage(config.ACCESS_TOKEN);
+  },
+  refreshToken() {
+    OAuth.refreshToken();
   }
 };
 

@@ -8,3 +8,7 @@ Vue.filter("date", value => {
   const split = value.split("-");
   return `Ngày ${split[2]} Tháng ${split[1]} năm ${split[0]}`;
 });
+
+Vue.filter("dateTime", v => {
+  return v.substring(0, v.length - 3);
+});

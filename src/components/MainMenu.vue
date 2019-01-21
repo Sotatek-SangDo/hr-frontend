@@ -20,26 +20,32 @@
                     <li class="active">
                       <a href="javascript:void(0)" class="has-sub" aria-expanded="true">
                         <i class="ti-dashboard"></i>
-                        <span>Nhan vien</span>
+                        <span>Nhân viên</span>
                       </a>
                       <ul class="collapse">
                         <li class="active">
                           <a href="/employees">Danh sách nhân viên</a>
                         </li>
+                        <li>
+                          <a href="/employee-add">Thêm mới nhân viên</a>
+                        </li>
                       </ul>
                     </li>
                       <li>
-                          <a href="javascript:void(0)" aria-expanded="true">
+                          <a href="javascript:void(0)" class="has-sub" aria-expanded="true">
                             <i class="ti-layout-sidebar-left"></i>
-                            <span>Company</span>
+                            <span>Phòng ban</span>
                           </a>
                           <ul class="collapse">
-                              <li><a href="/company">Company</a></li>
-                              <li><a href="/departments">Departments</a></li>
+                              <li><a href="/company">Công ty</a></li>
+                              <li><a href="/departments">Phòng ban</a></li>
                           </ul>
                       </li>
                       <li>
-                          <a href="javascript:void(0)" aria-expanded="true"><i class="ti-pie-chart"></i><span>Charts</span></a>
+                          <a href="javascript:void(0)" aria-expanded="true" class="has-sub">
+                            <i class="ti-pie-chart"></i>
+                            <span>Charts</span>
+                          </a>
                           <ul class="collapse">
                               <li><a href="barchart.html">bar chart</a></li>
                               <li><a href="linechart.html">line Chart</a></li>
@@ -47,17 +53,20 @@
                           </ul>
                       </li>
                       <li>
-                          <a href="javascript:void(0)" aria-expanded="true"><i class="ti-palette"></i><span>Bảo hiểm</span></a>
+                          <a href="javascript:void(0)" aria-expanded="true" class="has-sub"><i class="ti-palette"></i><span>Bảo hiểm</span></a>
                           <ul class="collapse">
                               <li><a href="/insurances">Hồ sơ bảo hiểm</a></li>
                               <li><a href="/insurance-payment">Thanh toán bảo hiểm</a></li>
                           </ul>
                       </li>
                       <li>
-                          <a href="javascript:void(0)" aria-expanded="true"><i class="ti-slice"></i><span>icons</span></a>
+                          <a href="javascript:void(0)" aria-expanded="true" class="has-sub">
+                            <i class="ti-slice"></i><span>Tuyển dụng</span>
+                          </a>
                           <ul class="collapse">
-                              <li><a href="fontawesome.html">fontawesome icons</a></li>
-                              <li><a href="themify.html">themify icons</a></li>
+                              <li><a href="/recruitment">Kế hoạch tuyển dụng</a></li>
+                              <li><a href="/candidates">Ứng tuyển</a></li>
+                              <li><a href="/interviews">Phỏng vấn</a></li>
                           </ul>
                       </li>
                       <li>

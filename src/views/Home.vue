@@ -354,6 +354,7 @@
           </div>
           <!-- row area start-->
       </div>
+      <calendar></calendar>
     </template>
   </home-layout>
 </template>
@@ -361,6 +362,7 @@
 import auth from "../auth.js";
 import HomeLayout from "@/components/HomeLayout";
 import MasterView from "./MasterView";
+import Calendar from "../components/commons/Calendar";
 
 export default {
   extends: MasterView,
@@ -371,7 +373,8 @@ export default {
     };
   },
   components: {
-    HomeLayout
+    HomeLayout,
+    Calendar
   },
   methods: {
     logout() {

@@ -10,4 +10,7 @@ import "bootstrap-datepicker";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css";
 import "bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css";
 import "jquery";
+import "eonasdan-bootstrap-datetimepicker";
 import "./filter";
+import "moment";
+import "fullcalendar";

@@ -19,6 +19,9 @@ import UserLanguagesRequest from "./UserLanguagesRequest";
 import InsuranceRequest from "./InsuranceRequest";
 import InsurancePaymentRequest from "./InsurancePaymentRequest";
 import IPDetailRequest from "./IPEmployeeRequest";
+import RecruitmentRequest from "./RecruitmentRequest";
+import CandidateRequest from "./CandidateRequest";
+import InterviewRequest from "./InterviewRequest";
 
 const requestMap = {
   UserRequest,
@@ -41,7 +44,10 @@ const requestMap = {
   UserLanguagesRequest,
   InsuranceRequest,
   InsurancePaymentRequest,
-  IPDetailRequest
+  IPDetailRequest,
+  RecruitmentRequest,
+  CandidateRequest,
+  InterviewRequest
 };
 
 const instances = {};
