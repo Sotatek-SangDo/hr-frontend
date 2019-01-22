@@ -156,6 +156,12 @@ export default new Router({
   routes: constantRouterMap
 })
 
+export const map = {
+ syncEmployee: require('@/views/layout/Layout').default, // sync
+ asyncEmployee:()=>import('@/views/layout/Layout'),      // async
+ childSyncEmployee: require('@/views/Employee/EmployeeList').default, // sync
+}
+
 export const asyncRouterMap = [
   {
     path: '/permission',
@@ -207,7 +213,6 @@ export const asyncRouterMap = [
   chartsRouter,
   nestedRouter,
   tableRouter,
-
   {
     path: '/example',
     component: Layout,

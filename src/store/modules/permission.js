@@ -1,4 +1,6 @@
-import { asyncRouterMap, constantRouterMap } from '@/router'
+import { asyncRouterMap, constantRouterMap, map } from '@/router'
+import { getDynamicRouter } from '@/api/dynamicrouters'
+
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -34,6 +36,24 @@ function filterAsyncRouter(routes, roles) {
   return res
 }
 
+function mappingComponent(routes, roles) {
+  const res = []
+
+  routes.forEach(route => {
+
+    const tmp = { ...route }
+    if (hasPermission(roles, tmp)) {
+      tmp.component = map[tmp.component]
+      if (tmp.children) {
+        tmp.children = mappingComponent(tmp.children, roles)
+      }
+      res.push(tmp)
+    }
+  })
+
+  return res
+}
+
 const permission = {
   state: {
     routers: constantRouterMap,
@@ -43,6 +63,7 @@ const permission = {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
+      // state.routers = dynamicRouterMap.concat(state.routes)
     }
   },
   actions: {
@@ -50,14 +71,26 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        if (roles.includes('admin')) {
-          accessedRouters = asyncRouterMap
-        } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        }
-        commit('SET_ROUTERS', accessedRouters)
-        resolve()
-      })
+
+        let result = []
+        getDynamicRouter().then(response => {
+            result = response.data
+            if (roles.includes('admin')) {
+              // state.addRouters.concat(result)
+              accessedRouters = filterAsyncRouter(result, roles);
+
+              result = mappingComponent(result, roles)
+              
+              accessedRouters = result.concat(asyncRouterMap);
+
+            } else {
+              accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+            }
+            commit('SET_ROUTERS', accessedRouters)
+            resolve()
+          })
+        });
+      
     }
   }
 }
