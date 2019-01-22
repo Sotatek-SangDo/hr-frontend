@@ -41,7 +41,7 @@
 
       <div style="position:relative">
         <div class="tips">
-          <span>{{ $t('login.username') }} : admin</span>
+          <span>{{ $t('login.username') }} : admin@erptech.vn</span>
           <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>
         </div>
         <div class="tips">
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+import { validateEmail } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 
@@ -74,8 +74,8 @@ export default {
   components: { LangSelect, SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      if (!validateEmail(value)) {
+        callback(new Error('Please enter the correct email address'))
       } else {
         callback()
       }
@@ -89,8 +89,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        username: 'admin@erptech.vn',
+        password: '111111'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],

@@ -50,6 +50,7 @@
     "mockjs": "1.0.1-beta3",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
+    "oauth": "^0.9.15",
     "screenfull": "3.3.3",
     "showdown": "1.8.6",
     "sortablejs": "1.7.0",
