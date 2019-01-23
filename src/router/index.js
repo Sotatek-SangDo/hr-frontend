@@ -101,52 +101,6 @@ export const constantRouterMap = [
         meta: { title: 'guide', icon: 'guide', noCache: true }
       }
     ]
-  },
-  {
-    path: '/employees',
-    name: 'emp-list',
-    component: () => import('@/views/Employee/EmployeeList.vue'),
-    meta: { title: 'employees', icon: 'employees', noCache: true }
-    // beforeEnter: requireAuth
-  },
-  {
-    path: '/company',
-    name: 'com-contact',
-    component: () => import('@/views/Company/CompanyContact.vue'),
-    // beforeEnter: requireAuth
-  },
-  {
-    path: '/departments',
-    component: Layout,
-    redirect: '/departments/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/Department/index'),
-        name: 'departments',
-        meta: { title: 'departments', icon: 'departments', noCache: true }
-      }
-      // beforeEnter: requireAuth
-    ]
-  },
-  {
-    path: '/insurances',
-    name: 'insurances',
-    component: () => import('@/views/Insurances/Insurances.vue'),
-    // beforeEnter: requireAuth
-  },
-  {
-    path: '/insurance-payment',
-    name: 'insurance-payment',
-    component: () => import('@/views/Insurances/InsurancePayment.vue'),
-    // beforeEnter: requireAuth
-  },
-  {
-    path: '/insurance-payment-detail',
-    name: 'insurance-payment-detail',
-    props: route => ({ id: route.query.id }),
-    component: () => import('@/views/Insurances/IPDetail.vue'),
-    // beforeEnter: requireAuth
   }
 ]
 
@@ -156,14 +110,32 @@ export default new Router({
   routes: constantRouterMap
 })
 
-export const map = {
- syncEmployee: require('@/views/layout/Layout').default, // sync
- asyncEmployee:()=>import('@/views/layout/Layout'),      // async
- childSyncEmployee: require('@/views/Employee/EmployeeList').default, // sync
+export const mapServerRouters = {
+ syncEmployee: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/employee',
+    redirect: '/Employee/EmployeeList',
+    meta: {
+      title: 'Employee List',
+      icon: 'user',
+    },
+  },
+  childSyncEmployee: {
+    component: () => import('@/views/Employee/EmployeeList'),
+    path: 'index',
+    name: 'Employee',
+    meta: { title: 'Employee', icon: 'user', noCache: true }
+  },
+  childSyncEmployee2: {
+    component: () => import('@/views/Employee/EmployeeList'),
+    path: 'index2',
+    name: 'Employee 2',
+    meta: { title: 'Employee 2', icon: 'user', noCache: true }
+  },
 }
 
-export const asyncRouterMap = [
-  {
+export const developerRouterMap = [
+{
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',
@@ -415,6 +387,10 @@ export const asyncRouterMap = [
       }
     ]
   },
+]
+
+export const asyncRouterMap = [
+  
 
   { path: '*', redirect: '/404', hidden: true }
 ]

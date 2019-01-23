@@ -1,5 +1,5 @@
-import { asyncRouterMap, constantRouterMap, map } from '@/router'
-import { getDynamicRouter } from '@/api/dynamicrouters'
+import { asyncRouterMap, constantRouterMap, mapServerRouters, developerRouterMap } from '@/router'
+import { getPermissionByRoles } from '@/api/dynamicrouters'
 
 
 /**
@@ -43,10 +43,29 @@ function mappingComponent(routes, roles) {
 
     const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
-      tmp.component = map[tmp.component]
+
+      const compName = tmp.component
+      tmp.component = mapServerRouters[compName].component
+      tmp.redirect = mapServerRouters[compName].redirect
+      tmp.path = mapServerRouters[compName].path
+      if(mapServerRouters[compName].meta){
+        if (!tmp.meta){
+          tmp.meta = {}
+        }
+        tmp.meta.title = mapServerRouters[compName].meta.title
+        tmp.meta.icon = mapServerRouters[compName].meta.icon
+        tmp.meta.noCache = mapServerRouters[compName].meta.noCache  
+      }
+      
+      
+      tmp.name = mapServerRouters[compName].name
+      tmp.hidden = mapServerRouters[compName].hidden
+      tmp.alwaysShow = mapServerRouters[compName].alwaysShow
+
       if (tmp.children) {
         tmp.children = mappingComponent(tmp.children, roles)
       }
+
       res.push(tmp)
     }
   })
@@ -63,7 +82,6 @@ const permission = {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
-      // state.routers = dynamicRouterMap.concat(state.routes)
     }
   },
   actions: {
@@ -71,21 +89,28 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
+        let serverRouters
 
         let result = []
-        getDynamicRouter().then(response => {
+        getPermissionByRoles().then(response => {
             result = response.data
+
             if (roles.includes('admin')) {
-              // state.addRouters.concat(result)
-              accessedRouters = filterAsyncRouter(result, roles);
-
-              result = mappingComponent(result, roles)
-              
-              accessedRouters = result.concat(asyncRouterMap);
-
+              accessedRouters = asyncRouterMap
             } else {
               accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
             }
+
+            if(result){
+              serverRouters = mappingComponent(result, roles)
+              accessedRouters = serverRouters.concat(accessedRouters)
+            }
+
+
+            if (process.env.NODE_ENV !== 'production'){
+              accessedRouters = accessedRouters.concat(developerRouterMap)
+            }
+
             commit('SET_ROUTERS', accessedRouters)
             resolve()
           })

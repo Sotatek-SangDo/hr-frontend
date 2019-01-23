@@ -37,6 +37,6 @@ Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)
 // 账单相关
 Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
-Mock.mock(/\/routers\/dynamic/, 'get', dynamicRouters.getDynamicRouter)
+Mock.mock(/\/routers\/dynamic/, 'post', dynamicRouters.getPermissionByRoles)
 
 export default Mock
