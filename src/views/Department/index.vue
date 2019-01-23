@@ -1,38 +1,75 @@
 <template>
-  <tab-slide :tabs="tabs">
+  <tab-slide>
     <div id="nv" role="tabpanel" class="tab-pane fade active in show">
       <div class="col-12 mt-5">
-        <div v-if="addStep">
-          <span class="back" @click="goToAddPage('list')">Quay lại</span>
-        </div>
-        <div v-show="listStep" class="card">
+        <div class="card">
           <div class="card-body">
             <div class="epm-tb-header">
               <h4 class="header-title">Danh sách phòng ban</h4>
-              <a @click="goToAddPage('add')">
-                <span><i class="ti-plus"/>Thêm mới</span>
-              </a>
             </div>
-            <el-table ref="datatable" :data="tableData">
-              <el-table-column>Name</el-table-column>
-              <el-table-column>Email</el-table-column>
-              <el-table-column>Phone</el-table-column>
-              <el-table-column>Action</el-table-column>
-              <template slot="body" slot-scope="props">
-                <tr>
-                  <td v-text="props.row.name"/>
-                  <td v-text="props.row.email"/>
-                  <td v-text="props.row.phone_number"/>
-                  <td>
-                    <span>Xem chi tiết</span>
-                  </td>
-                </tr>
-              </template>
+            <div class="filter-container">
+              <el-input :placeholder="$t('table.title')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+              <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+              <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addItem()">{{ $t('table.add') }}</el-button>
+            </div>
+
+            <el-table
+              v-loading="listLoading"
+              ref="datatable"
+              :key="tableKey"
+              :data="list"
+              border
+              fit
+              highlight-current-row
+              style="width: 100%;"
+              @sort-change="sortChange">
+              <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.id }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('table.department.name')" prop="name" align="center" sortable>
+                <template slot-scope="scope">
+                  <span>{{ scope.row.name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('table.email')" prop="email" align="center" sortable>
+                <template slot-scope="scope">
+                  <span>{{ scope.row.email }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('table.phone')" prop="phone_number" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.phone_number }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+                <template slot-scope="scope">
+                  <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+                  <el-button size="mini" type="danger" @click="handleDestroy(scope.row)">{{ $t('table.delete') }}
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
+            <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+            <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+              <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" style="width: 400px; margin: 0 auto">
+                <el-form-item :label="$t('table.department.name')" prop="name">
+                  <el-input v-model="temp.name"/>
+                </el-form-item>
+                <el-form-item :label="$t('table.department.email')">
+                  <el-input v-model="temp.email" :placeholder="$t('placeholder.email')" type="email"/>
+                </el-form-item>
+                <el-form-item :label="$t('table.phone')">
+                  <el-input v-model="temp.phone_number" :placeholder="$t('placeholder.phone')" type="input" @keyup.enter.native="handleConfirm"/>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
+                <el-button type="primary" @click="handleConfirm">{{ $t('table.confirm') }}</el-button>
+              </div>
+            </el-dialog>
           </div>
-        </div>
-        <div v-if="addStep" class="add-form">
-          <add-department/>
         </div>
       </div>
     </div>
@@ -40,82 +77,154 @@
 </template>
 
 <script>
-import DataTable from '../../components/commons/DataTable'
-import AddDepartment from './AddDepartment'
 import TabSlide from '../../components/TabSlide'
 import rf from '../../requests/RequestFactory'
+import Pagination from '@/components/Pagination'
+import { fetchList, store, update, destroy } from '@/api/department'
+import waves from '@/directive/waves'
 
 export default {
   components: {
-    AddDepartment,
-    DataTable,
-    TabSlide
+    TabSlide,
+    Pagination
   },
+  directives: { waves },
   data() {
     return {
       headerTitle: 'Nhân viên',
-      tabs: [
-        { title: 'Nhân viên', href: 'nv' },
-        { title: 'Kỹ nămg', href: 'kn' },
-        { title: 'Học vấn', href: 'hv' },
-        { title: 'Chứng chỉ', href: 'chc' },
-        { title: 'Ngôn ngữ', href: 'ngn' },
-        { title: 'Phòng ban', href: 'pb' },
-        { title: 'Danh bạ khẩn cấp', href: 'dbkc' }
-      ],
-      breadcrumbs: [
-        { title: 'Home', href: '/' },
-        { title: 'Nhân viên', href: '' }
-      ],
-      addStep: false,
-      listStep: true,
-      empView: {},
-      tableData: [
-        {
-          name: 'fruit-1',
-          email: 'apple-10',
-          phone_number: 'banana-10',
-          orange: 'orange-10'
-        },
-        {
-          name: 'fruit-2',
-          email: 'apple-20',
-          phone_number: 'banana-20',
-          orange: 'orange-20'
-        }
-      ],
+      listLoading: true,
+      tableKey: 0,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        title: undefined,
+        sort: '+id'
+      },
+      activeName: 'nv',
+      temp: {
+        id: undefined,
+        email: '',
+        name: '',
+        phone_number: ''
+      },
+      rules: {
+        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+      },
+      list: [],
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: 'Chỉnh sửa',
+        create: 'Thêm mới'
+      }
+    }
+  },
+  watch: {
+    dialogFormVisible(val) {
+      if (!val) {
+        this.clear()
+      }
     }
   },
   mounted() {
     this.inital()
   },
+  created() {
+    this.getList()
+  },
   methods: {
-    goToAddPage(type) {
-      this.showLoader()
-      if (type === 'list') {
-        this.addStep = false
-        this.listStep = true
+    createData() {
+      store(this.temp).then(response => {
+        this.dialogFormVisible = false
+        if (response.data.status) {
+          this.getList()
+        }
+      })
+    },
+    updateData() {
+      update(this.temp).then(response => {
+        this.dialogFormVisible = false
+        if (response.data.status) {
+          this.getList()
+        }
+      })
+    },
+    handleConfirm() {
+      this.dialogStatus === 'create'
+        ? this.createData()
+        : this.updateData()
+    },
+    addItem() {
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
       }
-      if (type === 'add') {
-        this.addStep = true
-        this.listStep = false
+    },
+    handleDestroy(row) {
+      destroy(row).then(response => {
+        if (response.data.status) {
+          this.getList()
+          this.$message({
+            message: 'Thanh cong',
+            type: 'success'
+          })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row)
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
       }
+      this.handleFilter()
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    getList() {
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
+        this.list = response.data.data
+        this.total = response.data.total
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
     },
     getDepartments() {
       return rf.getRequest('DepartmentRequest').getAll()
     },
     inital() {
-      // this.sleep(500).then(() => {
-      // this.init()
-      // })
-      // this.fadeOut()
-      // result = this.getDepartments();
+    },
+    clear() {
+      this.temp.id = undefined
+      this.temp.email = ''
+      this.temp.phone_number = ''
+      this.temp.name = ''
     }
   }
 }
 </script>
 <style scoped lang="sass">
-@import url("https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
 select
   display: none
 .content

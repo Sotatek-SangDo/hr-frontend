@@ -25,7 +25,7 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <img :src="handleAvataSrc()" class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -77,6 +77,9 @@ export default {
     ])
   },
   methods: {
+    handleAvataSrc() {
+      return this.avatar || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
+    },
     toggleSideBar() {
       this.$store.dispatch('toggleSideBar')
     },
@@ -110,12 +113,20 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
+    display: flex;
+    align-items: center;
     &:focus{
      outline: none;
     }
     .right-menu-item {
       display: inline-block;
       margin: 0 8px;
+      img {
+        display: flex;
+      }
+      .el-icon-caret-bottom {
+        top: 14px !important;;
+      }
     }
     .screenfull {
       height: 20px;

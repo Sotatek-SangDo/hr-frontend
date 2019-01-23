@@ -1,17 +1,17 @@
 const data = [{
-    component: 'syncEmployee',
-    children: [
-      {
-        component: 'childSyncEmployee'
-      },
-      {
-        component: 'childSyncEmployee2'
-      }
-    ]
-  }]
+  component: 'syncEmployee',
+  children: [
+    {
+      component: 'childSyncEmployee'
+    },
+    {
+      component: 'childSyncEmployee2'
+    }
+  ]
+}]
 
 export default {
-	getPermissionByRoles: () => {
-	    return data
- 	}
+  getPermissionByRoles: () => {
+    return data
+  }
 }

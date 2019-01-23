@@ -6,8 +6,8 @@ export function getPermissionByRoles() {
     url: '/routers/dynamic',
     method: 'post',
     data: () => {
-    	const roles = store.getters && store.getters.roles
-    	return roles;
+      const roles = store.getters && store.getters.roles
+      return roles
     }
   })
 }

@@ -111,14 +111,14 @@ export default new Router({
 })
 
 export const mapServerRouters = {
- syncEmployee: {
+  syncEmployee: {
     component: () => import('@/views/layout/Layout'),
     path: '/employee',
     redirect: '/Employee/EmployeeList',
     meta: {
       title: 'Employee List',
-      icon: 'user',
-    },
+      icon: 'user'
+    }
   },
   childSyncEmployee: {
     component: () => import('@/views/Employee/EmployeeList'),
@@ -131,11 +131,11 @@ export const mapServerRouters = {
     path: 'index2',
     name: 'Employee 2',
     meta: { title: 'Employee 2', icon: 'user', noCache: true }
-  },
+  }
 }
 
 export const developerRouterMap = [
-{
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/index',
@@ -185,6 +185,24 @@ export const developerRouterMap = [
   chartsRouter,
   nestedRouter,
   tableRouter,
+  {
+    path: '/department',
+    component: Layout,
+    redirect: '/department/index',
+    name: 'Departments',
+    meta: {
+      title: 'Department',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/Department/index'),
+        name: 'DepartmentIndex',
+        meta: { title: 'Department', icon: 'example' }
+      }
+    ]
+  },
   {
     path: '/example',
     component: Layout,
@@ -386,11 +404,9 @@ export const developerRouterMap = [
         meta: { title: 'externalLink', icon: 'link' }
       }
     ]
-  },
+  }
 ]
 
 export const asyncRouterMap = [
-  
-
   { path: '*', redirect: '/404', hidden: true }
 ]

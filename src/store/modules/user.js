@@ -1,5 +1,5 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setRefreshToken, setExpiresAt, getRefreshToken, getExpiresAt } from '@/utils/auth'
 
 const user = {
   state: {
@@ -13,7 +13,9 @@ const user = {
     roles: [],
     setting: {
       articlePlatform: []
-    }
+    },
+    refreshToken: getRefreshToken(),
+    expiresAt: getExpiresAt()
   },
 
   mutations: {
@@ -40,18 +42,31 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_REFRESH_TOKEN: (state, refresh_token) => {
+      state.refreshToken = refresh_token
+    },
+    SET_EXPIRES_AT: (state, expires_at) => {
+      state.expiresAt = expires_at
     }
   },
 
   actions: {
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+      const form = {
+        username: userInfo.username.trim(),
+        password: userInfo.password
+      }
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
+        loginByUsername(form).then(response => {
+          const token = response.access_token
+          commit('SET_TOKEN', token)
+          commit('SET_REFRESH_TOKEN', response.access_token)
+          commit('SET_EXPIRES_AT', response.expires_in)
+          setToken(token)
+          setRefreshToken(response.access_token)
+          setExpiresAt(response.expires_in)
           resolve()
         }).catch(error => {
           reject(error)
@@ -62,22 +77,17 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(response => {
-          // 由于mockjs 不支持自定义状态码只能这样hack
+        getUserInfo().then(response => {
           if (!response.data) {
             reject('Verification failed, please login again.')
           }
-          const data = response.data
-
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
+          const user = response.data
+          if (user.roles && user.roles.length > 0) {
+            commit('SET_ROLES', user.roles)
           } else {
             reject('getInfo: roles must be a non-null array!')
           }
-
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
+          commit('SET_NAME', user.username)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -130,10 +140,8 @@ const user = {
         getUserInfo(role).then(response => {
           const data = response.data
           commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          dispatch('GenerateRoutes', data) // 动态修改权限后 重绘侧边菜单
+          commit('SET_NAME', data.username)
+          dispatch('GenerateRoutes', data)
           resolve()
         })
       })

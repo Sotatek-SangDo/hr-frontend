@@ -113,7 +113,7 @@ export default {
     type: 'Type',
     remark: 'Remark',
     search: 'Search',
-    add: 'Add',
+    add: 'Thêm',
     export: 'Export',
     reviewer: 'reviewer',
     id: 'ID',
@@ -121,15 +121,25 @@ export default {
     author: 'Author',
     readings: 'Readings',
     status: 'Status',
-    actions: 'Actions',
-    edit: 'Edit',
+    actions: 'Thao tác',
+    edit: 'Sửa',
     publish: 'Publish',
     draft: 'Draft',
-    delete: 'Delete',
+    delete: 'Xóa',
     cancel: 'Cancel',
-    confirm: 'Confirm',
-    name: 'Full Name',
-    phone: 'Phone Number'
+    confirm: 'Lưu',
+    name: 'Họ và tên',
+    phone: 'Số điện thoại',
+    email: 'Email',
+    action: 'Thao tác',
+    department: {
+      name: 'Phòng ban',
+      email: 'Email công việc'
+    }
+  },
+  placeholder: {
+    email: 'Nhập vào email ...',
+    phone: 'Nhập số điện thoại'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
@@ -160,7 +170,7 @@ export default {
     closeAll: 'Close All'
   },
   language: {
-    en: 'English',
-    vi: 'Vietnam'
+    vi: 'Tiếng Việt',
+    en: 'Tiếng Anh'
   }
 }
