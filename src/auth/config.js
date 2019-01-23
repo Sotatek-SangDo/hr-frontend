@@ -10,7 +10,8 @@ const authPasswordFlowConfig = {
 const defaultString = {
   AUTH: 'auth',
   token_endpoint: 'http://auth.erptech.vn/connect/token',
-  url_config: 'http://auth.erptech.vn/.well-known/openid-configuration',
+  userInfor_endpoint: 'http://auth.erptech.vn/api/userinfo',
+  url_config: 'https://auth.erptech.vn/.well-known/openid-configuration',
   METHOD_POST: 'POST',
   METHOD_GET: 'GET'
 }

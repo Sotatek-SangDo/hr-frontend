@@ -4,6 +4,7 @@ import articleAPI from './article'
 import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
 import dynamicRouters from './dynamicrouters'
+import departmentAPI from './department'
 
 // 修复在使用 MockJS 情况下，设置 withCredentials = true，且未被拦截的跨域请求丢失 Cookies 的问题
 // https://github.com/nuysoft/Mock/issues/300
@@ -18,6 +19,11 @@ Mock.XHR.prototype.send = function() {
 // Mock.setup({
 //   timeout: '350-600'
 // })
+
+Mock.mock(/\/mock-department/, 'get', departmentAPI.getList)
+Mock.mock(/\/mock-department\/store/, 'post', departmentAPI.createDepartment)
+Mock.mock(/\/mock-department\/update/, 'post', departmentAPI.updateDepartment)
+Mock.mock(/\/mock-department\/destroy/, 'post', departmentAPI.destroyDepartment)
 
 // 登录相关
 Mock.mock(/\/login\/login/, 'post', loginAPI.loginByUsername)
@@ -37,6 +43,6 @@ Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)
 // 账单相关
 Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
-Mock.mock(/\/routers\/dynamic/, 'get', dynamicRouters.getDynamicRouter)
+Mock.mock(/\/routers\/dynamic/, 'post', dynamicRouters.getPermissionByRoles)
 
 export default Mock
