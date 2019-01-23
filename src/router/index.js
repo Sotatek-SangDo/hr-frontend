@@ -186,24 +186,6 @@ export const developerRouterMap = [
   nestedRouter,
   tableRouter,
   {
-    path: '/department',
-    component: Layout,
-    redirect: '/department/index',
-    name: 'Departments',
-    meta: {
-      title: 'Department',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/Department/index'),
-        name: 'DepartmentIndex',
-        meta: { title: 'Department', icon: 'example' }
-      }
-    ]
-  },
-  {
     path: '/example',
     component: Layout,
     redirect: '/example/list',
@@ -408,5 +390,23 @@ export const developerRouterMap = [
 ]
 
 export const asyncRouterMap = [
+  {
+    path: '/department',
+    component: Layout,
+    redirect: '/department/index',
+    name: 'Departments',
+    meta: {
+      title: 'Department',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/Department/index'),
+        name: 'DepartmentIndex',
+        meta: { title: 'Department', icon: 'department' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
