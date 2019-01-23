@@ -91,30 +91,31 @@ const permission = {
         let accessedRouters
         let serverRouters
 
+        if (roles.includes('admin')) {
+          accessedRouters = asyncRouterMap
+        } else {
+          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+        }
+
+        if (process.env.NODE_ENV !== 'production'){
+          accessedRouters = accessedRouters.concat(developerRouterMap)
+        }
+
         let result = []
         getPermissionByRoles().then(response => {
-            result = response.data
+          result = response.data
 
-            if (roles.includes('admin')) {
-              accessedRouters = asyncRouterMap
-            } else {
-              accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-            }
+          if(result){
+            serverRouters = mappingComponent(result, roles)
+            accessedRouters = serverRouters.concat(accessedRouters)
+          }
 
-            if(result){
-              serverRouters = mappingComponent(result, roles)
-              accessedRouters = serverRouters.concat(accessedRouters)
-            }
-
-
-            if (process.env.NODE_ENV !== 'production'){
-              accessedRouters = accessedRouters.concat(developerRouterMap)
-            }
-
-            commit('SET_ROUTERS', accessedRouters)
-            resolve()
-          })
+        }).finally(function() {
+          commit('SET_ROUTERS', accessedRouters)
+          resolve()
         });
+        
+      });
       
     }
   }

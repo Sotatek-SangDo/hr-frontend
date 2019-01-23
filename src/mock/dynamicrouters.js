@@ -1,6 +1,5 @@
 const data = [{
     component: 'syncEmployee',
-    meta: {roles: ['admin']},
     children: [
       {
         component: 'childSyncEmployee'
