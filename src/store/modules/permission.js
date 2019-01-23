@@ -53,7 +53,6 @@ function mappingComponent(routes, roles) {
         tmp.meta.icon = mapServerRouters[compName].meta.icon
         tmp.meta.noCache = mapServerRouters[compName].meta.noCache
       }
-
       tmp.name = mapServerRouters[compName].name
       tmp.hidden = mapServerRouters[compName].hidden
       tmp.alwaysShow = mapServerRouters[compName].alwaysShow
