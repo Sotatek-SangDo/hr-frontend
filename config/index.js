@@ -9,7 +9,17 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: process.env.BASE_API,
+        changeOrigin: true
+      },
+      '/auth': {
+        target: 'http://auth.erptech.vn',
+        pathRewrite: {'^/auth' : ''},
+        changeOrigin: true
+      }
+    },
 
     // Various Dev Server settings
 
