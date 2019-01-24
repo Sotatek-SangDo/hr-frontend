@@ -1,33 +1,29 @@
 <template>
   <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
     <template slot="main-content">
-      <e-profile :id="empId"/>
+      <add-employee :is-create="isCreate"/>
     </template>
   </home-layout>
 </template>
 
 <script>
-import MasterView from '../MasterView.vue'
 import HomeLayout from '../../components/HomeLayout'
-import EProfile from '../../components/employee/EProfile'
+import MasterView from '../MasterView'
+import AddEmployee from '../../components/employee/AddEmployee'
 
 export default {
-  name: 'Profile',
+  name: 'EmployeeEdit',
   components: {
     HomeLayout,
-    EProfile
+    AddEmployee
   },
   extends: MasterView,
   data() {
     return {
-      headerTitle: 'Thông tin cá nhân',
-      breadcrumbs: [{ title: 'Thông tin cá nhân', href: '' }],
-      empId: '',
-      employee: {}
+      headerTitle: 'Chỉnh sửa thông tin',
+      breadcrumbs: [{ title: 'Chỉnh sửa thông tin', href: '' }],
+      isCreate: false
     }
-  },
-  created() {
-    this.empId = this.$route.query.id
   },
   mounted() {
     this.inital()

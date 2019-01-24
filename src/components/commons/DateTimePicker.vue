@@ -1,13 +1,12 @@
 <template>
   <div class="form-group">
     <label>{{ title }}</label>
-    <div ref="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
-      <input ref="input" class="form-control" type="text" readonly>
+    <div ref="datetimepicker" class="input-group date">
+      <input :value="value" class="form-control" type="text">
       <span class="input-group-addon">
         <i class="ti-calendar"/>
       </span>
     </div>
-    <input :value="value" type="hidden" @input="onChange">
   </div>
 </template>
 
@@ -28,10 +27,6 @@ export default {
     default: {
       type: Date,
       default: new Date()
-    },
-    format: {
-      type: String,
-      default: 'dd-mm-yyyy'
     }
   },
   data() {
@@ -47,16 +42,10 @@ export default {
     onChange() {},
     init() {
       const self = this
-      $(self.$refs.datepicker)
-        .datepicker({
-          autoclose: true,
-          todayHighlight: true
-        })
-        .datepicker('update', self.date)
-        .on('changeDate', function(e) {
-          const date = e.format(self.format)
-          self.$emit('input', date)
-        })
+      $(self.$refs.datetimepicker).datetimepicker({
+        defaultDate: self.date,
+        format: 'YYYY-MM-DD HH:mm'
+      })
     }
   }
 }

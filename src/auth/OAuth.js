@@ -2,7 +2,7 @@ import { authPasswordFlowConfig, defaultString } from './config'
 import axios from 'axios'
 import EventBus from '../event-bus'
 import $ from 'jquery'
-import { getToken } from '@/utils/auth'
+import { getHeaderToken } from '@/utils/auth'
 
 export default {
   loginByUserPass(userInfor = {}) {
@@ -30,7 +30,7 @@ export default {
       url: defaultString.userInfor_endpoint,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
+        'Authorization': getHeaderToken()
       }
     }
     return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
 <template>
   <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
     <template slot="main-content">
-      <e-profile :id="empId"/>
+      <interview-layout/>
     </template>
   </home-layout>
 </template>
@@ -9,25 +9,20 @@
 <script>
 import MasterView from '../MasterView.vue'
 import HomeLayout from '../../components/HomeLayout'
-import EProfile from '../../components/employee/EProfile'
+import InterviewLayout from '../../components/Recruitment/InterviewLayout'
 
 export default {
-  name: 'Profile',
+  name: 'Interview',
   components: {
     HomeLayout,
-    EProfile
+    InterviewLayout
   },
   extends: MasterView,
   data() {
     return {
-      headerTitle: 'Thông tin cá nhân',
-      breadcrumbs: [{ title: 'Thông tin cá nhân', href: '' }],
-      empId: '',
-      employee: {}
+      headerTitle: 'Phỏng vấn',
+      breadcrumbs: [{ title: 'Phỏng vấn', href: '' }]
     }
-  },
-  created() {
-    this.empId = this.$route.query.id
   },
   mounted() {
     this.inital()

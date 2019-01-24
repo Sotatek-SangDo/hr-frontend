@@ -48,7 +48,8 @@ export default {
       },
       passError: '',
       validatePass: true,
-      errors: []
+      errors: [],
+      errorsModal: []
     }
   },
   watch: {
@@ -74,6 +75,7 @@ export default {
             .authenticate()
             .then(res => {
               localStorage.setItem('user', JSON.stringify(res))
+              // auth.refreshToken();
               this.$router.replace(this.$route.query.redirect || '/')
             })
         }

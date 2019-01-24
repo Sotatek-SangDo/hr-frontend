@@ -7,6 +7,7 @@ const authPasswordFlowConfig = {
   oidc: false,
   grant_type: 'password'
 }
+
 const defaultString = {
   AUTH: 'auth',
   token_endpoint: '/auth/connect/token',

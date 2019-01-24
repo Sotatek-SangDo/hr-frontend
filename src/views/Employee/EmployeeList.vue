@@ -4,14 +4,11 @@
       <tab-slide :tabs="tabs">
         <div id="nv" role="tabpanel" class="tab-pane fade active in show">
           <div class="col-12 mt-5">
-            <div v-if="addStep || profileStep">
-              <span class="back" @click="goToAddPage('list')">Quay lại</span>
-            </div>
-            <div v-show="listStep" class="card">
+            <div class="card">
               <div class="card-body">
                 <div class="epm-tb-header">
                   <h4 class="header-title header-underline">Danh sách nhân viên</h4>
-                  <a class="button-add button" @click="goToAddPage('add')">
+                  <a class="button-add button" @click="addPage">
                     <span>Thêm mới</span>
                   </a>
                 </div>
@@ -26,7 +23,7 @@
                     <th>Thao tác</th>
                   </template>
                   <template slot="body" slot-scope="props">
-                    <tr>
+                    <tr @click="profilePage(props.item.id)">
                       <td v-text="props.item.name"/>
                       <td v-text="props.item.job.title"/>
                       <td v-text="props.item.address"/>
@@ -34,7 +31,7 @@
                       <td v-text="props.item.birthday"/>
                       <td v-text="props.item.private_email"/>
                       <td>
-                        <span @click="empProfile(props.item)">
+                        <span>
                           <i class="ti-search"/>
                         </span>
                       </td>
@@ -42,12 +39,6 @@
                   </template>
                 </data-table>
               </div>
-            </div>
-            <div v-if="addStep" class="add-form">
-              <add-employee :employee="emp" :header="header"/>
-            </div>
-            <div v-if="profileStep" class="profile card">
-              <profile-employee :employee="empView"/>
             </div>
           </div>
         </div>
@@ -78,8 +69,6 @@
 import DataTable from '../../components/commons/DataTable'
 import MasterView from '../MasterView'
 import HomeLayout from '../../components/HomeLayout'
-import AddEmployee from './AddEmployee'
-import ProfileEmployee from './ProfileEmployee'
 import EmployeeSkill from '../../components/employee/EmployeeSkill'
 import EmployeeEducation from '../../components/employee/EmployeeEducation'
 import EmployeeCertification from '../../components/employee/EmployeeCertification'
@@ -92,9 +81,7 @@ import rf from '../../requests/RequestFactory'
 export default {
   components: {
     HomeLayout,
-    AddEmployee,
     DataTable,
-    ProfileEmployee,
     TabSlide,
     EmployeeSkill,
     EmployeeEducation,
@@ -118,9 +105,6 @@ export default {
         { title: 'Phòng ban', href: 'pb' }
       ],
       breadcrumbs: [{ title: 'Nhân viên', href: '' }],
-      addStep: false,
-      listStep: true,
-      profileStep: false,
       empView: {},
       emp: {
         full_name: '',
@@ -149,26 +133,14 @@ export default {
     this.inital()
   },
   methods: {
-    empProfile(employeee) {
-      this.empView = employeee
-      this.goToAddPage('profile')
+    profilePage(empId) {
+      return this.$router.push({
+        name: 'employee-profile',
+        query: { id: empId }
+      })
     },
-    goToAddPage(type) {
-      if (type === 'list') {
-        this.addStep = false
-        this.profileStep = false
-        this.listStep = true
-      }
-      if (type === 'add') {
-        this.addStep = true
-        this.profileStep = false
-        this.listStep = false
-      }
-      if (type === 'profile') {
-        this.addStep = false
-        this.profileStep = true
-        this.listStep = false
-      }
+    addPage() {
+      this.$router.push({ name: 'employee-add' })
     },
     getEmployees() {
       return rf.getRequest('EmployeeRequest').getEmpFullInfo()
@@ -184,6 +156,8 @@ export default {
 </script>
 <style scoped lang="sass">
 @import url("https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
+.button
+  cursor: pointer
 select
   display: none
 .content
@@ -196,6 +170,8 @@ select
     i
       font-size: 35px
 table
+  tr
+    cursor: pointer
   margin: 0 auto;
   td
     span

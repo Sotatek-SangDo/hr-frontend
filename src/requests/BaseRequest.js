@@ -1,6 +1,7 @@
 import axios from 'axios'
 const PREFIX = 'api/v1'
 import EventBus from '../event-bus'
+import auth from '../auth'
 
 export default class BaseRequest {
   getPrefix() {
@@ -49,7 +50,7 @@ export default class BaseRequest {
   _errorHandler(reject, err) {
     // window.app.$broadcast('EVENT_COMMON_ERROR', err);
     if (err.response && err.response.status === 401) {
-      // window.location.reload();
+      auth.logout()
     }
     if (err.response && err.response.status === 503) {
       // window.location.reload();
