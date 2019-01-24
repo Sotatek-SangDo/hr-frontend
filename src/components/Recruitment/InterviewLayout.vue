@@ -1,55 +1,58 @@
 <template>
   <div class="card">
-    <interview-modal v-if="isShow" :prop-interview="interview" :is-create="isCreate" :start="start" :end="end"></interview-modal>
+    <interview-modal v-if="isShow" :prop-interview="interview" :is-create="isCreate" :start="start" :end="end"/>
     <div class="calendar">
-      <calendar ref="calendar" v-if="show" :select-calendar="addInterview" :get-event="interviews" :drop="drop" :resize="resize"></calendar>
+      <calendar v-if="show" ref="calendar" :select-calendar="addInterview" :get-event="interviews" :drop="drop" :resize="resize"/>
     </div>
   </div>
 </template>
 
 <script>
-import MasterView from "../../views/MasterView";
-import rf from "../../requests/RequestFactory";
-import InterviewModal from "../commons/RecruitmentModal/InterviewModal";
-import Calendar from "../commons/Calendar";
-import $ from "jquery";
-import _ from "lodash";
-import moment from "moment";
+import MasterView from '../../views/MasterView'
+import rf from '../../requests/RequestFactory'
+import InterviewModal from '../commons/RecruitmentModal/InterviewModal'
+import Calendar from '../commons/Calendar'
+import $ from 'jquery'
+import _ from 'lodash'
+import moment from 'moment'
 
 export default {
-  name: "InterviewLayout",
-  extends: MasterView,
+  name: 'InterviewLayout',
   components: {
     InterviewModal,
     Calendar
   },
+  extends: MasterView,
   data() {
     return {
       interview: {
-        candidate_id: "",
-        started_at: "",
-        ended_at: "",
-        interviewer: "",
-        address: "",
-        id: ""
+        candidate_id: '',
+        started_at: '',
+        ended_at: '',
+        interviewer: '',
+        address: '',
+        id: ''
       },
       isShow: false,
       isCreate: true,
-      modal_id: "interview-modal",
-      importText: "Import file...",
-      start: "",
-      end: "",
+      modal_id: 'interview-modal',
+      importText: 'Import file...',
+      start: '',
+      end: '',
       events: [],
       interviews: [],
       show: false
-    };
+    }
   },
   created() {
-    this.getInterviews();
+    this.getInterviews()
+  },
+  mounted() {
+    this.onListener()
   },
   methods: {
     getInterviews() {
-      rf.getRequest("InterviewRequest")
+      rf.getRequest('InterviewRequest')
         .getAll()
         .then(res => {
           _.each(res, v => {
@@ -58,78 +61,75 @@ export default {
               end: v.ended_at,
               title: v.name,
               event_id: v.id
-            };
-            this.interviews.push(event);
-          });
-          this.show = true;
-        });
+            }
+            this.interviews.push(event)
+          })
+          this.show = true
+        })
     },
     addInterview(start, end) {
-      this.start = $.fullCalendar.formatDate(start, "YYYY-MM-DD hh:mm");
-      this.end = $.fullCalendar.formatDate(end, "YYYY-MM-DD hh:mm");
-      this.isCreate = true;
-      this.isShow = true;
-      this.addEventShowModal();
+      this.start = $.fullCalendar.formatDate(start, 'YYYY-MM-DD hh:mm')
+      this.end = $.fullCalendar.formatDate(end, 'YYYY-MM-DD hh:mm')
+      this.isCreate = true
+      this.isShow = true
+      this.addEventShowModal()
     },
     drop(event) {
       const params = {
-        started_at: moment(event.start).format("YYYY-MM-DD hh:mm"),
-        ended_at: moment(event.end).format("YYYY-MM-DD hh:mm"),
+        started_at: moment(event.start).format('YYYY-MM-DD hh:mm'),
+        ended_at: moment(event.end).format('YYYY-MM-DD hh:mm'),
         id: event.event_id
-      };
-      rf.getRequest("InterviewRequest")
+      }
+      rf.getRequest('InterviewRequest')
         .update(params)
-        .then(() => {});
+        .then(() => {})
     },
     resize(event) {
       const params = {
-        started_at: moment(event.start).format("YYYY-MM-DD hh:mm"),
-        ended_at: moment(event.end).format("YYYY-MM-DD hh:mm"),
+        started_at: moment(event.start).format('YYYY-MM-DD hh:mm'),
+        ended_at: moment(event.end).format('YYYY-MM-DD hh:mm'),
         id: event.event_id
-      };
-      rf.getRequest("InterviewRequest")
+      }
+      rf.getRequest('InterviewRequest')
         .update(params)
-        .then(() => {});
+        .then(() => {})
     },
     importData(e) {
-      this.importText = e.target.files[0].name;
-      const formData = new FormData();
-      formData.append("file", e.target.files[0]);
-      rf.getRequest("InterviewRequest")
+      this.importText = e.target.files[0].name
+      const formData = new FormData()
+      formData.append('file', e.target.files[0])
+      rf.getRequest('InterviewRequest')
         .importExcelData(formData)
-        .then(() => {});
+        .then(() => {})
     },
     updateInterview(interview) {
-      this.isCreate = false;
-      Object.assign(this.interview, this.setData(this.interview, interview));
-      this.isShow = true;
-      this.addEventShowModal();
+      this.isCreate = false
+      Object.assign(this.interview, this.setData(this.interview, interview))
+      this.isShow = true
+      this.addEventShowModal()
     },
     clearData() {
-      this.interview = this.emptyData(this.interview);
+      this.interview = this.emptyData(this.interview)
     },
     tableRefresh() {
-      this.$refs.datatable.refresh();
-      this.isShow = false;
+      this.$refs.datatable.refresh()
+      this.isShow = false
     },
     refreshEvent(event) {
-      let refreshEvent = {
+      const refreshEvent = {
         title: event.name,
         start: event.started_at,
         end: event.ended_at,
         event_id: event.id
-      };
-      this.$refs.calendar.refreshEvent(refreshEvent);
+      }
+      this.$refs.calendar.refreshEvent(refreshEvent)
     },
     onListener() {
-      window.EventBus.$on("add-interview", res => this.refreshEvent(res));
-      window.EventBus.$on("update-interview", () => this.tableRefresh());
+      window.EventBus.$on('add-interview', res => this.refreshEvent(res))
+      window.EventBus.$on('update-interview', () => this.tableRefresh())
     }
-  },
-  mounted() {
-    this.onListener();
   }
-};
+}
 </script>
 
 <style lang="sass" scoped>

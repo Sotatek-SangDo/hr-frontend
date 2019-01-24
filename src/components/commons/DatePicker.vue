@@ -2,60 +2,64 @@
   <div class="form-group">
     <label>{{ title }}</label>
     <div ref="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
-      <input class="form-control" ref="input" type="text" readonly/>
+      <input ref="input" class="form-control" type="text" readonly>
       <span class="input-group-addon">
-        <i class="ti-calendar"></i>
+        <i class="ti-calendar"/>
       </span>
     </div>
-    <input type="hidden" @input="onChange" :value="value">
+    <input :value="value" type="hidden" @input="onChange">
   </div>
 </template>
 
 <script>
-import $ from "jquery";
+import $ from 'jquery'
 
 export default {
-  name: "DatePicker",
+  name: 'DatePicker',
   props: {
     title: {
-      type: String
+      type: String,
+      default: ''
     },
     value: {
-      type: String
+      type: String,
+      default: ''
     },
     default: {
-      type: Date
+      type: Date,
+      default: new Date()
     },
     format: {
-      default: "dd-mm-yyyy"
+      type: String,
+      default: 'dd-mm-yyyy'
     }
   },
   data() {
     return {
-      date: ""
-    };
+      date: ''
+    }
+  },
+  mounted() {
+    this.date = this.default
+    this.init()
   },
   methods: {
     onChange() {},
     init() {
-      const self = this;
+      const self = this
       $(self.$refs.datepicker)
         .datepicker({
           autoclose: true,
           todayHighlight: true
         })
-        .datepicker("update", self.date)
-        .on("changeDate", function(e) {
-          const date = e.format(self.format);
-          self.$emit("input", date);
-        });
+        .datepicker('update', self.date)
+        .on('changeDate', function(e) {
+          const date = e.format(self.format)
+          self.$emit('input', date)
+        })
     }
-  },
-  mounted() {
-    this.date = this.default;
-    this.init();
   }
-};
+}
 </script>
 <style lang="sass">
 .input-group-addon

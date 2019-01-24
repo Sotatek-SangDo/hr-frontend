@@ -3,18 +3,18 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addCertification">
-          <span class="icon"><i class="ti-plus"></i></span>Chứng chỉ
+          <span class="icon"><i class="ti-plus"/></span>Chứng chỉ
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userCertifications">
-          <div class="list-group-item sub-tab-item" v-for="(cer, i) in userCertifications" :key="i">
+        <div v-if="userCertifications" class="card-body">
+          <div v-for="(cer, i) in userCertifications" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ cer.certification_name }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeCertification(cer)">
-                <i class="ti-trash"></i>
+                <i class="ti-trash"/>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(cer)">
-                <i class="ti-marker-alt"></i>
+                <i class="ti-marker-alt"/>
               </button>
             </h5>
             <p class="list-group-item-text">Ngày cấp: {{ cer.granted_on }}</p>
@@ -24,102 +24,102 @@
         </div>
       </div>
     </div>
-    <certification-modal v-if="isShow" :emp-id="empId" :isCreate="isCreate" :certification="user_certification"></certification-modal>
+    <certification-modal v-if="isShow" :emp-id="empId" :is-create="isCreate" :certification="user_certification"/>
   </div>
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import MasterView from "../../views/MasterView";
-import CertificationModal from "../../components/commons/EmployeeModal/CertificationModal";
+import rf from '../../requests/RequestFactory'
+import MasterView from '../../views/MasterView'
+import CertificationModal from '../../components/commons/EmployeeModal/CertificationModal'
 
 export default {
-  name: "AddCertification",
-  extends: MasterView,
+  name: 'AddCertification',
   components: {
     CertificationModal
   },
-  data() {
-    return {
-      user_certification: {
-        certification_id: "",
-        institute: "",
-        granted_on: "",
-        valid_to: "",
-        emp_id: this.empId,
-        id: ""
-      },
-      userCertifications: [],
-      isShow: false,
-      modal_id: "certification-modal"
-    };
-  },
+  extends: MasterView,
   props: {
     empId: {
       type: Number
     }
   },
-  methods: {
-    getCertificationsUser() {
-      rf.getRequest("CertificationUserRequest")
-        .getECertification({ id: this.empId })
-        .then(res => {
-          this.userCertifications = res;
-        });
-    },
-    addCertification(e) {
-      e.preventDefault();
-      this.isCreate = true;
-      this.user_certification.emp_id = this.empId;
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    showModalUpdate(certification) {
-      this.isCreate = false;
-      Object.assign(
-        this.user_certification,
-        this.setData(this.user_certification, certification)
-      );
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    removeCertification(certification) {
-      if (confirm("Bạn có chắc muốn xóa chứng chỉ này?")) {
-        rf.getRequest("CertificationUserRequest")
-          .destroy({ id: certification.id })
-          .then(res => {
-            if (res.status) {
-              window.EventBus.$emit("delete-eCertification", certification);
-            }
-          });
-      }
-    },
-    clearData() {
-      this.user_certification = this.emptyData(this.user_certification);
-    },
-    onEventCertification() {
-      window.EventBus.$on("update-eCertification", eCer => {
-        const index = this.userCertifications.findIndex(c => c.id === eCer.id);
-        this.userCertifications[index] = eCer;
-        this.$forceUpdate();
-      });
-      window.EventBus.$on("add-eCertification", eCer =>
-        this.userCertifications.push(eCer)
-      );
-      window.EventBus.$on("delete-eCertification", eCer => {
-        const index = this.userCertifications.findIndex(c => c.id === eCer.id);
-        this.userCertifications.splice(index, 1);
-      });
-    },
-    init() {
-      this.getCertificationsUser();
-      this.onEventCertification();
+  data() {
+    return {
+      user_certification: {
+        certification_id: '',
+        institute: '',
+        granted_on: '',
+        valid_to: '',
+        emp_id: this.empId,
+        id: ''
+      },
+      userCertifications: [],
+      isShow: false,
+      modal_id: 'certification-modal'
     }
   },
   mounted() {
-    this.init();
+    this.init()
+  },
+  methods: {
+    getCertificationsUser() {
+      rf.getRequest('CertificationUserRequest')
+        .getECertification({ id: this.empId })
+        .then(res => {
+          this.userCertifications = res
+        })
+    },
+    addCertification(e) {
+      e.preventDefault()
+      this.isCreate = true
+      this.user_certification.emp_id = this.empId
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    showModalUpdate(certification) {
+      this.isCreate = false
+      Object.assign(
+        this.user_certification,
+        this.setData(this.user_certification, certification)
+      )
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    removeCertification(certification) {
+      if (confirm('Bạn có chắc muốn xóa chứng chỉ này?')) {
+        rf.getRequest('CertificationUserRequest')
+          .destroy({ id: certification.id })
+          .then(res => {
+            if (res.status) {
+              window.EventBus.$emit('delete-eCertification', certification)
+            }
+          })
+      }
+    },
+    clearData() {
+      this.user_certification = this.emptyData(this.user_certification)
+    },
+    onEventCertification() {
+      window.EventBus.$on('update-eCertification', eCer => {
+        const index = this.userCertifications.findIndex(c => c.id === eCer.id)
+        this.userCertifications[index] = eCer
+        this.$forceUpdate()
+      })
+      window.EventBus.$on('add-eCertification', eCer =>
+        this.userCertifications.push(eCer)
+      )
+      window.EventBus.$on('delete-eCertification', eCer => {
+        const index = this.userCertifications.findIndex(c => c.id === eCer.id)
+        this.userCertifications.splice(index, 1)
+      })
+    },
+    init() {
+      this.getCertificationsUser()
+      this.onEventCertification()
+    }
   }
-};
+}
 </script>
 
 <style lang="sass">
@@ -129,7 +129,7 @@ button::disabled
   resize: none;
 .form-group
   margin-bottom: 10px
-a.icon-p  
+a.icon-p
   font-weight: 800
   font-size: 22px !important
   span.icon

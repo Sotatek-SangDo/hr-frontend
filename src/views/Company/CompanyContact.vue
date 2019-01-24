@@ -4,14 +4,14 @@
       <div class="epm-tb-header">
         <h4 class="header-title">Company</h4>
       </div>
-      <data-table :getData="getCompany" ref="datatable">
+      <data-table ref="datatable" :get-data="getCompany">
         <th>Name</th>
         <th>Email</th>
         <th>Phone</th>
         <th>Address</th>
         <template slot="body" slot-scope="props">
           <tr>
-            <td v-text="props.item.name"></td>
+            <td v-text="props.item.name"/>
             <td v-text="props.item.email"/>
             <td v-text="props.item.phone_number"/>
             <td v-text="props.item.address"/>
@@ -23,38 +23,38 @@
 </template>
 
 <script>
-import DataTable from "../../components/commons/DataTable";
-import MasterView from "../MasterView";
-import HomeLayout from "../../components/HomeLayout";
-import rf from "../../requests/RequestFactory";
+import DataTable from '../../components/commons/DataTable'
+import MasterView from '../MasterView'
+import HomeLayout from '../../components/HomeLayout'
+import rf from '../../requests/RequestFactory'
 
 export default {
-  extends: MasterView,
   components: {
     HomeLayout,
     DataTable
   },
+  extends: MasterView,
+  mounted() {
+    this.inital()
+  },
   methods: {
     getCompany() {
-      return rf.getRequest("CompanyRequest").getComFullContact();
+      return rf.getRequest('CompanyRequest').getComFullContact()
     },
     inital() {
       this.sleep(500).then(() => {
-        this.init();
-      });
-      this.fadeOut();
+        this.init()
+      })
+      this.fadeOut()
     }
-  },
-  mounted() {
-    this.inital();
   }
-};
+}
 </script>
 <style scoped lang="sass">
 @import url("https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
 select
   display: none
-.content 
+.content
   min-height: 86vh
 .header-button
   padding: 20px 0 10px 20px
@@ -63,12 +63,12 @@ select
   a
     i
       font-size: 35px
-table 
+table
   margin: 0 auto;
   td
     span
       cursor: pointer
-.header-button 
+.header-button
   a
     color: blue
     cursor: pointer
@@ -78,7 +78,7 @@ table
   a
     i
       transition: all 0.5s ease-in-out
-.header-button 
+.header-button
   a:hover i
     transform: scale(1.4)
 .content-tab

@@ -1,11 +1,10 @@
-<template>
-    <div class="sidebar-menu">
-      <div class="sidebar-header">
-          <div class="logo">
-              <a href="/">
-                <img src="assets/images/icon/hr-admin.png" alt="logo">
-              </a>
-          </div>
+<!-- <template>
+  <div class="sidebar-menu">
+    <div class="sidebar-header">
+      <div class="logo">
+        <a href="/">
+          <img src="assets/images/icon/hr-admin.png" alt="logo">
+        </a>
       </div>
       <div class="main-menu">
           <div class="menu-inner">
@@ -122,35 +121,40 @@
                           </ul>
                       </li>
                   </ul>
-              </nav>
-          </div>
+                </li>
+                <li><a href="#">Item level (1)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
-import MetisMenu from "metismenu";
+import MetisMenu from 'metismenu'
 
 export default {
+  mounted() {
+    this.init()
+  },
   methods: {
     init() {
-      const config = {};
-      const menu = new MetisMenu(this.$refs.metismenu, config);
-      menu.init();
+      const config = {}
+      const menu = new MetisMenu(this.$refs.metismenu, config)
+      menu.init()
     }
-    // isPageActive(routeName) {
-    //   const reg = new RegExp("/" + routeName + '/');
-    //   let path = this.$route.path;
-    //   if (path === PathRoot.path) {
-    //     path = '/' + PathRoot.redirect.name + '/';
-    //   }
-    //   return reg.test(path);
-    // }
-  },
-  mounted() {
-    this.init();
+    isPageActive(routeName) {
+      const reg = new RegExp("/" + routeName + '/');
+      let path = this.$route.path;
+      if (path === PathRoot.path) {
+        path = '/' + PathRoot.redirect.name + '/';
+      }
+      return reg.test(path);
+    }
   }
-};
+}
 </script>
 
 <style lang="sass" scoped>
@@ -168,3 +172,4 @@ export default {
       &.no-sub:after
         content: ""
 </style>
+ -->

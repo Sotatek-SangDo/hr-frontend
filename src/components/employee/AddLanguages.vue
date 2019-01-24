@@ -3,18 +3,18 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addLanguage">
-          <span class="icon"><i class="ti-plus"></i></span>Ngôn ngữ
+          <span class="icon"><i class="ti-plus"/></span>Ngôn ngữ
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userLanguages">
-          <div class="list-group-item sub-tab-item" v-for="(lang, i) in userLanguages" :key="i">
+        <div v-if="userLanguages" class="card-body">
+          <div v-for="(lang, i) in userLanguages" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading" style="text-transform: uppercase">{{ lang.language }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeLang(lang)">
-                <i class="ti-trash"></i>
+                <i class="ti-trash"/>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(lang)">
-                <i class="ti-marker-alt"></i>
+                <i class="ti-marker-alt"/>
               </button>
             </h5>
             <p class="list-group-item-text">Listen: {{ lang.listen }}</p>
@@ -25,101 +25,101 @@
         </div>
       </div>
     </div>
-    <language-modal v-if="isShow" :emp-id="empId" :e-language="user_language" :is-create="isCreate"></language-modal>
+    <language-modal v-if="isShow" :emp-id="empId" :e-language="user_language" :is-create="isCreate"/>
   </div>
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import MasterView from "../../views/MasterView";
-import LanguageModal from "../commons/EmployeeModal/LanguageModal";
+import rf from '../../requests/RequestFactory'
+import MasterView from '../../views/MasterView'
+import LanguageModal from '../commons/EmployeeModal/LanguageModal'
 
 export default {
-  name: "AddEducations",
-  extends: MasterView,
+  name: 'AddEducations',
   components: {
     LanguageModal
   },
-  data() {
-    return {
-      user_language: {
-        lang_id: "",
-        listen: "",
-        speak: "",
-        read: "",
-        write: "",
-        emp_id: this.empId,
-        id: ""
-      },
-      isCreate: true,
-      userLanguages: [],
-      isShow: false,
-      modal_id: "language-modal"
-    };
-  },
+  extends: MasterView,
   props: {
     empId: {
       type: Number
     }
   },
-  methods: {
-    getUserLanguages() {
-      rf.getRequest("UserLanguagesRequest")
-        .getELanguages({ id: this.empId })
-        .then(res => {
-          this.userLanguages = res;
-        });
-    },
-    addLanguage(e) {
-      e.preventDefault();
-      this.isCreate = true;
-      this.user_language.emp_id = this.empId;
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    showModalUpdate(lang) {
-      this.isCreate = false;
-      Object.assign(this.user_language, this.setData(this.user_language, lang));
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    removeLang(lang) {
-      if (confirm("Bạn có chắc muốn xóa ngôn ngữ này khỏi danh sách?")) {
-        rf.getRequest("UserLanguagesRequest")
-          .destroy({ id: lang.id })
-          .then(res => {
-            if (res.status) {
-              window.EventBus.$emit("delete-eLanguage", lang);
-            }
-          });
-      }
-    },
-    clearData() {
-      this.user_language = this.emptyData(this.user_language);
-    },
-    onEventLanguage() {
-      window.EventBus.$on("update-eLanguage", eLang => {
-        const index = this.userLanguages.findIndex(l => l.id === eLang.id);
-        this.userLanguages[index] = eLang;
-        this.$forceUpdate();
-      });
-      window.EventBus.$on("add-eLanguage", eLang =>
-        this.userLanguages.push(eLang)
-      );
-      window.EventBus.$on("delete-eLanguage", eLang => {
-        const index = this.userLanguages.findIndex(l => l.id === eLang.id);
-        this.userLanguages.splice(index, 1);
-      });
-    },
-    init() {
-      this.getUserLanguages();
-      this.onEventLanguage();
+  data() {
+    return {
+      user_language: {
+        lang_id: '',
+        listen: '',
+        speak: '',
+        read: '',
+        write: '',
+        emp_id: this.empId,
+        id: ''
+      },
+      isCreate: true,
+      userLanguages: [],
+      isShow: false,
+      modal_id: 'language-modal'
     }
   },
   mounted() {
-    this.init();
+    this.init()
+  },
+  methods: {
+    getUserLanguages() {
+      rf.getRequest('UserLanguagesRequest')
+        .getELanguages({ id: this.empId })
+        .then(res => {
+          this.userLanguages = res
+        })
+    },
+    addLanguage(e) {
+      e.preventDefault()
+      this.isCreate = true
+      this.user_language.emp_id = this.empId
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    showModalUpdate(lang) {
+      this.isCreate = false
+      Object.assign(this.user_language, this.setData(this.user_language, lang))
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    removeLang(lang) {
+      if (confirm('Bạn có chắc muốn xóa ngôn ngữ này khỏi danh sách?')) {
+        rf.getRequest('UserLanguagesRequest')
+          .destroy({ id: lang.id })
+          .then(res => {
+            if (res.status) {
+              window.EventBus.$emit('delete-eLanguage', lang)
+            }
+          })
+      }
+    },
+    clearData() {
+      this.user_language = this.emptyData(this.user_language)
+    },
+    onEventLanguage() {
+      window.EventBus.$on('update-eLanguage', eLang => {
+        const index = this.userLanguages.findIndex(l => l.id === eLang.id)
+        this.userLanguages[index] = eLang
+        this.$forceUpdate()
+      })
+      window.EventBus.$on('add-eLanguage', eLang =>
+        this.userLanguages.push(eLang)
+      )
+      window.EventBus.$on('delete-eLanguage', eLang => {
+        const index = this.userLanguages.findIndex(l => l.id === eLang.id)
+        this.userLanguages.splice(index, 1)
+      })
+    },
+    init() {
+      this.getUserLanguages()
+      this.onEventLanguage()
+    }
   }
-};
+}
 </script>
 
 <style lang="sass" scoped>
@@ -129,7 +129,7 @@ button::disabled
   resize: none;
 .form-group
   margin-bottom: 10px
-a.icon-p  
+a.icon-p
   font-weight: 800
   font-size: 22px !important
   span.icon

@@ -3,18 +3,18 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addContact">
-          <span class="icon"><i class="ti-plus"></i></span>Danh bạ khẩn cấp
+          <span class="icon"><i class="ti-plus"/></span>Danh bạ khẩn cấp
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userContacts">
-          <div class="list-group-item sub-tab-item" v-for="(con, i) in userContacts" :key="i">
+        <div v-if="userContacts" class="card-body">
+          <div v-for="(con, i) in userContacts" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ con.full_name }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeContact(con)">
-                <i class="ti-trash"></i>
+                <i class="ti-trash"/>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(con)">
-                <i class="ti-marker-alt"></i>
+                <i class="ti-marker-alt"/>
               </button>
             </h5>
             <p class="list-group-item-text">Quan hệ: {{ con.relationship }}</p>
@@ -23,103 +23,103 @@
         </div>
       </div>
     </div>
-    <emergency-contact-modal v-if="isShow" :contact="user_contact" :isCreate="isCreate" :emp-id="empId"></emergency-contact-modal>
+    <emergency-contact-modal v-if="isShow" :contact="user_contact" :is-create="isCreate" :emp-id="empId"/>
   </div>
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import MasterView from "../../views/MasterView";
-import EmergencyContactModal from "../commons/EmployeeModal/EmergencyContactModal";
+import rf from '../../requests/RequestFactory'
+import MasterView from '../../views/MasterView'
+import EmergencyContactModal from '../commons/EmployeeModal/EmergencyContactModal'
 
 export default {
-  name: "AddEmergencyContact",
-  extends: MasterView,
+  name: 'AddEmergencyContact',
   components: {
     EmergencyContactModal
   },
-  data() {
-    return {
-      user_contact: {
-        full_name: "",
-        relationship: "",
-        contact_phone: "",
-        emp_id: this.empId,
-        id: ""
-      },
-      errors: [],
-      isDisable: false,
-      userContacts: [],
-      isShow: false,
-      modal_id: "contact-modal"
-    };
-  },
+  extends: MasterView,
   props: {
     empId: {
       type: Number
     }
   },
-  methods: {
-    getEmergencyContacts() {
-      rf.getRequest("EmergencyContactsRequest")
-        .getEEmergencyContact({ id: this.empId })
-        .then(res => {
-          this.userContacts = res;
-        });
-    },
-    addContact(e) {
-      e.preventDefault();
-      this.isCreate = true;
-      this.user_contact.emp_id = this.empId;
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    showModalUpdate(contact) {
-      this.isCreate = false;
-      Object.assign(
-        this.user_contact,
-        this.setData(this.user_contact, contact)
-      );
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    removeContact(contact) {
-      if (confirm("Bạn có chắc muốn xóa liên lạc này?")) {
-        rf.getRequest("EmergencyContactsRequest")
-          .destroy({ id: contact.id })
-          .then(res => {
-            if (res.status) {
-              window.EventBus.$emit("delete-eContact", contact);
-            }
-          });
-      }
-    },
-    clearData() {
-      this.user_contact = this.emptyData(this.user_contact);
-    },
-    onEventContact() {
-      window.EventBus.$on("update-eContact", eContact => {
-        const index = this.userContacts.findIndex(c => c.id === eContact.id);
-        this.userContacts[index] = eContact;
-        this.$forceUpdate();
-      });
-      window.EventBus.$on("add-eContact", eContact =>
-        this.userContacts.push(eContact)
-      );
-      window.EventBus.$on("delete-eContact", eContact => {
-        const index = this.userContacts.findIndex(c => c.id === eContact.id);
-        this.userContacts.splice(index, 1);
-      });
-    },
-    init() {
-      this.getEmergencyContacts();
-      this.onEventContact();
+  data() {
+    return {
+      user_contact: {
+        full_name: '',
+        relationship: '',
+        contact_phone: '',
+        emp_id: this.empId,
+        id: ''
+      },
+      errors: [],
+      isDisable: false,
+      userContacts: [],
+      isShow: false,
+      modal_id: 'contact-modal'
     }
   },
   mounted() {
-    this.init();
+    this.init()
+  },
+  methods: {
+    getEmergencyContacts() {
+      rf.getRequest('EmergencyContactsRequest')
+        .getEEmergencyContact({ id: this.empId })
+        .then(res => {
+          this.userContacts = res
+        })
+    },
+    addContact(e) {
+      e.preventDefault()
+      this.isCreate = true
+      this.user_contact.emp_id = this.empId
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    showModalUpdate(contact) {
+      this.isCreate = false
+      Object.assign(
+        this.user_contact,
+        this.setData(this.user_contact, contact)
+      )
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    removeContact(contact) {
+      if (confirm('Bạn có chắc muốn xóa liên lạc này?')) {
+        rf.getRequest('EmergencyContactsRequest')
+          .destroy({ id: contact.id })
+          .then(res => {
+            if (res.status) {
+              window.EventBus.$emit('delete-eContact', contact)
+            }
+          })
+      }
+    },
+    clearData() {
+      this.user_contact = this.emptyData(this.user_contact)
+    },
+    onEventContact() {
+      window.EventBus.$on('update-eContact', eContact => {
+        const index = this.userContacts.findIndex(c => c.id === eContact.id)
+        this.userContacts[index] = eContact
+        this.$forceUpdate()
+      })
+      window.EventBus.$on('add-eContact', eContact =>
+        this.userContacts.push(eContact)
+      )
+      window.EventBus.$on('delete-eContact', eContact => {
+        const index = this.userContacts.findIndex(c => c.id === eContact.id)
+        this.userContacts.splice(index, 1)
+      })
+    },
+    init() {
+      this.getEmergencyContacts()
+      this.onEventContact()
+    }
   }
-};
+}
 </script>
 
 <style lang="sass">
@@ -129,7 +129,7 @@ button::disabled
   resize: none;
 .form-group
   margin-bottom: 10px
-a.icon-p  
+a.icon-p
   font-weight: 800
   font-size: 22px !important
   span.icon

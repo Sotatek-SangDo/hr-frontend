@@ -6,7 +6,7 @@
           <span>Thêm mới</span>
         </a>
       </div>
-      <data-table :getData="getCandidates" ref="datatable">
+      <data-table ref="datatable" :get-data="getCandidates">
         <template slot="head" slot-scope="props">
           <th class="sort sorting_asc" @click="props.sort('name', $event)">Họ và tên</th>
           <th>Email</th>
@@ -18,7 +18,7 @@
         </template>
         <template slot="body" slot-scope="props">
           <tr>
-            <td v-text="props.item.name"></td>
+            <td v-text="props.item.name"/>
             <td v-text="props.item.email"/>
             <td v-text="props.item.gender"/>
             <td v-text="props.item.phonenumber"/>
@@ -26,82 +26,82 @@
             <td v-text="props.item.status"/>
             <td>
               <button class="btn btn-edit" type="button" tooltip="Edit" @click="updateCandidate(props.item)">
-                <i class="ti-marker-alt"></i>
+                <i class="ti-marker-alt"/>
               </button>
             </td>
           </tr>
         </template>
       </data-table>
     </div>
-    <candidate-modal v-if="isShow" :prop-candidate="candidate" :is-create="isCreate"></candidate-modal>
+    <candidate-modal v-if="isShow" :prop-candidate="candidate" :is-create="isCreate"/>
   </div>
 </template>
 
 <script>
-import MasterView from "../../views/MasterView";
-import DataTable from "../commons/DataTable";
-import rf from "../../requests/RequestFactory";
-import CandidateModal from "../commons/RecruitmentModal/CandidateModal";
+import MasterView from '../../views/MasterView'
+import DataTable from '../commons/DataTable'
+import rf from '../../requests/RequestFactory'
+import CandidateModal from '../commons/RecruitmentModal/CandidateModal'
 
 export default {
-  name: "RecruitmentDetailLayout",
-  extends: MasterView,
+  name: 'RecruitmentDetailLayout',
   components: {
     DataTable,
     CandidateModal
   },
+  extends: MasterView,
   data() {
     return {
       candidate: {
-        job_id: "",
-        email: "",
-        name: "",
-        gender: "",
-        birthday: "",
-        phonenumber: "",
-        description: "",
-        id: ""
+        job_id: '',
+        email: '',
+        name: '',
+        gender: '',
+        birthday: '',
+        phonenumber: '',
+        description: '',
+        id: ''
       },
       isShow: false,
       isCreate: true,
-      modal_id: "candidate-modal"
-    };
-  },
-  methods: {
-    getCandidates() {
-      const query = this.$route.query.id;
-      return rf
-        .getRequest("CandidateRequest")
-        .getCandidateByRecruitment({ recruitment_id: query });
-    },
-    addCandidate(e) {
-      e.preventDefault();
-      this.isCreate = true;
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    updateCandidate(candidate) {
-      this.isCreate = false;
-      Object.assign(this.candidate, this.setData(this.candidate, candidate));
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    clearData() {
-      this.candidate = this.emptyData(this.candidate);
-    },
-    tableRefresh() {
-      this.$refs.datatable.refresh();
-      this.isShow = false;
-    },
-    onListener() {
-      window.EventBus.$on("add-candidate", () => this.tableRefresh());
-      window.EventBus.$on("update-candidate", () => this.tableRefresh());
+      modal_id: 'candidate-modal'
     }
   },
   mounted() {
-    this.onListener();
+    this.onListener()
+  },
+  methods: {
+    getCandidates() {
+      const query = this.$route.query.id
+      return rf
+        .getRequest('CandidateRequest')
+        .getCandidateByRecruitment({ recruitment_id: query })
+    },
+    addCandidate(e) {
+      e.preventDefault()
+      this.isCreate = true
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    updateCandidate(candidate) {
+      this.isCreate = false
+      Object.assign(this.candidate, this.setData(this.candidate, candidate))
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    clearData() {
+      this.candidate = this.emptyData(this.candidate)
+    },
+    tableRefresh() {
+      this.$refs.datatable.refresh()
+      this.isShow = false
+    },
+    onListener() {
+      window.EventBus.$on('add-candidate', () => this.tableRefresh())
+      window.EventBus.$on('update-candidate', () => this.tableRefresh())
+    }
   }
-};
+}
 </script>
 
 <style lang="sass" scoped>

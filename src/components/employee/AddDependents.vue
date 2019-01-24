@@ -3,18 +3,18 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addDependent">
-          <span class="icon"><i class="ti-plus"></i></span>Người phụ thuộc
+          <span class="icon"><i class="ti-plus"/></span>Người phụ thuộc
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userDependents">
-          <div class="list-group-item sub-tab-item" v-for="(dep, i) in userDependents" :key="i">
+        <div v-if="userDependents" class="card-body">
+          <div v-for="(dep, i) in userDependents" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ dep.full_name }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeDep(dep)">
-                <i class="ti-trash"></i>
+                <i class="ti-trash"/>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(dep)">
-                <i class="ti-marker-alt"></i>
+                <i class="ti-marker-alt"/>
               </button>
             </h5>
             <p class="list-group-item-text">Mối quan hệ: {{ dep.relationship }}</p>
@@ -23,102 +23,102 @@
         </div>
       </div>
     </div>
-    <dependent-modal v-if="isShow" :emp-id="empId" :dependent="user_dependent" :isCreate="isCreate"></dependent-modal>
+    <dependent-modal v-if="isShow" :emp-id="empId" :dependent="user_dependent" :is-create="isCreate"/>
   </div>
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import MasterView from "../../views/MasterView";
-import DependentModal from "../commons/EmployeeModal/DependentModal";
+import rf from '../../requests/RequestFactory'
+import MasterView from '../../views/MasterView'
+import DependentModal from '../commons/EmployeeModal/DependentModal'
 
 export default {
-  name: "AddDependenst",
-  extends: MasterView,
+  name: 'AddDependenst',
   components: {
     DependentModal
   },
-  data() {
-    return {
-      user_dependent: {
-        full_name: "",
-        relationship: "",
-        birthday: "",
-        emp_id: this.empId,
-        id: ""
-      },
-      modal_id: "dependent-modal",
-      userDependents: [],
-      isCreate: true,
-      isShow: false
-    };
-  },
+  extends: MasterView,
   props: {
     empId: {
       type: Number
     }
   },
-  methods: {
-    getDependents() {
-      rf.getRequest("DependentsRequest")
-        .getEDependents({ id: this.empId })
-        .then(res => {
-          this.userDependents = res;
-        });
-    },
-    addDependent(e) {
-      e.preventDefault();
-      this.isCreate = true;
-      this.user_dependent.emp_id = this.empId;
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    showModalUpdate(dependent) {
-      this.isCreate = false;
-      Object.assign(
-        this.user_dependent,
-        this.setData(this.user_dependent, dependent)
-      );
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    removeDep(dependent) {
-      if (confirm("Bạn có chắc muốn xóa người phụ thuộc này?")) {
-        rf.getRequest("DependentsRequest")
-          .destroy({ id: dependent.id })
-          .then(res => {
-            if (res.status) {
-              window.EventBus.$emit("delete-eDependent", dependent);
-            }
-          });
-      }
-    },
-    clearData() {
-      this.user_dependent = this.emptyData(this.user_dependent);
-    },
-    onEventDependent() {
-      window.EventBus.$on("update-eDependent", eDep => {
-        const index = this.userDependents.findIndex(c => c.id === eDep.id);
-        this.userDependents[index] = eDep;
-        this.$forceUpdate();
-      });
-      window.EventBus.$on("add-eDependent", eDep =>
-        this.userDependents.push(eDep)
-      );
-      window.EventBus.$on("delete-eDependent", eDep => {
-        const index = this.userDependents.findIndex(c => c.id === eDep.id);
-        this.userDependents.splice(index, 1);
-      });
-    },
-    init() {
-      this.getDependents();
-      this.onEventDependent();
+  data() {
+    return {
+      user_dependent: {
+        full_name: '',
+        relationship: '',
+        birthday: '',
+        emp_id: this.empId,
+        id: ''
+      },
+      modal_id: 'dependent-modal',
+      userDependents: [],
+      isCreate: true,
+      isShow: false
     }
   },
   mounted() {
-    this.init();
+    this.init()
+  },
+  methods: {
+    getDependents() {
+      rf.getRequest('DependentsRequest')
+        .getEDependents({ id: this.empId })
+        .then(res => {
+          this.userDependents = res
+        })
+    },
+    addDependent(e) {
+      e.preventDefault()
+      this.isCreate = true
+      this.user_dependent.emp_id = this.empId
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    showModalUpdate(dependent) {
+      this.isCreate = false
+      Object.assign(
+        this.user_dependent,
+        this.setData(this.user_dependent, dependent)
+      )
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    removeDep(dependent) {
+      if (confirm('Bạn có chắc muốn xóa người phụ thuộc này?')) {
+        rf.getRequest('DependentsRequest')
+          .destroy({ id: dependent.id })
+          .then(res => {
+            if (res.status) {
+              window.EventBus.$emit('delete-eDependent', dependent)
+            }
+          })
+      }
+    },
+    clearData() {
+      this.user_dependent = this.emptyData(this.user_dependent)
+    },
+    onEventDependent() {
+      window.EventBus.$on('update-eDependent', eDep => {
+        const index = this.userDependents.findIndex(c => c.id === eDep.id)
+        this.userDependents[index] = eDep
+        this.$forceUpdate()
+      })
+      window.EventBus.$on('add-eDependent', eDep =>
+        this.userDependents.push(eDep)
+      )
+      window.EventBus.$on('delete-eDependent', eDep => {
+        const index = this.userDependents.findIndex(c => c.id === eDep.id)
+        this.userDependents.splice(index, 1)
+      })
+    },
+    init() {
+      this.getDependents()
+      this.onEventDependent()
+    }
   }
-};
+}
 </script>
 
 <style lang="sass">
@@ -128,7 +128,7 @@ button::disabled
   resize: none;
 .form-group
   margin-bottom: 10px
-a.icon-p  
+a.icon-p
   font-weight: 800
   font-size: 22px !important
   span.icon

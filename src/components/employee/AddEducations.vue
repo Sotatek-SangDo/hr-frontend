@@ -3,18 +3,18 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addEducation">
-          <span class="icon"><i class="ti-plus"></i></span>Trình độ chuyên môn
+          <span class="icon"><i class="ti-plus"/></span>Trình độ chuyên môn
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
-        <div class="card-body" v-if="userEducations">
-          <div class="list-group-item sub-tab-item" v-for="(edu, i) in userEducations" :key="i">
+        <div v-if="userEducations" class="card-body">
+          <div v-for="(edu, i) in userEducations" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ edu.qualification_name }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeEducation(edu)">
-                <i class="ti-trash"></i>
+                <i class="ti-trash"/>
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(edu)">
-                <i class="ti-marker-alt"></i>
+                <i class="ti-marker-alt"/>
               </button>
             </h5>
             <p class="list-group-item-text">Ngaỳ bắt đầu: {{ edu.started_at }}</p>
@@ -24,103 +24,103 @@
         </div>
       </div>
     </div>
-    <education-modal :education="user_education" :is-create="isCreate" :emp-id="empId" v-if="isShow"></education-modal>
+    <education-modal v-if="isShow" :education="user_education" :is-create="isCreate" :emp-id="empId"/>
   </div>
 </template>
 
 <script>
-import rf from "../../requests/RequestFactory";
-import MasterView from "../../views/MasterView";
-import EducationModal from "../commons/EmployeeModal/EducationModal";
+import rf from '../../requests/RequestFactory'
+import MasterView from '../../views/MasterView'
+import EducationModal from '../commons/EmployeeModal/EducationModal'
 
 export default {
-  name: "AddEducations",
-  extends: MasterView,
+  name: 'AddEducations',
   components: {
     EducationModal
   },
-  data() {
-    return {
-      user_education: {
-        qualification_id: "",
-        institute: "",
-        started_at: "",
-        ended_at: "",
-        emp_id: this.empId,
-        id: ""
-      },
-      isShow: false,
-      isCreate: true,
-      userEducations: [],
-      modal_id: "education-modal"
-    };
-  },
+  extends: MasterView,
   props: {
     empId: {
       type: Number
     }
   },
-  methods: {
-    getEducations() {
-      rf.getRequest("EducationRequest")
-        .getEmployeeEducation({ id: this.empId })
-        .then(res => {
-          this.userEducations = res;
-        });
-    },
-    addEducation(e) {
-      e.preventDefault();
-      this.isCreate = true;
-      this.user_education.emp_id = this.empId;
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    showModalUpdate(qualification) {
-      this.isCreate = false;
-      Object.assign(
-        this.user_education,
-        this.setData(this.user_education, qualification)
-      );
-      this.isShow = true;
-      this.addEventShowModal();
-    },
-    removeEducation(qualification) {
-      if (confirm("Bạn có chắc muốn xóa trình đọ chuyên môn này?")) {
-        rf.getRequest("EducationRequest")
-          .destroy({ id: qualification.id })
-          .then(res => {
-            if (res.status) {
-              window.EventBus.$emit("delete-eEducation", qualification);
-            }
-          });
-      }
-    },
-    clearData() {
-      this.user_education = this.emptyData(this.user_education);
-    },
-    init() {
-      this.getEducations();
-      this.onEventEducation();
-    },
-    onEventEducation() {
-      window.EventBus.$on("update-eEducation", eEdu => {
-        const index = this.userEducations.findIndex(s => s.id === eEdu.id);
-        this.userEducations[index] = eEdu;
-        this.$forceUpdate();
-      });
-      window.EventBus.$on("add-eEducation", eEdu =>
-        this.userEducations.push(eEdu)
-      );
-      window.EventBus.$on("delete-eEducation", eEdu => {
-        const index = this.userEducations.findIndex(s => s.id === eEdu.id);
-        this.userEducations.splice(index, 1);
-      });
+  data() {
+    return {
+      user_education: {
+        qualification_id: '',
+        institute: '',
+        started_at: '',
+        ended_at: '',
+        emp_id: this.empId,
+        id: ''
+      },
+      isShow: false,
+      isCreate: true,
+      userEducations: [],
+      modal_id: 'education-modal'
     }
   },
   mounted() {
-    this.init();
+    this.init()
+  },
+  methods: {
+    getEducations() {
+      rf.getRequest('EducationRequest')
+        .getEmployeeEducation({ id: this.empId })
+        .then(res => {
+          this.userEducations = res
+        })
+    },
+    addEducation(e) {
+      e.preventDefault()
+      this.isCreate = true
+      this.user_education.emp_id = this.empId
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    showModalUpdate(qualification) {
+      this.isCreate = false
+      Object.assign(
+        this.user_education,
+        this.setData(this.user_education, qualification)
+      )
+      this.isShow = true
+      this.addEventShowModal()
+    },
+    removeEducation(qualification) {
+      if (confirm('Bạn có chắc muốn xóa trình đọ chuyên môn này?')) {
+        rf.getRequest('EducationRequest')
+          .destroy({ id: qualification.id })
+          .then(res => {
+            if (res.status) {
+              window.EventBus.$emit('delete-eEducation', qualification)
+            }
+          })
+      }
+    },
+    clearData() {
+      this.user_education = this.emptyData(this.user_education)
+    },
+    init() {
+      this.getEducations()
+      this.onEventEducation()
+    },
+    onEventEducation() {
+      window.EventBus.$on('update-eEducation', eEdu => {
+        const index = this.userEducations.findIndex(s => s.id === eEdu.id)
+        this.userEducations[index] = eEdu
+        this.$forceUpdate()
+      })
+      window.EventBus.$on('add-eEducation', eEdu =>
+        this.userEducations.push(eEdu)
+      )
+      window.EventBus.$on('delete-eEducation', eEdu => {
+        const index = this.userEducations.findIndex(s => s.id === eEdu.id)
+        this.userEducations.splice(index, 1)
+      })
+    }
   }
-};
+}
 </script>
 
 <style lang="sass">
@@ -130,7 +130,7 @@ button::disabled
   resize: none;
 .form-group
   margin-bottom: 10px
-a.icon-p  
+a.icon-p
   font-weight: 800
   font-size: 22px !important
   span.icon
