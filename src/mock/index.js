@@ -20,10 +20,10 @@ Mock.XHR.prototype.send = function() {
 //   timeout: '350-600'
 // })
 
-Mock.mock(/\/mock-department/, 'get', departmentAPI.getList)
-Mock.mock(/\/mock-department\/store/, 'post', departmentAPI.createDepartment)
-Mock.mock(/\/mock-department\/update/, 'post', departmentAPI.updateDepartment)
-Mock.mock(/\/mock-department\/destroy/, 'post', departmentAPI.destroyDepartment)
+// Mock.mock(/\/departments/, 'get', departmentAPI.getList)
+// Mock.mock(/\/mock-department\/store/, 'post', departmentAPI.createDepartment)
+// Mock.mock(/\/mock-department\/update/, 'post', departmentAPI.updateDepartment)
+// Mock.mock(/\/mock-department\/destroy/, 'post', departmentAPI.destroyDepartment)
 
 // 登录相关
 Mock.mock(/\/login\/login/, 'post', loginAPI.loginByUsername)
