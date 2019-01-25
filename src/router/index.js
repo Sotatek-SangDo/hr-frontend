@@ -393,18 +393,18 @@ export const asyncRouterMap = [
   {
     path: '/department',
     component: Layout,
-    redirect: '/department/index',
+    // redirect: '/department/index',
     name: 'Departments',
     meta: {
       title: 'Department',
-      icon: 'example'
+      icon: 'department',
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/Department/index'),
-        name: 'DepartmentIndex',
-        meta: { title: 'Department', icon: 'department' }
+        name: 'DepartmentsIndex',
+        meta: { title: 'Department', icon: 'department'}
       }
     ]
   },
