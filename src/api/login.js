@@ -28,3 +28,7 @@ export function getUserInfo() {
   // })
 }
 
+export function getTokenFromRefreshToken() {
+  return Oauth2.getTokenFromRefreshToken()
+}
+

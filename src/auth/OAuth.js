@@ -2,7 +2,7 @@ import { authPasswordFlowConfig, defaultString } from './config'
 import axios from 'axios'
 import EventBus from '../event-bus'
 import $ from 'jquery'
-import { getHeaderToken } from '@/utils/auth'
+import { getHeaderToken, getRefreshToken } from '@/utils/auth'
 
 export default {
   loginByUserPass(userInfor = {}) {
@@ -14,6 +14,24 @@ export default {
         scope: authPasswordFlowConfig.scope,
         username: userInfor.username,
         password: userInfor.password,
+        client_id: authPasswordFlowConfig.clientId,
+        client_secret: authPasswordFlowConfig.ClientSecret
+      })
+    }
+    return new Promise((resolve, reject) => {
+      this.req(options)
+        .then(res => resolve(res.data))
+        .catch(err => reject(err))
+    })
+  },
+  getTokenFromRefreshToken() {
+    const options = {
+      method: defaultString.METHOD_POST,
+      url: defaultString.token_endpoint,
+      data: $.param({
+        grant_type: authPasswordFlowConfig.grant_refresh_token,
+        scope: authPasswordFlowConfig.scope,
+        refresh_token: getRefreshToken(),
         client_id: authPasswordFlowConfig.clientId,
         client_secret: authPasswordFlowConfig.ClientSecret
       })
@@ -58,5 +76,6 @@ export default {
       EventBus.$emit('errors', { type: 'request_auth', error: err.message })
     }
     return reject(err)
-  }
+  },
+
 }

@@ -5,7 +5,8 @@ const authPasswordFlowConfig = {
   ClientSecret: 'gJ7t7czenNY8WZEdSAe8ZbKd9MpUhc3S',
   scope: 'openid offline_access email roles profile hrm',
   oidc: false,
-  grant_type: 'password'
+  grant_type: 'password',
+  grant_refresh_token: 'refresh_token'
 }
 
 const defaultString = {

@@ -58,6 +58,12 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     })
+    if(error.response.status === 401) {
+      store.dispatch('FedLogOut').then(() => {
+        location.reload()
+      })
+    }
+
     return Promise.reject(error)
   }
 )

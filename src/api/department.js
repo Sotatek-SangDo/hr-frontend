@@ -1,6 +1,11 @@
 import request from '@/utils/request'
 
 export function fetchList(query) {
+  request({
+    url: 'http://mock.erptech.vn/mock/5c493ec0c583af69a0715fdb/api/401',
+    method: 'get'
+  })
+    
   return request({
     url: parseUrl(),
     method: 'get',
