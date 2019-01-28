@@ -78,9 +78,9 @@
 
 <script>
 import TabSlide from '../../components/TabSlide'
-import rf from '../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import Pagination from '@/components/Pagination'
-import { fetchList, store, update, destroy } from '@/api/department'
+import { store, update, destroy } from '@/api/department'
 import waves from '@/directive/waves'
 
 export default {
@@ -133,8 +133,16 @@ export default {
   },
   created() {
     this.getList()
+    this.getJobs()
   },
   methods: {
+    getJobs() {
+      rf.getRequest('JobRequest')
+        .getList()
+        .then(res => {
+          this.jobs = res.data.data
+        })
+    },
     createData() {
       store(this.temp).then(response => {
         this.dialogFormVisible = false
@@ -202,16 +210,16 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.total
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
-    },
-    getDepartments() {
-      return rf.getRequest('DepartmentRequest').getAll()
+      rf.getRequest('DepartmentRequest')
+        .getList(this.listQuery)
+        .then(response => {
+          console.log(response)
+          this.list = response.data.data
+          this.total = response.data.total
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
     },
     inital() {
     },

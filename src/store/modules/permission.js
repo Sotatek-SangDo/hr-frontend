@@ -1,7 +1,6 @@
 import { asyncRouterMap, constantRouterMap, mapServerRouters, developerRouterMap } from '@/router'
 import { getPermissionByRoles } from '@/api/dynamicrouters'
 
-
 /**
  * 通过meta.role判断是否与当前用户权限匹配
  * @param roles
@@ -40,24 +39,20 @@ function mappingComponent(routes, roles) {
   const res = []
 
   routes.forEach(route => {
-
     const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
-
       const compName = tmp.component
       tmp.component = mapServerRouters[compName].component
       tmp.redirect = mapServerRouters[compName].redirect
       tmp.path = mapServerRouters[compName].path
-      if(mapServerRouters[compName].meta){
-        if (!tmp.meta){
+      if (mapServerRouters[compName].meta) {
+        if (!tmp.meta) {
           tmp.meta = {}
         }
         tmp.meta.title = mapServerRouters[compName].meta.title
         tmp.meta.icon = mapServerRouters[compName].meta.icon
-        tmp.meta.noCache = mapServerRouters[compName].meta.noCache  
+        tmp.meta.noCache = mapServerRouters[compName].meta.noCache
       }
-      
-      
       tmp.name = mapServerRouters[compName].name
       tmp.hidden = mapServerRouters[compName].hidden
       tmp.alwaysShow = mapServerRouters[compName].alwaysShow
@@ -97,7 +92,7 @@ const permission = {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         }
 
-        if (process.env.NODE_ENV !== 'production'){
+        if (process.env.NODE_ENV !== 'production') {
           accessedRouters = accessedRouters.concat(developerRouterMap)
         }
 
@@ -105,18 +100,15 @@ const permission = {
         getPermissionByRoles().then(response => {
           result = response.data
 
-          if(result){
+          if (result) {
             serverRouters = mappingComponent(result, roles)
             accessedRouters = serverRouters.concat(accessedRouters)
           }
-
         }).finally(function() {
           commit('SET_ROUTERS', accessedRouters)
           resolve()
-        });
-        
-      });
-      
+        })
+      })
     }
   }
 }

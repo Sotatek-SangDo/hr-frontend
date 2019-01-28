@@ -49,6 +49,9 @@ export default {
 </script>
 
 <style scoped>
+.drag-select {
+  width: 100%;
+}
 .drag-select >>> .sortable-ghost{
   opacity: .8;
   color: #fff!important;

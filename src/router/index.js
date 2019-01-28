@@ -116,7 +116,7 @@ export const mapServerRouters = {
     path: '/employee',
     redirect: '/Employee/EmployeeList',
     meta: {
-      title: 'Employee List',
+      title: 'employee.index',
       icon: 'user'
     }
   },
@@ -124,7 +124,13 @@ export const mapServerRouters = {
     component: () => import('@/views/Employee/EmployeeList'),
     path: 'index',
     name: 'Employee',
-    meta: { title: 'Employee', icon: 'user', noCache: true }
+    meta: { title: 'employee.list', icon: 'user', noCache: true }
+  },
+  childSyncEmployeeAdd: {
+    component: () => import('@/views/Employee/AddEmployee'),
+    path: 'add',
+    name: 'Add Employee',
+    meta: { title: 'employee.add', icon: 'new-user', noCache: true }
   },
   childSyncEmployee2: {
     component: () => import('@/views/Employee/EmployeeList'),

@@ -8,6 +8,22 @@ export function fetchList(query) {
   })
 }
 
+export function getEmployee(query) {
+  return request({
+    url: parseUrl('get-employee'),
+    method: 'get',
+    params: query
+  })
+}
+
+export function getFullInfo(query) {
+  return request({
+    url: parseUrl('full-info'),
+    method: 'get',
+    params: query
+  })
+}
+
 export function update(data) {
   return request({
     url: parseUrl('update'),
@@ -33,7 +49,7 @@ export function destroy(data) {
 }
 
 const getModel = () => {
-  return 'departments'
+  return 'employees'
 }
 
 const parseUrl = (url = '') => {

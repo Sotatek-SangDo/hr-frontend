@@ -1,6 +1,6 @@
 export default {
   route: {
-    dashboard: 'Dashboard',
+    dashboard: 'Trang quản lý',
     introduction: 'Introduction',
     documentation: 'Documentation',
     guide: 'Guide',
@@ -62,7 +62,12 @@ export default {
     theme: 'Theme',
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
-    externalLink: 'External Link'
+    externalLink: 'External Link',
+    employee: {
+      index: 'Nhân viên',
+      list: 'Danh sách',
+      add: 'Thêm mới'
+    }
   },
   navbar: {
     logOut: 'Log Out',
@@ -112,7 +117,7 @@ export default {
     importance: 'Imp',
     type: 'Type',
     remark: 'Remark',
-    search: 'Search',
+    search: 'Tìm kiếm',
     add: 'Thêm',
     export: 'Export',
     reviewer: 'reviewer',
@@ -132,14 +137,40 @@ export default {
     phone: 'Số điện thoại',
     email: 'Email',
     action: 'Thao tác',
+    birthday: 'Ngày sinh',
+    address: 'Địa chỉ',
     department: {
       name: 'Phòng ban',
       email: 'Email công việc'
+    },
+    employee: {
+      private_email: 'Email cá nhân',
+      job: 'Công việc',
+      name: 'Họ và tên',
+      search_name: 'Tên tìm kiếm...',
+      header: 'Danh sách nhân viên'
     }
   },
   placeholder: {
     email: 'Nhập vào email ...',
-    phone: 'Nhập số điện thoại'
+    phone: 'Nhập số điện thoại',
+    employee_add: {
+      name: 'Nhập tên của nhân viên...',
+      nationality: 'Chọn quốc tịch...',
+      gender: 'Chọn giới tính...',
+      marital: 'Chọn tình trạng hôn nhân',
+      ethnicity: 'Dân tộc...',
+      address: 'Nhập địa chỉ...',
+      country: 'Chọn quốc gia...',
+      status: 'Chọn loại nhân viên',
+      job: 'Chọn công việc',
+      paygrade: 'Lựa chọn trả lương',
+      department: 'Lựa chọn phòng ban',
+      avatar: 'Chọn ảnh ...',
+      supervisor: 'Chọn người giám sát trực tiếp',
+      indirect_supervisor: 'Lựa chọn người giám sát gián tiếp',
+      date: 'Chọn một ngày...'
+    }
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
@@ -172,5 +203,37 @@ export default {
   language: {
     vi: 'Tiếng Việt',
     en: 'Tiếng Anh'
+  },
+  employee: {
+    add: 'Thêm mới',
+    name: 'Họ và tên',
+    phone: 'Số điện thoại',
+    ethnicity: 'Dân tộc',
+    address: 'Địa chỉ',
+    nationality: 'Quốc tịch',
+    gender: 'Giới tính',
+    birthday: 'Ngày sinh',
+    marital: 'Tình trạng hôn nhân',
+    country: 'Quốc gia',
+    status: 'Loại nhân viên',
+    job: 'Công việc',
+    paygrade: 'Trả lương',
+    private_email: 'Email cá nhân',
+    email_work: 'Email công việc',
+    department: 'Phòng ban',
+    supervisor: 'Người gián sát trực tiếp',
+    avatar: 'Ảnh đại diện',
+    indirect_supervisor: 'Người gián sát gián tiếp',
+    joinAt: 'Ngày gia nhập',
+    confirmAt: 'Ngày xác nhận'
+  },
+  validation: {
+    fields: {
+      full_name: 'Họ và tên',
+      birthday: 'Ngày sinh',
+      confirmed_at: 'Ngày xác nhận',
+      joined_at: 'Ngày gia nhập'
+    },
+    required: 'bắt buộc không được rỗng'
   }
 }

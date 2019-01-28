@@ -1,5 +1,5 @@
 <template>
-  <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
+  <!-- <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
     <template slot="main-content">
       <tab-slide :tabs="tabs">
         <div id="nv" role="tabpanel" class="tab-pane fade active in show">
@@ -62,13 +62,78 @@
         </div>
       </tab-slide>
     </template>
-  </home-layout>
+  </home-layout> -->
+  <div>
+    <div class="col-12 mt-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="epm-tb-header">
+            <h4 class="header-title header-underline" v-text="$t('table.employee.header')"/>
+          </div>
+          <div class="filter-container">
+            <el-input :placeholder="$t('table.employee.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+            <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addItem()">{{ $t('table.add') }}</el-button>
+          </div>
+          <el-table
+            v-loading="listLoading"
+            ref="datatable"
+            :key="tableKey"
+            :data="employees"
+            border
+            fit
+            highlight-current-row
+            style="width: 100%;"
+            @sort-change="sortChange">
+            <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.employee.name')" prop="name" align="center" sortable>
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.employee.job')" prop="job" align="center" sortable>
+              <template slot-scope="scope">
+                <span>{{ scope.row.job.title }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.address')" prop="address" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.address }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.phone')" prop="phone" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.phone }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.birthday')" prop="birthday" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.birthday }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.employee.private_email')" prop="private_email" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.private_email }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+              <template slot-scope="scope">
+                <el-button type="primary" size="medium" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import DataTable from '../../components/commons/DataTable'
-import MasterView from '../MasterView'
-import HomeLayout from '../../components/HomeLayout'
 import EmployeeSkill from '../../components/employee/EmployeeSkill'
 import EmployeeEducation from '../../components/employee/EmployeeEducation'
 import EmployeeCertification from '../../components/employee/EmployeeCertification'
@@ -77,24 +142,25 @@ import EmployeeEmergencyContact from '../../components/employee/EmployeeEmergenc
 import EmployeeDepartment from '../../components/employee/EmployeeDepartment'
 import TabSlide from '../../components/TabSlide'
 import rf from '../../requests/RequestFactory'
+import Pagination from '@/components/Pagination'
+import { getFullInfo } from '@/api/employee'
 
 export default {
   components: {
-    HomeLayout,
-    DataTable,
     TabSlide,
     EmployeeSkill,
     EmployeeEducation,
     EmployeeCertification,
     EmployeeLanguage,
     EmployeeEmergencyContact,
-    EmployeeDepartment
+    EmployeeDepartment,
+    Pagination
   },
-  extends: MasterView,
   data() {
     return {
       headerTitle: 'Nhân viên',
       header: 'Thêm mới nhân viên',
+      tableKey: 0,
       tabs: [
         { title: 'Nhân viên', href: 'nv' },
         { title: 'Kỹ năng', href: 'kn' },
@@ -105,39 +171,59 @@ export default {
         { title: 'Phòng ban', href: 'pb' }
       ],
       breadcrumbs: [{ title: 'Nhân viên', href: '' }],
-      empView: {},
-      emp: {
-        full_name: '',
-        nationality_id: '',
-        birthday: '',
-        gender: '',
-        marital_status: '',
-        ethnicity: '',
-        address: '',
-        country: '',
-        phone: '',
-        private_email: '',
-        email: '',
-        joined_at: '',
-        confirmed_at: '',
-        department: '',
-        supervisor: '',
-        indirect_supervisor: '',
-        status: '',
-        job: '',
-        pay_grade: ''
+      employees: [],
+      listLoading: false,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        title: undefined,
+        sort: '+id'
       }
     }
+  },
+  created() {
+    this.getList()
   },
   mounted() {
     this.inital()
   },
   methods: {
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter()
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    getList() {
+      this.listLoading = true
+      getFullInfo(this.listQuery).then(response => {
+        this.employees = response.data.data
+        this.total = response.data.total
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
     profilePage(empId) {
       return this.$router.push({
         name: 'employee-profile',
         query: { id: empId }
       })
+    },
+    handleUpdate(row) {
     },
     addPage() {
       this.$router.push({ name: 'employee-add' })
@@ -146,10 +232,6 @@ export default {
       return rf.getRequest('EmployeeRequest').getEmpFullInfo()
     },
     inital() {
-      this.sleep(500).then(() => {
-        this.init()
-      })
-      this.fadeOut()
     }
   }
 }

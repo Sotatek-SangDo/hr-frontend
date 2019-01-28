@@ -3,154 +3,133 @@
     <div class="card-body">
       <div class="container">
         <h5>{{ header }}</h5>
-        <form @submit.prevent="submitForm">
+        <el-form ref="postForm" :model="emp" :rules="rules" class="form-container">
           <div class="row">
-            <div class="col-xs-6 col-md-6">
+            <div class="col-xs-4 col-md-4">
               <div class="form-group">
-                <label for="fullname" class="col-form-label">Họ và tên</label>
-                <input id="fullname" v-model="emp.full_name" class="form-control" type="text" autocomplete="off" placeholder="Họ và tên">
+                <label class="col-form-label">{{ $t('employee.name') }}</label>
+                <el-form-item style="margin-bottom: 30px;" prop="full_name">
+                  <el-input :rows="1" v-model="emp.full_name" :placeholder="$t('placeholder.employee_add.name')" type="text" class="article-textarea" autosize/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Quốc Tịch</label>
-                <select v-model="emp.nationality_id" class="form-control">
-                  <option value="">Lựa chọn quốc tịch</option>
-                  <option
-                    v-for="(national, index) in nationalities"
-                    :key="index"
-                    :value="national.id"
-                    v-text="national.name"/>
-                </select>
-              </div>
-              <date-picker v-if="isShow" :title="birthday" v-model="emp.birthday" :default="getDate(emp.birthday)"/>
-              <div class="form-group">
-                <label class="col-form-label">Giới tính</label>
-                <select v-model="emp.gender" class="form-control">
-                  <option value="">Lựa chọn giới tính</option>
-                  <option
-                    v-for="(g, index) in gender"
-                    :key="index"
-                    :value="g"
-                    v-text="g"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.nationality') }}</label>
+                <el-drag-select v-model="emp.nationality_id" :placeholder="$t('placeholder.employee_add.nationality')">
+                  <el-option v-for="(item, index) in nationalities" :label="item.name" :value="item.id" :key="index" />
+                </el-drag-select>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Tình trạng hôn nhân</label>
-                <select v-model="emp.marital_status" class="form-control">
-                  <option value="">Tình trạng hôn nhân</option>
-                  <option
-                    v-for="(ms, index) in maritalStatus"
-                    :key="index"
-                    :value="ms"
-                    v-text="ms"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.birthday') }}</label>
+                <el-form-item prop="birthday">
+                  <el-date-picker v-model="emp.birthday" :placeholder="$t('placeholder.employee_add.date')" type="date"/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label for="ethnicity" class="col-form-label">Dân tộc</label>
-                <input id="ethnicity" v-model="emp.ethnicity" class="form-control" type="text" autocomplete="off" placeholder="Nhập vào dân tộc ...">
+                <label class="col-form-label">{{ $t('employee.gender') }}</label>
+                <el-drag-select v-model="emp.gender" :placeholder="$t('placeholder.employee_add.gender')">
+                  <el-option v-for="(item, index) in gender" :label="item" :value="item" :key="index" />
+                </el-drag-select>
               </div>
               <div class="form-group">
-                <label for="address" class="col-form-label">Địa chỉ</label>
-                <input id="address" v-model="emp.address" class="form-control" type="text" autocomplete="off" placeholder="Nhập vào địa chỉ ...">
+                <label class="col-form-label">{{ $t('employee.marital') }}</label>
+                <el-drag-select v-model="emp.marital_status" :placeholder="$t('placeholder.employee_add.marital')">
+                  <el-option v-for="(item, index) in maritalStatus" :label="item" :value="item" :key="index" />
+                </el-drag-select>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Quốc gia</label>
-                <select v-model="emp.country" class="form-control">
-                  <option value="">Lựa chọn quốc gia</option>
-                  <option
-                    v-for="(national, index) in nationalities"
-                    :key="index"
-                    :value="national.id"
-                    v-text="national.name"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.ethnicity') }}</label>
+                <el-form-item>
+                  <el-input :rows="1" v-model="emp.ethnicity" :placeholder="$t('placeholder.employee_add.ethnicity')" type="text" class="article-textarea" autosize/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Loại nhân viên</label>
-                <select v-model="emp.status" class="form-control">
-                  <option value="">Lựa chọn loại nhân viên</option>
-                  <option
-                    v-for="(s, index) in status"
-                    :key="index"
-                    :value="s.id"
-                    v-text="s.status"/>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="col-form-label">Công việc</label>
-                <select v-model="emp.job" class="form-control">
-                  <option value="">Lựa chọn công việc</option>
-                  <option
-                    v-for="(j, index) in jobs"
-                    :key="index"
-                    :value="j.id"
-                    v-text="j.title"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.address') }}</label>
+                <el-form-item>
+                  <el-input :rows="1" v-model="emp.address" :placeholder="$t('placeholder.employee_add.address')" type="text" class="article-textarea" autosize/>
+                </el-form-item>
               </div>
             </div>
-            <div class="col-xs-6 col-md-6">
+            <div class="col-xs-4 col-md-4">
+              <div class="form-group">
+                <label class="col-form-label">{{ $t('employee.country') }}</label>
+                <el-drag-select v-model="emp.nationality_id" :placeholder="$t('placeholder.employee_add.country')">
+                  <el-option v-for="(item, index) in nationalities" :label="item.name" :value="item.id" :key="index" />
+                </el-drag-select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">{{ $t('employee.status') }}</label>
+                <el-drag-select v-model="emp.status" :placeholder="$t('placeholder.employee_add.status')">
+                  <el-option v-for="(item, index) in status" :label="item.status" :value="item.id" :key="index" />
+                </el-drag-select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">{{ $t('employee.job') }}</label>
+                <el-drag-select v-model="emp.job" :placeholder="$t('placeholder.employee_add.job')">
+                  <el-option v-for="(item, index) in jobs" :label="item.title" :value="item.id" :key="index" />
+                </el-drag-select>
+              </div>
               <div class="input-group mb-3">
-                <label class="col-form-label one-line">Ảnh</label>
+                <label class="col-form-label one-line">{{ $t('employee.avatar') }}</label>
                 <div class="custom-file">
                   <input id="avatar" type="file" class="custom-file-input" @change="onChooseAvatar">
-                  <label class="custom-file-label" for="avatar" v-text="upload"/>
+                  <label class="custom-file-label" for="avatar" v-text="$t('placeholder.employee_add.avatar')"/>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Trả lương</label>
-                <select v-model="emp.pay_grade" class="form-control">
-                  <option value="">Lựa chọn trả lương</option>
-                  <option
-                    v-for="(p, index) in payGrades"
-                    :key="index"
-                    :value="p.id"
-                    v-text="p.title"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.paygrade') }}</label>
+                <el-drag-select v-model="emp.pay_grade" :placeholder="$t('placeholder.employee_add.paygrade')">
+                  <el-option v-for="(item, index) in payGrades" :label="item.title" :value="item.id" :key="index" />
+                </el-drag-select>
               </div>
               <div class="form-group">
-                <label for="phone" class="col-form-label">Số điện thoại</label>
-                <input id="phone" v-model="emp.phone" class="form-control" type="text" autocomplete="off" placeholder="Nhập vào số điện thoại ...">
+                <label for="phone" class="col-form-label">{{ $t('employee.phone') }}</label>
+                <el-form-item>
+                  <el-input :rows="1" v-model="emp.phone" :placeholder="$t('placeholder.phone')" type="text" class="article-textarea" autosize/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label for="private_email" class="col-form-label">Email cá nhân</label>
-                <input id="private_email" v-model="emp.private_email" class="form-control" type="private_email" autocomplete="off" placeholder="Nhập vào email cá nhân ...">
+                <label for="private_email" class="col-form-label">{{ $t('employee.private_email') }}</label>
+                <el-form-item>
+                  <el-input :rows="1" v-model="emp.private_email" :placeholder="$t('placeholder.email')" type="email" class="article-textarea" autosize/>
+                </el-form-item>
+              </div>
+            </div>
+            <div class="col-xs-4 col-md-4">
+              <div class="form-group">
+                <label for="email" class="col-form-label">{{ $t('employee.email_work') }}</label>
+                <el-form-item>
+                  <el-input :rows="1" v-model="emp.email" :placeholder="$t('placeholder.email')" type="email" class="article-textarea" autosize/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label for="email" class="col-form-label">Email công việc</label>
-                <input id="email" v-model="emp.email" class="form-control" type="email" autocomplete="off" placeholder="Nhập vào email công việc ...">
-              </div>
-              <date-picker v-if="isShow" :title="joinAt" v-model="emp.joined_at" :default="getDate(emp.joined_at)"/>
-              <date-picker v-if="isShow" :title="confirmAt" v-model="emp.confirmed_at" :default="getDate(emp.confirmed_at)"/>
-              <div class="form-group">
-                <label class="col-form-label">Phòng ban</label>
-                <select v-model="emp.department" class="form-control">
-                  <option value="">Lựa chọn phòng ban</option>
-                  <option
-                    v-for="(d, index) in departments"
-                    :key="index"
-                    :value="d.id"
-                    v-text="d.name"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.joinAt') }}</label>
+                <el-form-item prop="joined_at">
+                  <el-date-picker v-model="emp.joined_at" :placeholder="$t('placeholder.employee_add.date')" type="date"/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Người gián sát trực tiếp</label>
-                <select v-model="emp.supervisor" class="form-control">
-                  <option value="">Lựa chọn người giám sát trực tiếp</option>
-                  <option
-                    v-for="(d, index) in supervisor"
-                    :key="index"
-                    :value="d.id"
-                    v-text="d.name"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.confirmAt') }}</label>
+                <el-form-item prop="confirmed_at">
+                  <el-date-picker v-model="emp.confirmed_at" :placeholder="$t('placeholder.employee_add.date')" type="date"/>
+                </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Người gián sát gián tiếp</label>
-                <select v-model="emp.indirect_supervisor" class="form-control">
-                  <option value="">Lựa chọn người giám sát gián tiếp</option>
-                  <option
-                    v-for="(d, index) in supervisor"
-                    :key="index"
-                    :value="d.id"
-                    v-text="d.name"/>
-                </select>
+                <label class="col-form-label">{{ $t('employee.department') }}</label>
+                <el-drag-select v-model="emp.department" :placeholder="$t('placeholder.employee_add.department')">
+                  <el-option v-for="(item, index) in departments" :label="item.name" :value="item.id" :key="index" />
+                </el-drag-select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">{{ $t('employee.supervisor') }}</label>
+                <el-drag-select v-model="emp.supervisor" :placeholder="$t('placeholder.employee_add.supervisor')">
+                  <el-option v-for="(item, index) in supervisor" :label="item.name" :value="item.id" :key="index" />
+                </el-drag-select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">{{ $t('employee.indirect_supervisor') }}</label>
+                <el-drag-select v-model="emp.indirect_supervisor" :placeholder="$t('placeholder.employee_add.indirect_supervisor')">
+                  <el-option v-for="(item, index) in supervisor" :label="item.name" :value="item.id" :key="index" />
+                </el-drag-select>
               </div>
             </div>
           </div>
@@ -159,11 +138,11 @@
             <span v-else/>
           </div>
           <div class="form-group">
-            <button :disabled="isDisable" class="btn btn-success mb-3" type="submit">
+            <button :disabled="isDisable" class="btn btn-success mb-3" type="submit" @click="submitForm">
               {{ isCreate ? createBtn : updateBtn }}
             </button>
           </div>
-        </form>
+        </el-form>
       </div>
     </div>
   </div>
@@ -171,13 +150,15 @@
 
 <script>
 import DatePicker from '../../components/commons/DatePicker'
-import rf from '../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'AddEmployee',
   components: {
-    DatePicker
+    DatePicker,
+    ElDragSelect
   },
   props: {
     header: {
@@ -190,6 +171,13 @@ export default {
     }
   },
   data() {
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        callback(this.handError(rule))
+      } else {
+        callback()
+      }
+    }
     return {
       emp: {
         full_name: '',
@@ -214,35 +202,62 @@ export default {
         id: ''
       },
       formData: '',
-      upload: 'Chọn ảnh',
       birthday: 'Ngày Sinh',
       joinAt: 'Ngày gia nhập',
       confirmAt: 'Ngày xác nhận',
-      nationalities: {},
+      nationalities: [],
       gender: ['Nam', 'Nữ', 'Khác'],
       supervisor: {},
       maritalStatus: ['Độc thân', 'Đã kết hôn', 'Li dị', 'Khác'],
       departments: {},
-      status: {},
+      status: [],
       jobs: {},
       payGrades: {},
       isDisable: false,
       errors: [],
       isShow: false,
       createBtn: 'Thêm mới',
-      updateBtn: 'Cập nhập'
+      updateBtn: 'Cập nhập',
+      rules: {
+        full_name: [{ validator: validateRequire }],
+        nationality_id: [{ validator: validateRequire }],
+        birthday: [{ validator: validateRequire }],
+        gender: [{ validator: validateRequire }],
+        ethnicity: [{ validator: validateRequire }],
+        marital_status: [{ validator: validateRequire }],
+        address: [{ validator: validateRequire }],
+        country: [{ validator: validateRequire }],
+        phone: [{ validator: validateRequire }],
+        email: [{ validator: validateRequire }],
+        joined_at: [{ validator: validateRequire }],
+        confirmed_at: [{ validator: validateRequire }],
+        department: [{ validator: validateRequire }],
+        job: [{ validator: validateRequire }],
+        pay_grade: [{ validator: validateRequire }],
+        status: [{ validator: validateRequire }]
+      }
     }
   },
+  computed: {
+  },
   created() {
-    if (!this.isCreate) {
-      this.getEmp()
-    }
+    // if (!this.isCreate) {
+    //   this.getEmp()
+    // }
+    this.getJobs()
+    // this.getEmployeeStatus()
+    // this.getPayGrades()
+    // this.getNationalities()
+    // this.getDepartments()
+    // this.getSupervisor()
   },
   mounted() {
     this.formData = new FormData()
-    this.initial()
   },
   methods: {
+    handError(rule) {
+      return new Error(`${this.$t(`validation.fields.${rule.field}`)} ${this.$t('validation.required')}`)
+    },
     setData(response) {
       this.emp.full_name = response.name
       this.emp.nationality_id = response.nationality_id
@@ -281,44 +296,44 @@ export default {
       return date ? new Date(date) : new Date()
     },
     getNationalities() {
-      rf.getRequest('Nationality')
-        .getAll()
+      rf.getRequest('NationalityRequest')
+        .getList()
         .then(res => {
-          this.nationalities = res
+          this.nationalities = res.data
         })
     },
     getSupervisor() {
       rf.getRequest('EmployeeRequest')
         .getAll()
         .then(res => {
-          this.supervisor = res
+          this.supervisor = res.data
         })
     },
     getEmployeeStatus() {
       rf.getRequest('EmployeeStatusRequest')
-        .getAll()
+        .getList()
         .then(res => {
-          this.status = res
+          this.status = res.data
         })
     },
     getJobs() {
       rf.getRequest('JobRequest')
-        .getAll()
+        .getList()
         .then(res => {
-          this.jobs = res
+          this.jobs = res.data.data
         })
     },
     getPayGrades() {
       rf.getRequest('PayGradeRequest')
-        .getAll()
+        .getList()
         .then(res => {
-          this.payGrades = res
+          this.payGrades = res.data
         })
     },
     getDepartments() {
       rf.getRequest('DepartmentRequest')
-        .getAll()
-        .then(res => (this.departments = res))
+        .getList()
+        .then(res => (this.departments = res.data))
     },
     initial() {
       this.getNationalities()
@@ -332,33 +347,39 @@ export default {
     hasErrors() {
       return !_.isEmpty(this.errors)
     },
-    submitForm() {
+    submitForm(e) {
+      e.preventDefault()
       this.isDisable = true
-      this.errors = []
-      const keyNullable = ['indirect_supervisor', 'supervisor']
-      _.forEach(this.emp, (val, key) => {
-        if (!val && keyNullable.indexOf(key) === -1) { this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` }) }
+      this.$refs['postForm'].validate((valid) => {
+        if (!valid) {
+          this.isDisable = false
+        }
       })
-      if (this.hasErrors()) {
-        this.isDisable = false
-        return
-      }
-      _.forEach(this.emp, (emp, i) => {
-        this.formData.append(`${i}`, emp)
-      })
-      if (!this.isCreate) {
-        return rf
-          .getRequest('EmployeeRequest')
-          .update(this.formData)
-          .then(res => {
-            this.handleRespone(res)
-          })
-      }
-      rf.getRequest('EmployeeRequest')
-        .store(this.formData)
-        .then(res => {
-          this.handleRespone(res)
-        })
+      // this.errors = []
+      // const keyNullable = ['indirect_supervisor', 'supervisor']
+      // _.forEach(this.emp, (val, key) => {
+      //   if (!val && keyNullable.indexOf(key) === -1) { this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` }) }
+      // })
+      // if (this.hasErrors()) {
+      //   this.isDisable = false
+      //   return
+      // }
+      // _.forEach(this.emp, (emp, i) => {
+      //   this.formData.append(`${i}`, emp)
+      // })
+      // if (!this.isCreate) {
+      //   return rf
+      //     .getRequest('EmployeeRequest')
+      //     .update(this.formData)
+      //     .then(res => {
+      //       this.handleRespone(res)
+      //     })
+      // }
+      // rf.getRequest('EmployeeRequest')
+      //   .store(this.formData)
+      //   .then(res => {
+      //     this.handleRespone(res)
+      //   })
     },
     handleRespone(response) {
       response.status
@@ -369,6 +390,9 @@ export default {
 }
 </script>
 <style scoped lang="sass">
+.el-date-editor
+  &.el-input
+    width: 100%
 .one-line
   display: block
   width: 100%
