@@ -12,6 +12,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: "http://mock.erptech.vn/mock/5c493ec0c583af69a0715fdb",
+        // target: "http://localhost:8000/api/v1",
         pathRewrite: {'^/api' : ''},
         changeOrigin: true
       },

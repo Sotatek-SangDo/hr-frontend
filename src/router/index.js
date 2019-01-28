@@ -131,7 +131,13 @@ export const mapServerRouters = {
     path: 'index2',
     name: 'Employee 2',
     meta: { title: 'Employee 2', icon: 'user', noCache: true }
-  }
+  },
+  addEmployee: {
+    component: () => import('@/views/Employee/AddEmployee'),
+    path: 'addemployee',
+    name: 'AddEmployee',
+    meta: { title: 'Add Employee', icon: 'user' }
+  },
 }
 
 export const developerRouterMap = [

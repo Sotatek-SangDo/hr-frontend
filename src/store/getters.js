@@ -14,6 +14,11 @@ const getters = {
   setting: state => state.user.setting,
   permission_routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
-  errorLogs: state => state.errorLog.logs
+  errorLogs: state => state.errorLog.logs,
+  nationalities: (state, getters) => state.masterData.nationalities,
+  employeeStatus: state => state.masterData.employeeStatus,
+  getNationalityById: (state) => (id) => {
+    return state.masterData.nationalities.find(nationality => nationality.id === id)
+  }
 }
 export default getters

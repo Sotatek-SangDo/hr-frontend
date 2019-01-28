@@ -1,20 +1,19 @@
-<template>
-  <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
-    <template slot="main-content">
-      <add-employee :is-create="isCreate"/>
-    </template>
-  </home-layout>
-</template>
+<!-- <template> -->
+  <template slot="main-content">
+    <add-employee :is-create="isCreate"/>
+  </template>
+<!-- </template> -->
 
 <script>
-import HomeLayout from '../../components/HomeLayout'
+// import HomeLayout from '../../components/HomeLayout'
 import MasterView from '../MasterView'
 import AddEmployee from '../../components/employee/AddEmployee'
+import store from '@/store'
 
 export default {
   name: 'EmployeeAdd',
   components: {
-    HomeLayout,
+    // HomeLayout,
     AddEmployee
   },
   extends: MasterView,
