@@ -16,32 +16,26 @@ const masterData = {
   actions: {
     getAllNationalities({ commit, state }) {
       return new Promise((resolve, reject) => {
-        if(state.nationalities && state.nationalities.length > 0) {
+        
+        getNationalities().then(response => {
+          commit('SET_NATIONALITIES', response.data)
           resolve()
-        } else {
-          getNationalities().then(response => {
-            commit('SET_NATIONALITIES', response.data)
-            resolve()
-          }).catch(error => {
-            reject(error)
-          })
-        }
+        }).catch(error => {
+          reject(error)
+        })
+        
       })
       
     },
     getAllEmployeeStatus({ commit, state }) {
       return new Promise((resolve, reject) => {
-        if(state.employeeStatus && state.employeeStatus.length > 0) {
-          resolve()
-        } else {
-          getEmployeeStatus().then(response => {
+        getEmployeeStatus().then(response => {
 
-            commit('SET_EMPLOYEE_STATUS', response.data)
-            resolve()
-          }).catch(error => {
-            reject(error)
-          })
-        }
+          commit('SET_EMPLOYEE_STATUS', response.data)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
       })
       
     }
