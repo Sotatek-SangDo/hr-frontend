@@ -173,10 +173,9 @@
 import DatePicker from '../../components/commons/DatePicker'
 import rf from '../../requests/RequestFactory'
 import _ from 'lodash'
-import store from '@/store'
 
 export default {
-  name: 'AddEmployee',
+  name: 'EmployeeAdd',
   components: {
     DatePicker
   },
@@ -219,12 +218,12 @@ export default {
       birthday: 'Ngày Sinh',
       joinAt: 'Ngày gia nhập',
       confirmAt: 'Ngày xác nhận',
-      nationalities: {},
+      nationalities: this.$store.getters.nationalities,
       gender: ['Nam', 'Nữ', 'Khác'],
       supervisor: {},
       maritalStatus: ['Độc thân', 'Đã kết hôn', 'Li dị', 'Khác'],
       departments: {},
-      status: {},
+      status: this.$store.getters.employeeStatus,
       jobs: {},
       payGrades: {},
       isDisable: false,
@@ -283,9 +282,9 @@ export default {
       return date ? new Date(date) : new Date()
     },
     getNationalities() {
-      store.dispatch('getAllNationalities').then(() => {
-        this.nationalities = store.getters.nationalities
-      })
+      // store.dispatch('getAllNationalities').then(() => {
+      //   this.nationalities = store.getters.nationalities
+      // })
     },
     getSupervisor() {
       // rf.getRequest('EmployeeRequest')
@@ -295,9 +294,9 @@ export default {
       //   })
     },
     getEmployeeStatus() {
-      store.dispatch('getAllEmployeeStatus').then(() => {
-        this.status = store.getters.employeeStatus
-      })
+      // store.dispatch('getAllEmployeeStatus').then(() => {
+      //   this.status = store.getters.employeeStatus
+      // })
     },
     getJobs() {
       // rf.getRequest('JobRequest')

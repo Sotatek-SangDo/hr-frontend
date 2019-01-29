@@ -6,9 +6,7 @@
 
 <script>
 // import HomeLayout from '../../components/HomeLayout'
-import MasterView from '../MasterView'
 import AddEmployee from '../../components/employee/AddEmployee'
-import store from '@/store'
 
 export default {
   name: 'EmployeeAdd',
@@ -16,7 +14,6 @@ export default {
     // HomeLayout,
     AddEmployee
   },
-  extends: MasterView,
   data() {
     return {
       headerTitle: 'Thêm mới',
@@ -29,10 +26,10 @@ export default {
   },
   methods: {
     inital() {
-      this.sleep(500).then(() => {
-        this.init()
-      })
-      this.fadeOut()
+      // this.sleep(500).then(() => {
+      //   this.init()
+      // })
+      // this.fadeOut()
     }
   }
 }
