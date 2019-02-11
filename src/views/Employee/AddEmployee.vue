@@ -1,23 +1,19 @@
-<template>
-  <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
-    <template slot="main-content">
-      <add-employee :is-create="isCreate"/>
-    </template>
-  </home-layout>
-</template>
+<!-- <template> -->
+  <template slot="main-content">
+    <add-employee :is-create="isCreate"/>
+  </template>
+<!-- </template> -->
 
 <script>
-import HomeLayout from '../../components/HomeLayout'
-import MasterView from '../MasterView'
+// import HomeLayout from '../../components/HomeLayout'
 import AddEmployee from '../../components/employee/AddEmployee'
 
 export default {
   name: 'EmployeeAdd',
   components: {
-    HomeLayout,
+    // HomeLayout,
     AddEmployee
   },
-  extends: MasterView,
   data() {
     return {
       headerTitle: 'Thêm mới',
@@ -30,10 +26,10 @@ export default {
   },
   methods: {
     inital() {
-      this.sleep(500).then(() => {
-        this.init()
-      })
-      this.fadeOut()
+      // this.sleep(500).then(() => {
+      //   this.init()
+      // })
+      // this.fadeOut()
     }
   }
 }

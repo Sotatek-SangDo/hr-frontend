@@ -175,7 +175,7 @@ import rf from '../../requests/RequestFactory'
 import _ from 'lodash'
 
 export default {
-  name: 'AddEmployee',
+  name: 'EmployeeAdd',
   components: {
     DatePicker
   },
@@ -218,12 +218,12 @@ export default {
       birthday: 'Ngày Sinh',
       joinAt: 'Ngày gia nhập',
       confirmAt: 'Ngày xác nhận',
-      nationalities: {},
+      nationalities: this.$store.getters.nationalities,
       gender: ['Nam', 'Nữ', 'Khác'],
       supervisor: {},
       maritalStatus: ['Độc thân', 'Đã kết hôn', 'Li dị', 'Khác'],
       departments: {},
-      status: {},
+      status: this.$store.getters.employeeStatus,
       jobs: {},
       payGrades: {},
       isDisable: false,
@@ -241,6 +241,7 @@ export default {
   mounted() {
     this.formData = new FormData()
     this.initial()
+    
   },
   methods: {
     setData(response) {
@@ -266,12 +267,12 @@ export default {
       this.emp.id = response.id
     },
     getEmp() {
-      const query = this.$route.query.id
-      rf.getRequest('EmployeeRequest')
-        .getEmployee({ id: query })
-        .then(res => {
-          this.setData(res)
-        })
+      // const query = this.$route.query.id
+      // rf.getRequest('EmployeeRequest')
+      //   .getEmployee({ id: query })
+      //   .then(res => {
+      //     this.setData(res)
+      //   })
     },
     onChooseAvatar(e) {
       this.upload = e.target.files[0].name
@@ -281,44 +282,40 @@ export default {
       return date ? new Date(date) : new Date()
     },
     getNationalities() {
-      rf.getRequest('Nationality')
-        .getAll()
-        .then(res => {
-          this.nationalities = res
-        })
+      // store.dispatch('getAllNationalities').then(() => {
+      //   this.nationalities = store.getters.nationalities
+      // })
     },
     getSupervisor() {
-      rf.getRequest('EmployeeRequest')
-        .getAll()
-        .then(res => {
-          this.supervisor = res
-        })
+      // rf.getRequest('EmployeeRequest')
+      //   .getAll()
+      //   .then(res => {
+      //     this.supervisor = res
+      //   })
     },
     getEmployeeStatus() {
-      rf.getRequest('EmployeeStatusRequest')
-        .getAll()
-        .then(res => {
-          this.status = res
-        })
+      // store.dispatch('getAllEmployeeStatus').then(() => {
+      //   this.status = store.getters.employeeStatus
+      // })
     },
     getJobs() {
-      rf.getRequest('JobRequest')
-        .getAll()
-        .then(res => {
-          this.jobs = res
-        })
+      // rf.getRequest('JobRequest')
+      //   .getAll()
+      //   .then(res => {
+      //     this.jobs = res
+      //   })
     },
     getPayGrades() {
-      rf.getRequest('PayGradeRequest')
-        .getAll()
-        .then(res => {
-          this.payGrades = res
-        })
+      // rf.getRequest('PayGradeRequest')
+      //   .getAll()
+      //   .then(res => {
+      //     this.payGrades = res
+      //   })
     },
     getDepartments() {
-      rf.getRequest('DepartmentRequest')
-        .getAll()
-        .then(res => (this.departments = res))
+      // rf.getRequest('DepartmentRequest')
+      //   .getAll()
+      //   .then(res => (this.departments = res))
     },
     initial() {
       this.getNationalities()

@@ -15,19 +15,16 @@ for (let i = 0; i < count; i++) {
 
 export default {
   getList: config => {
-    const { title, page = 1, limit = 20, sort } = param2Obj(config.url)
-    let mockList = List.filter(item => {
-      if (title && item.name.indexOf(title.replace(/\+/g, ' ').trim()) < 0) return false
-      return true
-    })
-    if (sort === '-id') {
-      mockList = mockList.reverse()
-    }
-    const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-    return {
-      total: mockList.length,
-      data: pageList
-    }
+    let result = Mock.mock({
+      total: '@integer(100, 300)',
+      "data|20": [{
+        id: "@integer(1, 100)",
+        name: "Phòng Ban " + "@integer(1, 100)",
+        email: '@email',
+        phone_number: '@string("number", 9)'
+      }]
+    });
+    return result
   },
   createDepartment: (config) => {
     const mockList = List

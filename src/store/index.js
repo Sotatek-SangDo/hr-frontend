@@ -6,6 +6,9 @@ import permission from './modules/permission'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import getters from './getters'
+import masterData from './modules/masterData'
+import vuexCache from 'vuex-cache'
+
 
 Vue.use(Vuex)
 
@@ -15,9 +18,14 @@ const store = new Vuex.Store({
     errorLog,
     permission,
     tagsView,
-    user
+    user,
+    masterData
   },
-  getters
+  getters,
+  plugins: [vuexCache],
 })
+
+store.cache.dispatch('getAllNationalities')
+store.cache.dispatch('getAllEmployeeStatus')
 
 export default store

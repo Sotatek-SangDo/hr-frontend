@@ -1,5 +1,5 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken, setRefreshToken, setExpiresAt, getRefreshToken, getExpiresAt } from '@/utils/auth'
+import { loginByUsername, logout, getUserInfo, getTokenFromRefreshToken } from '@/api/login'
+import { getToken, setToken, removeToken, setRefreshToken, setExpiresAt, getRefreshToken, getExpiresAt, removeExpiresAt, removeRefreshToken } from '@/utils/auth'
 
 const user = {
   state: {
@@ -62,10 +62,25 @@ const user = {
         loginByUsername(form).then(response => {
           const token = response.access_token
           commit('SET_TOKEN', token)
-          commit('SET_REFRESH_TOKEN', response.access_token)
+          commit('SET_REFRESH_TOKEN', response.refresh_token)
           commit('SET_EXPIRES_AT', response.expires_in)
           setToken(token)
-          setRefreshToken(response.access_token)
+          setRefreshToken(response.refresh_token)
+          setExpiresAt(response.expires_in)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetTokenFromRefreshToken({ commit }) {
+
+      return new Promise((resolve, reject) => {
+        getTokenFromRefreshToken().then(response => {
+          const token = response.access_token
+          commit('SET_TOKEN', token)
+          commit('SET_EXPIRES_AT', response.expires_in)
+          setToken(token)
           setExpiresAt(response.expires_in)
           resolve()
         }).catch(error => {
@@ -115,7 +130,11 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
+          commit('SET_REFRESH_TOKEN', '')
+          commit('SET_EXPIRES_AT', '')
           removeToken()
+          removeExpiresAt()
+          removeRefreshToken()
           resolve()
         }).catch(error => {
           reject(error)
@@ -127,7 +146,11 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_REFRESH_TOKEN', '')
+        commit('SET_EXPIRES_AT', '')
         removeToken()
+        removeExpiresAt()
+        removeRefreshToken()
         resolve()
       })
     },
