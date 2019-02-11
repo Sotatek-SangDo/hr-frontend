@@ -10,11 +10,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        target: 'http://mock.erptech.vn/mock/5c493ec0c583af69a0715fdb',
-        pathRewrite: {'^/api' : ''},
-        changeOrigin: true
-      },
+      // '/api': {
+      //   target: 'http://mock.erptech.vn/mock/5c493ec0c583af69a0715fdb',
+      //   pathRewrite: {'^/api' : ''},
+      //   changeOrigin: true
+      // },
       '/auth': {
         target: 'http://auth.erptech.vn',
         pathRewrite: {'^/auth' : ''},

@@ -8,8 +8,8 @@
             <div class="col-xs-4 col-md-4">
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.name') }}</label>
-                <el-form-item style="margin-bottom: 30px;" prop="full_name">
-                  <el-input :rows="1" v-model="emp.full_name" :placeholder="$t('placeholder.employee_add.name')" type="text" class="article-textarea" autosize/>
+                <el-form-item style="margin-bottom: 30px;" prop="name">
+                  <el-input :rows="1" v-model="emp.name" :placeholder="$t('placeholder.employee_add.name')" type="text" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
               <div class="form-group">
@@ -180,7 +180,7 @@ export default {
     }
     return {
       emp: {
-        full_name: '',
+        name: '',
         nationality_id: '',
         birthday: '',
         gender: '',
@@ -219,7 +219,7 @@ export default {
       createBtn: 'Thêm mới',
       updateBtn: 'Cập nhập',
       rules: {
-        full_name: [{ validator: validateRequire }],
+        name: [{ validator: validateRequire }],
         nationality_id: [{ validator: validateRequire }],
         birthday: [{ validator: validateRequire }],
         gender: [{ validator: validateRequire }],
@@ -244,12 +244,7 @@ export default {
     // if (!this.isCreate) {
     //   this.getEmp()
     // }
-    this.getJobs()
-    // this.getEmployeeStatus()
-    // this.getPayGrades()
-    // this.getNationalities()
-    // this.getDepartments()
-    // this.getSupervisor()
+    this.initial()
   },
   mounted() {
     this.formData = new FormData()
@@ -259,7 +254,7 @@ export default {
       return new Error(`${this.$t(`validation.fields.${rule.field}`)} ${this.$t('validation.required')}`)
     },
     setData(response) {
-      this.emp.full_name = response.name
+      this.emp.name = response.name
       this.emp.nationality_id = response.nationality_id
       this.emp.birthday = response.birthday
       this.emp.gender = response.gender
@@ -304,7 +299,7 @@ export default {
     },
     getSupervisor() {
       rf.getRequest('EmployeeRequest')
-        .getAll()
+        .getList()
         .then(res => {
           this.supervisor = res.data
         })
@@ -320,7 +315,7 @@ export default {
       rf.getRequest('JobRequest')
         .getList()
         .then(res => {
-          this.jobs = res.data.data
+          this.jobs = res.data
         })
     },
     getPayGrades() {
