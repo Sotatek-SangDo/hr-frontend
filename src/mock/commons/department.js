@@ -1,5 +1,4 @@
 import Mock from 'mockjs'
-import { param2Obj } from '@/utils'
 
 const List = []
 const count = 100
@@ -18,19 +17,16 @@ export default {
     return List
   },
   getList: config => {
-    const { title, page = 1, limit = 20, sort } = param2Obj(config.url)
-    let mockList = List.filter(item => {
-      if (title && item.name.indexOf(title.replace(/\+/g, ' ').trim()) < 0) return false
-      return true
+    const result = Mock.mock({
+      total: '@integer(100, 300)',
+      'data|20': [{
+        id: '@integer(1, 100)',
+        name: 'Phòng Ban ' + '@integer(1, 100)',
+        email: '@email',
+        phone_number: '@string("number", 9)'
+      }]
     })
-    if (sort === '-id') {
-      mockList = mockList.reverse()
-    }
-    const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-    return {
-      total: mockList.length,
-      data: pageList
-    }
+    return result
   },
   createDepartment: (config) => {
     const mockList = List

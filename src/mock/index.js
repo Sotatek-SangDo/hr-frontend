@@ -3,7 +3,7 @@ import Mock from 'mockjs'
 // import articleAPI from './article'
 // import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
-import dynamicRouters from './dynamicrouters'
+// import dynamicRouters from './dynamicrouters'
 // import departmentAPI from './commons/department'
 // import employeeAPI from './commons/employee'
 // import jobAPI from './commons/jobs'
@@ -25,6 +25,10 @@ Mock.XHR.prototype.send = function() {
 
 // nationality
 // Mock.mock(/\/nationalities/, 'get', nationalityAPI.getList)
+// Mock.mock(/\/departments/, 'get', departmentAPI.getList)
+// Mock.mock(/\/mock-department\/store/, 'post', departmentAPI.createDepartment)
+// Mock.mock(/\/mock-department\/update/, 'post', departmentAPI.updateDepartment)
+// Mock.mock(/\/mock-department\/destroy/, 'post', departmentAPI.destroyDepartment)
 
 // //paygrade
 // Mock.mock(/\/pay-grade/, 'get', paygradeAPI.getList)
@@ -64,6 +68,6 @@ Mock.XHR.prototype.send = function() {
 // // 账单相关
 Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
-Mock.mock(/\/routers\/dynamic/, 'post', dynamicRouters.getPermissionByRoles)
+// Mock.mock(/\/routers\/dynamic/, 'post', dynamicRouters.getPermissionByRoles)
 
 export default Mock

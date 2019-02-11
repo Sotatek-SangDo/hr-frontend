@@ -12,7 +12,12 @@
               <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
               <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addItem()">{{ $t('table.add') }}</el-button>
             </div>
-
+            <div>
+              <FilenameOption v-model="filename" />
+              <AutoWidthOption v-model="autoWidth" />
+              <BookTypeOption v-model="bookType" />
+              <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="document" @click="handleDownload">{{ $t('excel.export') }} Excel</el-button>
+            </div>
             <el-table
               v-loading="listLoading"
               ref="datatable"
@@ -83,10 +88,17 @@ import Pagination from '@/components/Pagination'
 import { store, update, destroy } from '@/api/department'
 import waves from '@/directive/waves'
 
+// options components
+import FilenameOption from './components/FilenameOption'
+import AutoWidthOption from './components/AutoWidthOption'
+import BookTypeOption from './components/BookTypeOption'
+
 export default {
+  name: 'DepartmentsIndex',
   components: {
     TabSlide,
-    Pagination
+    Pagination,
+    FilenameOption, AutoWidthOption, BookTypeOption
   },
   directives: { waves },
   data() {
@@ -118,7 +130,11 @@ export default {
       textMap: {
         update: 'Chỉnh sửa',
         create: 'Thêm mới'
-      }
+      },
+      filename: 'departments',
+      autoWidth: true,
+      bookType: 'xlsx',
+      downloadLoading: false
     }
   },
   watch: {
@@ -129,11 +145,28 @@ export default {
     }
   },
   mounted() {
+    console.warn('mounted')
     this.inital()
   },
+  activated: function() {
+    console.log('activated', this._inactive, this.list)
+  },
+  deactivated: function() {
+    console.log('deactivated', this._inactive, this.list)
+  },
   created() {
+    console.warn('created')
     this.getList()
     this.getJobs()
+  },
+  beforeCreate() {
+    console.warn('beforeCreate')
+  },
+  beforeDestroy() {
+    console.warn('beforeDestroy')
+  },
+  destroyed() {
+    console.warn('destroyed')
   },
   methods: {
     getJobs() {
@@ -228,6 +261,32 @@ export default {
       this.temp.email = ''
       this.temp.phone_number = ''
       this.temp.name = ''
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return new Date(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['Id', 'Phòng ban', 'Email', 'Số điện thoại']
+        const filterVal = ['id', 'name', 'email', 'phone_number']
+        const list = this.list
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
     }
   }
 }

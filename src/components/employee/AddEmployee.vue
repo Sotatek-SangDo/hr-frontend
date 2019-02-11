@@ -150,12 +150,12 @@
 
 <script>
 import DatePicker from '../../components/commons/DatePicker'
-import rf from '@/api/commons/RequestFactory'
+// import rf from '@/api/commons/RequestFactory'
 import _ from 'lodash'
 import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
-  name: 'AddEmployee',
+  name: 'EmployeeAdd',
   components: {
     DatePicker,
     ElDragSelect
@@ -205,12 +205,12 @@ export default {
       birthday: 'Ngày Sinh',
       joinAt: 'Ngày gia nhập',
       confirmAt: 'Ngày xác nhận',
-      nationalities: [],
+      nationalities: this.$store.getters.nationalities,
       gender: ['Nam', 'Nữ', 'Khác'],
       supervisor: {},
       maritalStatus: ['Độc thân', 'Đã kết hôn', 'Li dị', 'Khác'],
       departments: {},
-      status: [],
+      status: this.$store.getters.employeeStatus,
       jobs: {},
       payGrades: {},
       isDisable: false,
@@ -276,12 +276,12 @@ export default {
       this.emp.id = response.id
     },
     getEmp() {
-      const query = this.$route.query.id
-      rf.getRequest('EmployeeRequest')
-        .getEmployee({ id: query })
-        .then(res => {
-          this.setData(res)
-        })
+      // const query = this.$route.query.id
+      // rf.getRequest('EmployeeRequest')
+      //   .getEmployee({ id: query })
+      //   .then(res => {
+      //     this.setData(res)
+      //   })
     },
     onChooseAvatar(e) {
       this.upload = e.target.files[0].name
@@ -289,46 +289,6 @@ export default {
     },
     getDate(date) {
       return date ? new Date(date) : new Date()
-    },
-    getNationalities() {
-      rf.getRequest('NationalityRequest')
-        .getList()
-        .then(res => {
-          this.nationalities = res.data
-        })
-    },
-    getSupervisor() {
-      rf.getRequest('EmployeeRequest')
-        .getList()
-        .then(res => {
-          this.supervisor = res.data
-        })
-    },
-    getEmployeeStatus() {
-      rf.getRequest('EmployeeStatusRequest')
-        .getList()
-        .then(res => {
-          this.status = res.data
-        })
-    },
-    getJobs() {
-      rf.getRequest('JobRequest')
-        .getList()
-        .then(res => {
-          this.jobs = res.data
-        })
-    },
-    getPayGrades() {
-      rf.getRequest('PayGradeRequest')
-        .getList()
-        .then(res => {
-          this.payGrades = res.data
-        })
-    },
-    getDepartments() {
-      rf.getRequest('DepartmentRequest')
-        .getList()
-        .then(res => (this.departments = res.data))
     },
     initial() {
       this.getNationalities()

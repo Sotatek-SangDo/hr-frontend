@@ -137,6 +137,12 @@ export const mapServerRouters = {
     path: 'index2',
     name: 'Employee 2',
     meta: { title: 'Employee 2', icon: 'user', noCache: true }
+  },
+  addEmployee: {
+    component: () => import('@/views/Employee/AddEmployee'),
+    path: 'addemployee',
+    name: 'EmployeeAdd',
+    meta: { title: 'Add Employee', icon: 'user' }
   }
 }
 
@@ -399,17 +405,17 @@ export const asyncRouterMap = [
   {
     path: '/department',
     component: Layout,
-    redirect: '/department/index',
+    // redirect: '/department/index',
     name: 'Departments',
     meta: {
       title: 'Department',
-      icon: 'example'
+      icon: 'department'
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/Department/index'),
-        name: 'DepartmentIndex',
+        name: 'DepartmentsIndex',
         meta: { title: 'Department', icon: 'department' }
       }
     ]
