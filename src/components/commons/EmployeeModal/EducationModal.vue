@@ -11,31 +11,38 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="kni">Trình độ chuyên môn</label>
-                      <select id="kni" v-model="user_education.qualification_id" class="form-control">
-                        <option value="">Lựa chọn trình độ chuyên môn</option>
-                        <option
-                          v-for="(qua, index) in qualifications"
-                          :key="index"
-                          :value="qua.id"
-                          v-text="qua.name"/>
-                      </select>
+                      <label for="kni">{{ $t('edu.qualification_title') }}</label>
+                      <el-drag-select v-model="user_education.qualification_id" :placeholder="$t('edu.qualification_place')">
+                        <el-option v-for="(q, index) in qualifications" :label="q.name" :value="q.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Học viện</label>
-                      <input id="detail-kni" v-model="user_education.institute" type="text" class="form-control" placeholder="Học viện">
+                      <label for="detail-kni">{{ $t('edu.institute_title') }}</label>
+                      <el-form-item style="margin-bottom: 30px;" prop="name">
+                        <el-input :rows="1" v-model="user_education.institute" :placeholder="$t('edu.institute_title')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
-                    <date-picker v-if="delay" :title="startedAt" v-model="user_education.started_at" :default="getDate(user_education.started_at)"/>
-                    <date-picker v-if="delay" :title="endedAt" v-model="user_education.ended_at" :default="getDate(user_education.ended_at)"/>
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('edu.startedAt') }}</label>
+                      <el-form-item prop="started_at">
+                        <el-date-picker v-model="user_education.started_at" :placeholder="$t('edu.startedAt')" type="date" value-format="yyyy-MM-DD"/>
+                      </el-form-item>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('edu.endedAt') }}</label>
+                      <el-form-item prop="ended_at">
+                        <el-date-picker v-model="user_education.ended_at" :placeholder="$t('edu.endedAt')" type="date" value-format="yyyy-MM-DD"/>
+                      </el-form-item>
+                    </div>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -47,35 +54,40 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import DatePicker from '../../commons/DatePicker'
-import MasterView from '../../../views/MasterView'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'EducationModal',
   components: {
-    DatePicker
+    DatePicker,
+    ElDragSelect
   },
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     },
     education: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm học vấn',
-      updateTitle: 'Chỉnh sửa học vấn',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
-      qualifications: {},
+      createTitle: this.$t('edu.add_title'),
+      updateTitle: this.$t('edu.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
+      qualifications: this.$store.getters.qualifications,
       user_education: {
         qualification_id: '',
         institute: '',
@@ -86,8 +98,8 @@ export default {
       },
       isDisable: false,
       errors: [],
-      startedAt: 'Ngày bắt đầù',
-      endedAt: 'Ngày hoàn thành',
+      startedAt: this.$t('edu.startedAt'),
+      endedAt: this.$t('edu.endedAt'),
       delay: false,
       modal_id: 'education-modal'
     }
@@ -96,15 +108,12 @@ export default {
     this.init()
   },
   methods: {
+    onchange(date, $event) {
+      console.log($event)
+      console.log(date)
+    },
     getDate(date) {
       return date ? new Date(date) : new Date()
-    },
-    getQuatifications() {
-      rf.getRequest('QualificationRequest')
-        .getAll()
-        .then(res => {
-          this.qualifications = res
-        })
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
@@ -125,20 +134,20 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('EducationRequest')
-          .update({ data: this.user_education })
+          .update(this.user_education)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eEducation', res.data)
+              this.emitEvent('update-eEducation', res.data.data)
             }
           })
       }
       rf.getRequest('EducationRequest')
-        .store({ data: this.user_education })
+        .store(this.user_education)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eEducation', res.data)
+            this.emitEvent('add-eEducation', res.data.data)
           }
-        })
+        }).catch(err => console.log(err))
     },
     clearData() {
       this.user_education = this.emptyData(this.user_education)
@@ -147,7 +156,6 @@ export default {
     init() {
       this.user_education = this.education
       this.delay = true
-      this.getQuatifications()
     }
   }
 }

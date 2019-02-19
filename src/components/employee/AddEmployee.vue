@@ -52,7 +52,7 @@
             <div class="col-xs-4 col-md-4">
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.country') }}</label>
-                <el-drag-select v-model="emp.nationality_id" :placeholder="$t('placeholder.employee_add.country')">
+                <el-drag-select v-model="emp.country" :placeholder="$t('placeholder.employee_add.country')">
                   <el-option v-for="(item, index) in nationalities" :label="item.name" :value="item.id" :key="index" />
                 </el-drag-select>
               </div>
@@ -64,7 +64,7 @@
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.job') }}</label>
-                <el-drag-select v-model="emp.job" :placeholder="$t('placeholder.employee_add.job')">
+                <el-drag-select v-model="emp.job_id" :placeholder="$t('placeholder.employee_add.job')">
                   <el-option v-for="(item, index) in jobs" :label="item.title" :value="item.id" :key="index" />
                 </el-drag-select>
               </div>
@@ -72,12 +72,12 @@
                 <label class="col-form-label one-line">{{ $t('employee.avatar') }}</label>
                 <div class="custom-file">
                   <input id="avatar" type="file" class="custom-file-input" @change="onChooseAvatar">
-                  <label class="custom-file-label" for="avatar" v-text="$t('placeholder.employee_add.avatar')"/>
+                  <label class="custom-file-label" for="avatar" v-text="upload"/>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.paygrade') }}</label>
-                <el-drag-select v-model="emp.pay_grade" :placeholder="$t('placeholder.employee_add.paygrade')">
+                <el-drag-select v-model="emp.paygrade_id" :placeholder="$t('placeholder.employee_add.paygrade')">
                   <el-option v-for="(item, index) in payGrades" :label="item.title" :value="item.id" :key="index" />
                 </el-drag-select>
               </div>
@@ -96,9 +96,9 @@
             </div>
             <div class="col-xs-4 col-md-4">
               <div class="form-group">
-                <label for="email" class="col-form-label">{{ $t('employee.email_work') }}</label>
+                <label for="email" class="col-form-label">{{ $t('employee.work_email') }}</label>
                 <el-form-item>
-                  <el-input :rows="1" v-model="emp.email" :placeholder="$t('placeholder.email')" type="email" class="article-textarea" autosize/>
+                  <el-input :rows="1" v-model="emp.work_email" :placeholder="$t('placeholder.email')" type="email" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
               <div class="form-group">
@@ -115,13 +115,13 @@
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.department') }}</label>
-                <el-drag-select v-model="emp.department" :placeholder="$t('placeholder.employee_add.department')">
+                <el-drag-select v-model="emp.department_id" :placeholder="$t('placeholder.employee_add.department')">
                   <el-option v-for="(item, index) in departments" :label="item.name" :value="item.id" :key="index" />
                 </el-drag-select>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.supervisor') }}</label>
-                <el-drag-select v-model="emp.supervisor" :placeholder="$t('placeholder.employee_add.supervisor')">
+                <el-drag-select v-model="emp.supervisor_id" :placeholder="$t('placeholder.employee_add.supervisor')">
                   <el-option v-for="(item, index) in supervisor" :label="item.name" :value="item.id" :key="index" />
                 </el-drag-select>
               </div>
@@ -139,7 +139,7 @@
           </div>
           <div class="form-group">
             <button :disabled="isDisable" class="btn btn-success mb-3" type="submit" @click="submitForm">
-              {{ isCreate ? createBtn : updateBtn }}
+              {{ empId ? createBtn : updateBtn }}
             </button>
           </div>
         </el-form>
@@ -149,15 +149,13 @@
 </template>
 
 <script>
-import DatePicker from '../../components/commons/DatePicker'
-// import rf from '@/api/commons/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import _ from 'lodash'
 import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'EmployeeAdd',
   components: {
-    DatePicker,
     ElDragSelect
   },
   props: {
@@ -165,9 +163,9 @@ export default {
       type: String,
       default: ''
     },
-    isCreate: {
-      type: Boolean,
-      default: true
+    empId: {
+      type: [String, Number],
+      default: ''
     }
   },
   data() {
@@ -179,45 +177,43 @@ export default {
       }
     }
     return {
+      upload: this.$t('placeholder.employee_add.avatar'),
       emp: {
-        name: '',
-        nationality_id: '',
-        birthday: '',
-        gender: '',
-        marital_status: '',
-        ethnicity: '',
-        address: '',
-        country: '',
-        phone: '',
-        private_email: '',
-        email: '',
-        joined_at: '',
-        confirmed_at: '',
-        department: '',
-        supervisor: '',
-        indirect_supervisor: '',
-        status: '',
-        job: '',
-        pay_grade: '',
+        name: 'Nguyen A',
+        nationality_id: 1,
+        birthday: '1995-01-01',
+        gender: 1,
+        marital_status: 'Độc thân',
+        ethnicity: 'Kinh',
+        address: 'Ha Noi',
+        country: 1,
+        phone: '487209473850',
+        private_email: 'a@gmail.com',
+        work_email: 'abc@gmail.com',
+        joined_at: '2019-01-01',
+        confirmed_at: '2018-12-15',
+        department_id: 1,
+        supervisor_id: 1,
+        indirect_supervisor: 2,
+        status: 1,
+        job_id: 1,
+        paygrade_id: 5,
         id: ''
       },
-      formData: '',
-      birthday: 'Ngày Sinh',
-      joinAt: 'Ngày gia nhập',
-      confirmAt: 'Ngày xác nhận',
+      formData: new FormData(),
       nationalities: this.$store.getters.nationalities,
       gender: ['Nam', 'Nữ', 'Khác'],
       supervisor: {},
       maritalStatus: ['Độc thân', 'Đã kết hôn', 'Li dị', 'Khác'],
-      departments: {},
+      departments: this.$store.getters.departments,
       status: this.$store.getters.employeeStatus,
-      jobs: {},
-      payGrades: {},
+      jobs: this.$store.getters.jobs,
+      payGrades: this.$store.getters.paygrades,
       isDisable: false,
       errors: [],
       isShow: false,
-      createBtn: 'Thêm mới',
-      updateBtn: 'Cập nhập',
+      createBtn: this.$t('button.save'),
+      updateBtn: this.$t('button.update'),
       rules: {
         name: [{ validator: validateRequire }],
         nationality_id: [{ validator: validateRequire }],
@@ -228,11 +224,11 @@ export default {
         address: [{ validator: validateRequire }],
         country: [{ validator: validateRequire }],
         phone: [{ validator: validateRequire }],
-        email: [{ validator: validateRequire }],
+        work_email: [{ validator: validateRequire }],
         joined_at: [{ validator: validateRequire }],
         confirmed_at: [{ validator: validateRequire }],
-        department: [{ validator: validateRequire }],
-        job: [{ validator: validateRequire }],
+        department_id: [{ validator: validateRequire }],
+        job_id: [{ validator: validateRequire }],
         pay_grade: [{ validator: validateRequire }],
         status: [{ validator: validateRequire }]
       }
@@ -241,13 +237,12 @@ export default {
   computed: {
   },
   created() {
-    // if (!this.isCreate) {
-    //   this.getEmp()
-    // }
+    if (this.empId) {
+      this.getEmp()
+    }
     this.initial()
   },
   mounted() {
-    this.formData = new FormData()
   },
   methods: {
     handError(rule) {
@@ -264,24 +259,23 @@ export default {
       this.emp.country = response.country
       this.emp.phone = response.phone
       this.emp.private_email = response.private_email
-      this.emp.email = response.work_email
+      this.emp.work_email = response.work_email
       this.emp.joined_at = response.joined_at
       this.emp.confirmed_at = response.confirmed_at
-      this.emp.department = response.department_id
-      this.emp.supervisor = response.supervisor_id
+      this.emp.department_id = response.department_id
+      this.emp.supervisor_id = response.supervisor_id
       this.emp.indirect_supervisor = response.indirect_supervisor
       this.emp.status = response.status
       this.emp.job = response.job_id
-      this.emp.pay_grade = response.paygrade_id
+      this.emp.paygrade_id = response.paygrade_id
       this.emp.id = response.id
     },
     getEmp() {
-      // const query = this.$route.query.id
-      // rf.getRequest('EmployeeRequest')
-      //   .getEmployee({ id: query })
-      //   .then(res => {
-      //     this.setData(res)
-      //   })
+      rf.getRequest('EmployeeRequest')
+        .getEmployee({ id: this.empId })
+        .then(res => {
+          this.setData(res.data)
+        })
     },
     onChooseAvatar(e) {
       this.upload = e.target.files[0].name
@@ -291,13 +285,13 @@ export default {
       return date ? new Date(date) : new Date()
     },
     initial() {
-      this.getNationalities()
       this.getSupervisor()
-      this.getEmployeeStatus()
-      this.getJobs()
-      this.getPayGrades()
-      this.getDepartments()
       this.isShow = true
+    },
+    getSupervisor() {
+      rf.getRequest('EmployeeRequest')
+        .getList()
+        .then(res => (this.supervisor = res.data))
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
@@ -310,35 +304,26 @@ export default {
           this.isDisable = false
         }
       })
-      // this.errors = []
-      // const keyNullable = ['indirect_supervisor', 'supervisor']
-      // _.forEach(this.emp, (val, key) => {
-      //   if (!val && keyNullable.indexOf(key) === -1) { this.errors.push({ keys: `${key} yêu cầu, không được rỗng.` }) }
-      // })
-      // if (this.hasErrors()) {
-      //   this.isDisable = false
-      //   return
-      // }
-      // _.forEach(this.emp, (emp, i) => {
-      //   this.formData.append(`${i}`, emp)
-      // })
-      // if (!this.isCreate) {
-      //   return rf
-      //     .getRequest('EmployeeRequest')
-      //     .update(this.formData)
-      //     .then(res => {
-      //       this.handleRespone(res)
-      //     })
-      // }
-      // rf.getRequest('EmployeeRequest')
-      //   .store(this.formData)
-      //   .then(res => {
-      //     this.handleRespone(res)
-      //   })
+      _.forEach(this.emp, (emp, i) => {
+        this.formData.append(`${i}`, emp)
+      })
+      if (this.empId) {
+        return rf
+          .getRequest('EmployeeRequest')
+          .update(this.formData)
+          .then(res => {
+            this.handleRespone(res)
+          })
+      }
+      rf.getRequest('EmployeeRequest')
+        .store(this.formData)
+        .then(res => {
+          this.handleRespone(res)
+        }).catch(() => (this.disabled = false))
     },
     handleRespone(response) {
-      response.status
-        ? this.$router.push({ name: 'emp-list' })
+      response.data.status
+        ? this.$router.push({ name: 'Employee' })
         : this.errors.push({ keys: 'Lỗi chưa xác định trên server' })
     }
   }

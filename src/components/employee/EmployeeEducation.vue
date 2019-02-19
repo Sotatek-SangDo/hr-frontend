@@ -25,13 +25,13 @@
             <td v-text="props.item.ended_at"/>
             <td>
               <button class="btn btn-del" type="button" tooltip="Delete" @click="removeEducation(props.item)">
-                <i class="ti-trash"/>
+                <svg-icon icon-class="rubbish-bin" />
               </button>
               <button class="btn btn-edit" type="button" tooltip="Edit" @click="showModalUpdate(props.item)">
-                <i class="ti-marker-alt"/>
+                <svg-icon icon-class="edit" />
               </button>
               <button class="btn btn-add" type="button" tooltip="Edit" @click="addEducation(props.item)">
-                <i class="ti-plus"/>
+                <svg-icon icon-class="plus-square"/>
               </button>
             </td>
           </tr>
@@ -44,7 +44,7 @@
 <script>
 import rf from '../../requests/RequestFactory'
 import DataTable from '../commons/DataTable'
-import MasterView from '../../views/MasterView'
+import MasterView from '@/views/MasterView'
 import EducationModal from '../commons/EmployeeModal/EducationModal'
 
 export default {

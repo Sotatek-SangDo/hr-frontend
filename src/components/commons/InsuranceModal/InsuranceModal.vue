@@ -11,50 +11,45 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="kni">Kĩ năng</label>
-                      <select id="kni" v-model="insurance.emp_id" class="form-control">
-                        <option value="">Lựa chọn nhân viên</option>
-                        <option
-                          v-for="(e, index) in emps"
-                          :key="index"
-                          :value="e.id"
-                          v-text="e.name"/>
-                      </select>
+                      <label>{{ $t('insurance.employee') }}</label>
+                      <el-drag-select v-model="insurance.emp_id" :placeholder="$t('insurance.emp_select')">
+                        <el-option v-for="(e, index) in emps" :label="e.name" :value="e.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Số sổ BHXH</label>
-                      <textarea id="detail-kni" v-model="insurance.num_social_security" type="text" class="form-control" placeholder="Số sổ BHXH" />
+                      <label>{{ $t('insurance.num_social_security') }}</label>
+                      <el-input :rows="1" v-model="insurance.num_social_security" :placeholder="$t('insurance.num_social_security')" type="text" class="article-textarea"/>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Số thẻ BHYT</label>
-                      <textarea id="detail-kni" v-model="insurance.num_health_insurance" type="text" class="form-control" placeholder="Số thẻ BHYT" />
+                      <label>{{ $t('insurance.num_health_insurance') }}</label>
+                      <el-input :rows="1" v-model="insurance.num_health_insurance" :placeholder="$t('insurance.num_health_insurance')" type="text" class="article-textarea"/>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Nơi đăng kí KCB</label>
-                      <textarea id="detail-kni" v-model="insurance.place_registration_medical" type="text" class="form-control" placeholder="Nơi đăng kí KCB" />
+                      <label>{{ $t('insurance.place_registration_medical') }}</label>
+                      <el-input :rows="1" v-model="insurance.place_registration_medical" :placeholder="$t('insurance.place_registration_medical')" type="text" class="article-textarea"/>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Mức đóng</label>
-                      <textarea id="detail-kni" v-model="insurance.salary_paid" type="text" class="form-control" placeholder="Mức đóng ..." />
+                      <label>{{ $t('insurance.salary_paid') }}</label>
+                      <el-input :rows="1" v-model="insurance.salary_paid" :placeholder="$t('insurance.salary_paid')" type="text" class="article-textarea"/>
                     </div>
-                    <date-picker v-if="delay" :title="startedAt" v-model="insurance.started_at" :default="getDate(insurance.started_at)"/>
                     <div class="form-group">
-                      <label for="kni">Trạng thái</label>
-                      <select id="kni" v-model="insurance.status" class="form-control">
-                        <option value="">Chọn trạng thái</option>
-                        <option
-                          v-for="(s, index) in status"
-                          :key="index"
-                          :value="s"
-                          v-text="s"/>
-                      </select>
+                      <label class="col-form-label">{{ $t('insurance.started_at') }}</label>
+                      <el-form-item prop="started_at">
+                        <el-date-picker v-model="insurance.started_at" :placeholder="$t('insurance.started_at')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <div class="form-group">
+                      <label>{{ $t('insurance.status.title') }}</label>
+                      <el-drag-select v-model="insurance.status" :placeholder="$t('insurance.status_select')">
+                        <el-option v-for="(s, index) in status" :label="s" :value="s" :key="index" />
+                      </el-drag-select>
+                    </div>
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -66,31 +61,33 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import MasterView from '../../../views/MasterView'
-import DatePicker from '../DatePicker'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'InsuranceModal',
   components: {
-    DatePicker
+    ElDragSelect
   },
   extends: MasterView,
   props: {
     propInsurance: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm mới bảo biểm',
-      updateTitle: 'Chỉnh sửả bảo hiểm',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('insurance.add_title'),
+      updateTitle: this.$t('insurance.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       insurance: {
         emp_id: '',
         num_social_security: '',
@@ -101,15 +98,15 @@ export default {
         status: '',
         id: ''
       },
-      startedAt: 'Bắt đầu từ ngày',
       isDisable: false,
       emps: {},
       errors: [],
       modal_id: 'insurance-modal',
       status: [
-        'Đang tham gia',
-        'Giảm tạm thời',
-        'Giảm hẳn'
+        this.$t('insurance.status.st1'),
+        this.$t('insurance.status.st2'),
+        this.$t('insurance.status.st3')
+
       ],
       delay: false
     }
@@ -123,8 +120,8 @@ export default {
     },
     getEmployees() {
       rf.getRequest('EmployeeRequest')
-        .getAll()
-        .then(res => (this.emps = res))
+        .getList()
+        .then(res => (this.emps = res.data))
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
@@ -148,18 +145,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('InsuranceRequest')
-          .update({ data: this.insurance })
+          .update(this.insurance)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eInsurance', res.data)
+              this.emitEvent('update-eInsurance', true)
             }
           })
       }
       rf.getRequest('InsuranceRequest')
-        .store({ data: this.insurance })
+        .store(this.insurance)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eInsurance', res.data)
+            this.emitEvent('add-eInsurance', true)
           }
         })
     },

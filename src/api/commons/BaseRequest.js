@@ -17,7 +17,7 @@ export default class BaseRequest {
     return request({
       url: this.parseUrl(url),
       method: methodType,
-      queryParams
+      data: queryParams
     })
   }
   parseUrl(url = '') {
@@ -28,5 +28,21 @@ export default class BaseRequest {
   }
   postMethod() {
     return METHOD.POST
+  }
+  requestPost(url, query = {}) {
+    const request = this.rq(url, this.postMethod(), query)
+    return request
+  }
+  store(query = {}) {
+    const url = 'store'
+    return this.requestPost(url, query)
+  }
+  update(query = {}) {
+    const url = 'update'
+    return this.requestPost(url, query)
+  }
+  destroy(query = {}) {
+    const url = 'destroy'
+    return this.requestPost(url, query)
   }
 }

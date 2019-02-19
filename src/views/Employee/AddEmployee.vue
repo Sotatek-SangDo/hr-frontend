@@ -1,5 +1,5 @@
 <template>
-  <add-employee :is-create="isCreate" :header="header"/>
+  <add-employee :header="header" :emp-id="empId"/>
 </template>
 
 <script>
@@ -12,9 +12,15 @@ export default {
   },
   data() {
     return {
-      isCreate: true,
-      header: 'Thêm mới'
+      header: this.$t('employee.add'),
+      empId: ''
     }
+  },
+  created() {
+    const route = this.$route.path
+    if (route.length < 4) return
+    this.empId = route.split('/')[3]
+    this.header = this.$t('employee.edit')
   },
   mounted() {
     this.inital()

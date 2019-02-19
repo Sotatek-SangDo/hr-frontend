@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" data-toggle="modal" data-target="#add-skill">
-          <span class="icon"><i class="ti-plus"/></span>Documents
+          <span class="icon"><svg-icon icon-class="plus-square"/></span>Documents
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
@@ -11,10 +11,10 @@
           <div v-for="(s, i) in userSkills" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ s.skill }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeSkill(s)">
-                <i class="ti-trash"/>
+                <svg-icon icon-class="rubbish-bin" />
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(s)">
-                <i class="ti-marker-alt"/>
+                <svg-icon icon-class="edit" />
               </button>
             </h5>
             <p class="list-group-item-text">{{ s.detail }}</p>
@@ -67,8 +67,8 @@
 </template>
 
 <script>
-import rf from '../../requests/RequestFactory'
-import MasterView from '../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import $ from 'jquery'
 import _ from 'lodash'
 
@@ -77,7 +77,8 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -98,15 +99,10 @@ export default {
     this.init()
   },
   methods: {
-    getSkill() {
-      rf.getRequest('SkillRequest')
-        .getAll()
-        .then(res => (this.skills = res))
-    },
     getUserSkill() {
       rf.getRequest('SkillUserRequest')
         .getAll()
-        .then(res => (this.userSkills = res))
+        .then(res => (this.userSkills = res.data))
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
@@ -169,7 +165,6 @@ export default {
       this.isDisable = false
     },
     init() {
-      this.getSkill()
       this.getUserSkill()
       $(this.$refs.add_modal).on(
         'hidden.bs.modal',
@@ -210,6 +205,7 @@ a.icon-p
   position: absolute
   top: 0
   padding: 5px
+  cursor: pointer
   &.but-del
     right: 0
     border-right: none

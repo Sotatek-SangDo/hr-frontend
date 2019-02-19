@@ -11,30 +11,32 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="detail-kni">Họ và tên:</label>
-                      <input id="detail-kni" v-model="user_contact.full_name" type="text" class="form-control" placeholder="Họ và tên">
+                      <label>{{ $t('emergency_contact.full_name') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_contact.full_name" :placeholder="$t('emergency_contact.full_name')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Mối quan hệ:</label>
-                      <input id="detail-kni" v-model="user_contact.relationship" type="text" class="form-control" placeholder="Mỗi quan hệ">
+                      <label>{{ $t('emergency_contact.relation') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_contact.relationship" :placeholder="$t('emergency_contact.relation')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
-                    <div class="form-gruop">
-                      <label for="">Số điện thoaị:</label>
-                      <input
-                        v-model="user_contact.contact_phone"
-                        type="text"
-                        class="form-control"
-                        placeholder="Số điện thoại">
+                    <div class="form-group">
+                      <label>{{ $t('emergency_contact.phone_number') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_contact.contact_phone" :placeholder="$t('emergency_contact.phone_number')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/>{{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -45,7 +47,7 @@
   </div>
 </template>
 <script>
-import rf from '../../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import MasterView from '../../../views/MasterView'
 import _ from 'lodash'
 
@@ -54,21 +56,24 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     },
     contact: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm danh bạ khẩn cấp',
-      updateTitle: 'Chỉnh sửa danh bạ khẩn cấp',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('emergency_contact.add_title'),
+      updateTitle: this.$t('emergency_contact.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       user_contact: {
         full_name: '',
         relationship: '',
@@ -104,18 +109,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('EmergencyContactsRequest')
-          .update({ data: this.user_contact })
+          .update(this.user_contact)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eContact', res.data)
+              this.emitEvent('update-eContact', res.data.data)
             }
           })
       }
       rf.getRequest('EmergencyContactsRequest')
-        .store({ data: this.user_contact })
+        .store(this.user_contact)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eContact', res.data)
+            this.emitEvent('add-eContact', res.data.data)
           }
         })
     },

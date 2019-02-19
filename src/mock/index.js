@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-// import loginAPI from './login'
+import loginAPI from './login'
 // import articleAPI from './article'
 // import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
@@ -51,9 +51,9 @@ Mock.XHR.prototype.send = function() {
 // Mock.mock(/\/departments\/destroy/, 'post', departmentAPI.destroyDepartment)
 
 // // 登录相关
-// Mock.mock(/\/login\/login/, 'post', loginAPI.loginByUsername)
+Mock.mock(/\/login\/login/, 'post', loginAPI.loginByUsername)
 // Mock.mock(/\/login\/logout/, 'post', loginAPI.logout)
-// Mock.mock(/\/user\/info\.*/, 'get', loginAPI.getUserInfo)
+Mock.mock(/\/user\/info\.*/, 'get', loginAPI.getUserInfo)
 
 // // 文章相关
 // Mock.mock(/\/article\/list/, 'get', articleAPI.getList)

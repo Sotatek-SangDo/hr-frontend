@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import MasterView from '../../views/MasterView'
-import rf from '../../requests/RequestFactory'
-import InterviewModal from '../commons/RecruitmentModal/InterviewModal'
-import Calendar from '../commons/Calendar'
+import MasterView from '@/views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import InterviewModal from '@/components/commons/RecruitmentModal/InterviewModal'
+import Calendar from '@/components/commons/Calendar'
 import $ from 'jquery'
 import _ from 'lodash'
 import moment from 'moment'
@@ -53,9 +53,9 @@ export default {
   methods: {
     getInterviews() {
       rf.getRequest('InterviewRequest')
-        .getAll()
+        .getList()
         .then(res => {
-          _.each(res, v => {
+          _.each(res.data, v => {
             const event = {
               start: v.started_at,
               end: v.ended_at,
@@ -68,16 +68,16 @@ export default {
         })
     },
     addInterview(start, end) {
-      this.start = $.fullCalendar.formatDate(start, 'YYYY-MM-DD hh:mm')
-      this.end = $.fullCalendar.formatDate(end, 'YYYY-MM-DD hh:mm')
+      this.start = $.fullCalendar.formatDate(start, 'YYYY-MM-DD HH:mm')
+      this.end = $.fullCalendar.formatDate(end, 'YYYY-MM-DD HH:mm')
       this.isCreate = true
       this.isShow = true
       this.addEventShowModal()
     },
     drop(event) {
       const params = {
-        started_at: moment(event.start).format('YYYY-MM-DD hh:mm'),
-        ended_at: moment(event.end).format('YYYY-MM-DD hh:mm'),
+        started_at: moment(event.start).format('YYYY-MM-DD HH:mm'),
+        ended_at: moment(event.end).format('YYYY-MM-DD HH:mm'),
         id: event.event_id
       }
       rf.getRequest('InterviewRequest')
@@ -86,8 +86,8 @@ export default {
     },
     resize(event) {
       const params = {
-        started_at: moment(event.start).format('YYYY-MM-DD hh:mm'),
-        ended_at: moment(event.end).format('YYYY-MM-DD hh:mm'),
+        started_at: moment(event.start).format('YYYY-MM-DD HH:mm'),
+        ended_at: moment(event.end).format('YYYY-MM-DD HH:mm'),
         id: event.event_id
       }
       rf.getRequest('InterviewRequest')
@@ -132,7 +132,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .calendar
   width: 96%
   margin: 0 auto 0 auto

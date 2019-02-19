@@ -11,23 +11,32 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="detail-kni">Họ và tên:</label>
-                      <input id="detail-kni" v-model="user_dependent.full_name" type="text" class="form-control" placeholder="Full Name">
+                      <label>{{ $t('dependent.full_name') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_dependent.full_name" :placeholder="$t('dependent.full_name')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Mối quan hệ:</label>
-                      <input id="detail-kni" v-model="user_dependent.relationship" type="text" class="form-control" placeholder="Relationship">
+                      <label>{{ $t('dependent.relation') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_dependent.relationship" :placeholder="$t('dependent.relation')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
-                    <date-picker v-if="delay" :title="birthDay" v-model="user_dependent.birthday" :default="getDate(user_dependent.birthday)"/>
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('dependent.birthday') }}</label>
+                      <el-form-item prop="birthday">
+                        <el-date-picker v-model="user_dependent.birthday" :placeholder="$t('dependent.birthday')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
+                    </div>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -39,7 +48,7 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import MasterView from '../../../views/MasterView'
 import DatePicker from '../../commons/DatePicker'
 import _ from 'lodash'
@@ -52,21 +61,24 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     },
     dependent: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm người phụ thuộc',
-      updateTitle: 'Chỉnh sửa',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('dependent.add_title'),
+      updateTitle: this.$t('dependent.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       user_dependent: {
         full_name: '',
         relationship: '',
@@ -75,7 +87,6 @@ export default {
         id: ''
       },
       modal_id: 'dependent-modal',
-      birthDay: 'Ngày sinh',
       errors: [],
       isDisable: false,
       delay: false
@@ -106,18 +117,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('DependentsRequest')
-          .update({ data: this.user_dependent })
+          .update(this.user_dependent)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eDependent', res.data)
+              this.emitEvent('update-eDependent', res.data.data)
             }
           })
       }
       rf.getRequest('DependentsRequest')
-        .store({ data: this.user_dependent })
+        .store(this.user_dependent)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eDependent', res.data)
+            this.emitEvent('add-eDependent', res.data.data)
           }
         })
     },

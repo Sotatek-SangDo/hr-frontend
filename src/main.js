@@ -22,14 +22,12 @@ if (process.env.NODE_ENV === 'development') {
   require('./mock') // simulation data
 }
 
-
 import * as filters from './filters' // global filters
 // require("./config.js");
 
-//import config from "../src/config/config.js";
-// import EventBus from "./event-bus";
-import "./script.js";
-
+// import config from "../src/config/config.js";
+import EventBus from './event-bus'
+import './script.js'
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
@@ -41,13 +39,12 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
-
 // Vue.use(BootstrapVue);
 
 // window.config = config;
-// window.EventBus = EventBus;
+window.EventBus = EventBus
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 new Vue({
   el: '#app',

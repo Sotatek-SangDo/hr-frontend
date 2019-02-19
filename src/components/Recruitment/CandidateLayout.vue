@@ -5,10 +5,6 @@
         <a class="button-add button" @click="addCandidate">
           <span>Thêm mới</span>
         </a>
-        <!-- <div class="input-file-container">
-          <input class="input-file" id="my-file" type="file" @change="importData">
-          <label tabindex="0" for="my-file" class="input-file-trigger" v-text="importText" />
-        </div> -->
       </div>
       <data-table ref="datatable" :get-data="getCandidates">
         <template slot="head" slot-scope="props">

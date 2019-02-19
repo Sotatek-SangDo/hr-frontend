@@ -1,68 +1,4 @@
 <template>
-  <!-- <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
-    <template slot="main-content">
-      <tab-slide :tabs="tabs">
-        <div id="nv" role="tabpanel" class="tab-pane fade active in show">
-          <div class="col-12 mt-5">
-            <div class="card">
-              <div class="card-body">
-                <div class="epm-tb-header">
-                  <h4 class="header-title header-underline">Danh sách nhân viên</h4>
-                  <a class="button-add button" @click="addPage">
-                    <span>Thêm mới</span>
-                  </a>
-                </div>
-                <data-table ref="datatable" :get-data="getEmployees">
-                  <template slot="head" slot-scope="props">
-                    <th class="sort sorting_asc" @click="props.sort('name', $event)">Họ và tên</th>
-                    <th>Công việc</th>
-                    <th>Địa chỉ</th>
-                    <th>Số ĐT</th>
-                    <th>Ngày sinh</th>
-                    <th>Email công việc</th>
-                    <th>Thao tác</th>
-                  </template>
-                  <template slot="body" slot-scope="props">
-                    <tr @click="profilePage(props.item.id)">
-                      <td v-text="props.item.name"/>
-                      <td v-text="props.item.job.title"/>
-                      <td v-text="props.item.address"/>
-                      <td v-text="props.item.phone"/>
-                      <td v-text="props.item.birthday"/>
-                      <td v-text="props.item.private_email"/>
-                      <td>
-                        <span>
-                          <i class="ti-search"/>
-                        </span>
-                      </td>
-                    </tr>
-                  </template>
-                </data-table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="kn" role="tabpanel" class="tab-pane fade">
-          <employee-skill/>
-        </div>
-        <div id="hv" role="tabpanel" class="tab-pane fade">
-          <employee-education/>
-        </div>
-        <div id="chc" role="tabpanel" class="tab-pane fade">
-          <employee-certification/>
-        </div>
-        <div id="ngn" role="tabpanel" class="tab-pane fade">
-          <employee-language/>
-        </div>
-        <div id="dbkc" role="tabpanel" class="tab-pane fade">
-          <employee-emergency-contact/>
-        </div>
-        <div id="pb" role="tabpanel" class="tab-pane fade">
-          <employee-department/>
-        </div>
-      </tab-slide>
-    </template>
-  </home-layout> -->
   <div>
     <div class="col-12 mt-5">
       <div class="card">
@@ -73,7 +9,7 @@
           <div class="filter-container">
             <el-input :placeholder="$t('table.employee.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
-            <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addItem()">{{ $t('table.add') }}</el-button>
+            <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addPage">{{ $t('table.add') }}</el-button>
           </div>
           <el-table
             v-loading="listLoading"
@@ -92,7 +28,7 @@
             </el-table-column>
             <el-table-column :label="$t('table.employee.name')" prop="name" align="center" sortable>
               <template slot-scope="scope">
-                <span>{{ scope.row.name }}</span>
+                <span @click="profilePage(scope.row.id)">{{ scope.row.name }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.employee.job')" prop="job" align="center" sortable>
@@ -141,9 +77,8 @@ import EmployeeLanguage from '../../components/employee/EmployeeLanguage'
 import EmployeeEmergencyContact from '../../components/employee/EmployeeEmergencyContact'
 import EmployeeDepartment from '../../components/employee/EmployeeDepartment'
 import TabSlide from '../../components/TabSlide'
-import rf from '../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import Pagination from '@/components/Pagination'
-import { getFullInfo } from '@/api/employee'
 
 export default {
   components: {
@@ -209,21 +144,27 @@ export default {
     },
     getList() {
       this.listLoading = true
-      getFullInfo(this.listQuery).then(response => {
-        this.employees = response.data.data
-        this.total = response.data.total
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
+      rf.getRequest('EmployeeRequest')
+        .getFullInfo(this.listQuery)
+        .then(response => {
+          this.employees = response.data.data
+          this.total = response.data.total
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
     },
     profilePage(empId) {
       return this.$router.push({
-        name: 'employee-profile',
-        query: { id: empId }
+        name: 'EmployeeProfile',
+        params: { id: empId }
       })
     },
     handleUpdate(row) {
+      return this.$router.push({
+        name: 'EmployeeEdit',
+        params: { id: row.id }
+      })
     },
     addPage() {
       this.$router.push({ name: 'employee-add' })

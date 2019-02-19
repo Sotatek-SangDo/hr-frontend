@@ -13,9 +13,9 @@
                 <div class="card-body">
                   <form @submit.prevent="storeOrUpdate">
                     <div class="form-group">
-                      <label for="kni">Kĩ năng</label>
+                      <label for="kni">{{ $t('skill.title') }}</label>
                       <select id="kni" v-model="user_skill.skill_id" class="form-control">
-                        <option value="">Lựa chọn kỹ năng</option>
+                        <option value="">{{ $t('skill.select') }}</option>
                         <option
                           v-for="(s, index) in skills"
                           :key="index"
@@ -24,8 +24,8 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Thông tin chi tiết</label>
-                      <textarea id="detail-kni" v-model="user_skill.detail" type="text" class="form-control" placeholder="Thông tin chi tiết" />
+                      <label for="detail-kni">{{ $t('skill.detail') }}</label>
+                      <textarea id="detail-kni" v-model="user_skill.detail" :placeholder="$t('skill.detail_place')" type="text" class="form-control" />
                     </div>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import MasterView from '../../../views/MasterView'
 import _ from 'lodash'
 
@@ -54,21 +54,24 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     },
     skill: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm mới kỹ năng',
-      updateTitle: 'Chỉnh sửả kỹ năng',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('skill.add_title'),
+      updateTitle: this.$t('skill.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       user_skill: {
         skill_id: '',
         detail: '',
@@ -76,7 +79,7 @@ export default {
         id: ''
       },
       isDisable: false,
-      skills: {},
+      skills: this.$store.getters.skills,
       errors: [],
       modal_id: 'skill-modal'
     }
@@ -85,17 +88,11 @@ export default {
     this.init()
   },
   methods: {
-    getSkill() {
-      rf.getRequest('SkillRequest')
-        .getAll()
-        .then(res => (this.skills = res))
-    },
     hasErrors() {
       return !_.isEmpty(this.errors)
     },
     init() {
       this.user_skill = this.skill
-      this.getSkill()
     },
     storeOrUpdate(e) {
       e.preventDefault()
@@ -111,18 +108,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('SkillUserRequest')
-          .update({ data: this.user_skill })
+          .update(this.user_skill)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eskill', res.data)
+              this.emitEvent('update-eskill', res.data.data)
             }
           })
       }
       rf.getRequest('SkillUserRequest')
-        .store({ data: this.user_skill })
+        .store(this.user_skill)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eskill', res.data)
+            this.emitEvent('add-eskill', res.data.data)
           }
         })
     },

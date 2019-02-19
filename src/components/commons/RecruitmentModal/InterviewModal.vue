@@ -11,42 +11,29 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label class="col-form-label">Ứng viên</label>
-                      <select v-model="interview.candidate_id" class="form-control">
-                        <option value="">Lựa chọn ứng viên</option>
-                        <option
-                          v-for="(c, index) in candidates"
-                          :key="index"
-                          :value="c.id"
-                          v-text="c.name"/>
-                      </select>
+                      <label for="kni">{{ $t('interview.candidate') }}</label>
+                      <el-drag-select v-model="interview.candidate_id" :placeholder="$t('interview.candidate_select')">
+                        <el-option v-for="(c, index) in candidates" :label="c.name" :value="c.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label class="col-form-label">Người phỏng vấn</label>
-                      <select v-model="interview.interviewer" class="form-control">
-                        <option value="">Lựa chọn người phỏng vấn</option>
-                        <option
-                          v-for="(e, index) in emps"
-                          :key="index"
-                          :value="e.id"
-                          v-text="e.name"/>
-                      </select>
-                    </div>
-                    <date-picker v-if="delay" :title="startedAt" v-model="time" :default="getDate(time)" :format="'yyyy-mm-dd'"/>
-                    <div class="form-group">
-                      <label for="detail-kni">Gio</label>
-                      <input v-model="hours" type="text" class="form-control" placeholder="Gio bat dau" readonly>
+                      <label for="kni">{{ $t('interview.interviewer') }}</label>
+                      <el-drag-select v-model="interview.interviewer" :placeholder="$t('interview.interviewer_select')">
+                        <el-option v-for="(e, index) in emps" :label="e.name" :value="e.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Địa chỉ</label>
-                      <input v-model="interview.address" type="text" class="form-control" placeholder="Địa chỉ" >
+                      <label class="col-form-label">{{ $t('interview.started_at') }}</label>
+                      <el-form-item prop="started_at">
+                        <el-date-picker v-model="interview.started_at" :placeholder="$t('interview.started_at')" disabled type="datetime" format="yyyy-MM-dd HH:mm" value-format="yyyy-MM-dd HH:mm"/>
+                      </el-form-item>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -58,15 +45,17 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import MasterView from '../../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import DatePicker from '../DatePicker'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'InterviewModal',
   components: {
-    DatePicker
+    DatePicker,
+    ElDragSelect
   },
   extends: MasterView,
   props: {
@@ -89,10 +78,10 @@ export default {
   },
   data() {
     return {
-      createTitle: 'Thêm mới',
-      updateTitle: 'Chỉnh sửa',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('interview.add_title'),
+      updateTitle: this.$t('interview.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       interview: {
         candidate_id: '',
         started_at: '',
@@ -108,26 +97,14 @@ export default {
       delay: false,
       emps: {},
       candidates: {},
-      time: '',
-      hours: '',
       flag: 0
     }
   },
   watch: {
-    hours(newVal, oldVal) {
-      if (newVal.length === 2 && !this.flag) {
-        this.flag = 1
-        if (parseInt(newVal) > 12) newVal = '00'
-        this.hours = `${newVal}:`
-      }
-      if (!newVal.length || newVal.length < 2) return (this.flag = 0)
-      if (newVal.length > 5) return (this.hours = oldVal)
-      if (newVal.length === 5) {
-        const split = newVal.split(':')
-        if (parseInt(split[1]) >= 60) this.hours = `${split[0]}:00`
-        this.interview.started_at = `${this.time} ${this.hours}`
-      }
-    }
+  },
+  created() {
+    this.getEmployees()
+    this.getCandidates()
   },
   mounted() {
     this.init()
@@ -138,41 +115,27 @@ export default {
     },
     getEmployees() {
       rf.getRequest('EmployeeRequest')
-        .getAll()
-        .then(res => (this.emps = res))
+        .getList()
+        .then(res => (this.emps = res.data))
     },
     getCandidates() {
       rf.getRequest('CandidateRequest')
         .getAll()
-        .then(res => (this.candidates = res))
+        .then(res => (this.candidates = res.data))
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
     },
     init() {
       this.interview = this.propInterview
-      if (this.interview.started_at) {
-        const split = this.interview.started_at.split(' ')
-        this.time = split[0]
-        this.hours = split[1].substring(0, split[1].length - 3)
-      } else {
-        if (this.end) {
-          this.interview.ended_at = this.end
-        }
-        if (this.start) {
-          const split = this.start.split(' ')
-          this.time = split[0]
-          this.hours = split[1]
-        }
-      }
-      this.getEmployees()
-      this.getCandidates()
+      this.interview.started_at = this.start
+      this.interview.ended_at = this.end
       this.delay = true
     },
     storeOrUpdate(e) {
       e.preventDefault()
       this.isDisable = true
-      const keyNullable = ['id', 'description']
+      const keyNullable = ['id', 'address']
       _.forEach(this.interview, (val, key) => {
         let i = 0
         if (!i) this.errors = []
@@ -186,7 +149,7 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('InterviewRequest')
-          .update({ data: this.interview })
+          .update(this.interview)
           .then(res => {
             if (res.status) {
               this.emitEvent('update-interview', res.data)
@@ -194,7 +157,7 @@ export default {
           })
       }
       rf.getRequest('InterviewRequest')
-        .store({ data: this.interview })
+        .store(this.interview)
         .then(res => {
           if (res.status) {
             this.emitEvent('add-interview', res.data)

@@ -24,7 +24,7 @@
           <div class="row-fluid">
             <div class="col-xs-12" style="font-size:18px;border-bottom: 1px solid #DDD;margin-bottom: 10px;padding-bottom: 10px;">
               <button class="btn btn-small btn-success" style="margin-right:10px;" @click="editProfile(scopeEmp.id)">
-                <i class="fa fa-edit"/> Thay đổi thông tin
+                <svg-icon icon-class="edit" /> {{ $t('employee.edit') }}
               </button>
             </div>
           </div>
@@ -47,48 +47,48 @@
                         <div class="row">
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Quốc tịch:</b></span><br>
                               <span class="info">{{ scopeEmp.nationality.name }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Mã nhân viên:</b></span><br>
                               <span class="info">{{ scopeEmp.id }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Giới tính:</b></span><br>
                               <span class="info">{{ scopeEmp.gender }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Tình trạng hôn nhân:</b></span><br>
                               <span class="info">{{ scopeEmp.marital_status }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Ngày Sinh:</b></span><br>
                               <span class="info">{{ scopeEmp.birthday | date }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Ngày Gia nhập:</b></span><br>
                               <span class="info">{{ scopeEmp.joined_at | date }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Email cá nhân:</b></span><br>
                               <span class="info">{{ scopeEmp.private_email }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Dân tộc:</b></span><br>
                               <span class="info">{{ scopeEmp.ethnicity }}</span>
                             </p>
@@ -108,33 +108,33 @@
                         <div class="row">
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Địa chỉ: </b></span><br>
                               <span class="info">{{ scopeEmp.address }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Quốc gia:</b></span><br>
                               <span class="info">{{ scopeEmp.nationality.name }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Email: </b></span><br>
                               <span class="info">{{ scopeEmp.private_email }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Email công việc:</b></span><br>
                               <span class="info">{{ scopeEmp.work_email }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Số điện thoại: </b></span><br>
                               <span class="info">{{ scopeEmp.phone }}</span>
                             </p>
@@ -154,38 +154,38 @@
                         <div class="row">
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Chức danh: </b></span><br>
                               <span class="info">{{ scopeEmp.pay_grade.title }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Phòng:</b></span><br>
                               <span class="info">{{ scopeEmp.department_id }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Công việc: </b></span><br>
                               <span class="info">{{ scopeEmp.job.title }}</span>
                             </p>
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Tình trạng việc làm: </b></span><br>
                               <span class="info">{{ scopeEmp.employee_status.status }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Giám sát trực tiếp:</b></span><br>
                               <span class="info">{{ scopeEmp.supervisor_name }}</span>
                             </p>
                           </div>
                           <div class="col-lg-3 col-md-6">
                             <p>
-                              <i class="ti-info"/>&nbsp;
+                              <svg-icon icon-class="information" />&nbsp;
                               <span><b>Giám sát gián tiếp: </b></span><br>
                               <span class="info">{{ scopeEmp.indirect_supervisor_name }}</span>
                             </p>
@@ -264,7 +264,7 @@ import AddEducations from './AddEducations'
 import AddLanguages from './AddLanguages'
 import AddDependents from './AddDependents'
 import AddCertifications from './AddCertifications'
-import rf from '../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 
 export default {
   name: 'EProfile',
@@ -296,7 +296,7 @@ export default {
       show: false,
       emp: {
         id: '',
-        full_name: '',
+        name: '',
         nationality_id: '',
         birthday: '',
         gender: '',
@@ -306,14 +306,14 @@ export default {
         country: '',
         phone: '',
         private_email: '',
-        email: '',
+        work_email: '',
         joined_at: '',
         confirmed_at: '',
-        department: '',
-        supervisor: '',
+        department_id: '',
+        supervisor_id: '',
         indirect_supervisor: '',
         status: '',
-        job: '',
+        job_id: '',
         pay_grade: ''
       },
       scopeEmp: {}
@@ -325,21 +325,21 @@ export default {
   methods: {
     editProfile(empId) {
       this.$router.push({
-        name: 'employee-edit',
-        query: { id: empId }
+        name: 'EmployeeEdit',
+        params: { id: empId }
       })
     },
     getEmployee() {
       rf.getRequest('EmployeeRequest')
         .getEmployee({ id: this.id })
         .then(res => {
-          this.scopeEmp = res
+          this.scopeEmp = res.data
           this.setEmp()
         })
     },
     setEmp() {
       this.emp.id = this.scopeEmp.id
-      this.emp.full_name = this.scopeEmp.name
+      this.emp.name = this.scopeEmp.name
       this.emp.nationality_id = this.scopeEmp.nationality_id
       this.emp.birthday = this.scopeEmp.birthday
       this.emp.gender = this.scopeEmp.gender
@@ -349,16 +349,16 @@ export default {
       this.emp.country = this.scopeEmp.country
       this.emp.phone = this.scopeEmp.phone
       this.emp.private_email = this.scopeEmp.private_email
-      this.emp.email = this.scopeEmp.work_email
+      this.emp.work_email = this.scopeEmp.work_email
       this.emp.joined_at = this.scopeEmp.joined_at
       this.emp.confirmed_at = this.scopeEmp.confirmed_at
-      this.emp.department = this.scopeEmp.department_id
-      this.emp.supervisor = this.scopeEmp.supervisor_id
+      this.emp.department_id = this.scopeEmp.department_id
+      this.emp.supervisor_id = this.scopeEmp.supervisor_id
       this.emp.indirect_supervisor = this.scopeEmp.indirect_supervisor
         ? this.scopeEmp.indirect_supervisor
         : ''
       this.emp.status = this.scopeEmp.status
-      this.emp.job = this.scopeEmp.job_id
+      this.emp.job_id = this.scopeEmp.job_id
       this.emp.pay_grade = this.scopeEmp.paygrade_id
       this.show = true
     }

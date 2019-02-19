@@ -26,5 +26,12 @@ const store = new Vuex.Store({
 
 store.cache.dispatch('getAllNationalities')
 store.cache.dispatch('getAllEmployeeStatus')
+store.cache.dispatch('getDepartments')
+store.cache.dispatch('getJobs')
+store.cache.dispatch('getPayGrades')
+store.cache.dispatch('getSkills')
+store.cache.dispatch('getQualifications')
+store.cache.dispatch('getCertifications')
+store.cache.dispatch('getLanguages')
 
 export default store

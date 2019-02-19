@@ -1,53 +1,82 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="epm-tb-header">
-        <a class="button-add button" @click="addRecruitment">
-          <span>Thêm mới</span>
-        </a>
+      <div class="insurance-header">
+        <h4 class="header-title header-underline" v-text="$t('table.recruitment.header')"/>
       </div>
-      <data-table ref="datatable" :get-data="getRecruitments">
-        <template slot="head" slot-scope="props">
-          <th class="sort sorting_asc" @click="props.sort('name', $event)">Tên đợt tuyển dụng</th>
-          <th>Thời gian bắt đầu</th>
-          <th>Thời gian kết thúc</th>
-          <th>Hạn nộp hồ sơ</th>
-          <th>Số lượng</th>
-          <th>Trạng thái</th>
-          <th>Thao tác</th>
-        </template>
-        <template slot="body" slot-scope="props">
-          <tr @click="detailPage(props.item.id)">
-            <td v-text="props.item.name"/>
-            <td v-text="props.item.started_at"/>
-            <td v-text="props.item.ended_at"/>
-            <td v-text="props.item.expired_at"/>
-            <td v-text="props.item.num"/>
-            <td v-text="props.item.status"/>
-            <td>
-              <button class="btn btn-edit" type="button" tooltip="Edit" @click="updateRecruitment(props.item)">
-                <i class="ti-marker-alt"/>
-              </button>
-            </td>
-          </tr>
-        </template>
-      </data-table>
+      <div class="filter-container">
+        <el-input :placeholder="$t('table.employee.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+        <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addRecruitment">{{ $t('table.add') }}</el-button>
+      </div>
+      <el-table
+        v-loading="listLoading"
+        ref="datatable"
+        :key="tableKey"
+        :data="recruitments"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%;"
+        @sort-change="sortChange">
+        <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.recruitment.name')" prop="name" align="center" sortable>
+          <template slot-scope="scope">
+            <span @click="detailPage(scope.row.id)">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.recruitment.started_at')" prop="started_at" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.started_at }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.recruitment.ended_at')" prop="ended_at" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.ended_at }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.recruitment.expired_at')" prop="expired_at" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.expired_at }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.recruitment.num')" prop="num" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.num }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.recruitment.status')" prop="status" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.status }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button type="primary" size="medium" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </div>
     <recruitment-modal v-if="isShow" :recruitment="recruitment" :is-create="isCreate"/>
   </div>
 </template>
 
 <script>
-import MasterView from '../../views/MasterView'
-import DataTable from '../commons/DataTable'
-import rf from '../../requests/RequestFactory'
-import RecruitmentModal from '../commons/RecruitmentModal/RecruitmentModal'
+import MasterView from '@/views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import RecruitmentModal from '@/components/commons/RecruitmentModal/RecruitmentModal'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'RecruitmentLayout',
   components: {
-    DataTable,
-    RecruitmentModal
+    RecruitmentModal,
+    Pagination
   },
   extends: MasterView,
   data() {
@@ -64,21 +93,61 @@ export default {
       },
       isShow: false,
       isCreate: true,
-      modal_id: 'recruitment-modal'
+      modal_id: 'recruitment-modal',
+      recruitments: [],
+      listLoading: false,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        title: undefined,
+        sort: '+id'
+      },
+      tableKey: 0
     }
+  },
+  created() {
+    this.getList()
   },
   mounted() {
     this.onListener()
   },
   methods: {
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter()
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    getList() {
+      this.listLoading = true
+      rf.getRequest('RecruitmentRequest')
+        .getList(this.listQuery)
+        .then(response => {
+          this.recruitments = response.data.data
+          this.total = response.data.total
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+    },
     detailPage(param) {
       return this.$router.push({
-        name: 'recruitment-detail',
-        query: { id: param }
+        name: 'RecruitmentDetail',
+        params: { id: param }
       })
-    },
-    getRecruitments() {
-      return rf.getRequest('RecruitmentRequest').getAll()
     },
     addRecruitment(e) {
       e.preventDefault()
@@ -86,7 +155,7 @@ export default {
       this.isShow = true
       this.addEventShowModal()
     },
-    updateRecruitment(recruitment) {
+    handleUpdate(recruitment) {
       this.isCreate = false
       Object.assign(
         this.recruitment,
@@ -99,7 +168,7 @@ export default {
       this.recruitment = this.emptyData(this.recruitment)
     },
     tableRefresh() {
-      this.$refs.datatable.refresh()
+      this.handleFilter()
       this.isShow = false
     },
     onListener() {

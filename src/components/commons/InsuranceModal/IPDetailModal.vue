@@ -11,57 +11,59 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="kni">Chọn nhân viên</label>
-                      <select id="kni" v-model="ipDetail.emp_id" class="form-control">
-                        <option value="">Lựa chọn nhân viên</option>
-                        <option
-                          v-for="(e, index) in emps"
-                          :key="index"
-                          :value="e.id"
-                          v-text="e.name"/>
-                      </select>
+                      <label for="kni">{{ $t('ip_model.name') }}</label>
+                      <el-drag-select v-model="ipDetail.emp_id" :placeholder="$t('ip_model.name')">
+                        <el-option v-for="(e, index) in emps" :label="e.name" :value="e.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="knii">Chọn đợt thanh thoán</label>
-                      <select id="knii" v-model="ipDetail.ip_id" class="form-control">
-                        <option value="">Lựa chọn đợt thanh toán</option>
-                        <option
-                          v-for="(ip, index) in insurancePayments"
-                          :key="index"
-                          :value="ip.id"
-                          v-text="ip.title"/>
-                      </select>
+                      <label for="kni">{{ $t('ip_model.payment') }}</label>
+                      <el-drag-select v-model="ipDetail.ip_id" :placeholder="$t('ip_model.payment')">
+                        <el-option v-for="(ip, index) in insurancePayments" :label="ip.name" :value="ip.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Lý do</label>
-                      <input id="detail-kni" v-model="ipDetail.reason_leave" type="text" class="form-control" placeholder="Lý do" >
+                      <label>{{ $t('ip_model.reason_leave') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="ipDetail.reason_leave" :placeholder="$t('ip_model.reason_leave')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni1">Số sổ BHXH</label>
-                      <input id="detail-kni1" v-model="ipDetail.num_social_security" type="text" class="form-control" placeholder="Số sổ bảo hiểm xã hội" >
+                      <label>{{ $t('ip_model.num_social_security') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="ipDetail.num_social_security" :placeholder="$t('ip_model.num_social_security')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni2">Số ngày nghỉ</label>
-                      <input id="detail-kni2" v-model="ipDetail.num_day_leave" type="text" class="form-control" placeholder="Số ngaỳ nghỉ" >
+                      <label>{{ $t('ip_model.num_day_leave') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="ipDetail.num_day_leave" :placeholder="$t('ip_model.num_day_leave')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni3">Bảo hiểm thanh toán</label>
-                      <input id="detail-kni3" v-model="ipDetail.insurance_money" type="text" class="form-control" placeholder="Bảo hiểm thanh toán" >
+                      <label>{{ $t('ip_model.insurance_money') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="ipDetail.insurance_money" :placeholder="$t('ip_model.insurance_money')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni4">Tổng số tiền</label>
-                      <input id="detail-kni4" v-model="ipDetail.amount" type="text" class="form-control" placeholder="Tổng số tiền" >
+                      <label>{{ $t('ip_model.amount') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="ipDetail.amount" :placeholder="$t('ip_model.amount')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni5">Ghi chú</label>
-                      <textarea id="detail-kni5" v-model="ipDetail.notes" type="text" class="form-control" placeholder="Ghi chú" />
+                      <label>{{ $t('ip_model.notes') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="ipDetail.notes" :placeholder="$t('ip_model.notes')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -73,27 +75,33 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import MasterView from '../../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'IPDetailModal',
+  components: {
+    ElDragSelect
+  },
   extends: MasterView,
   props: {
     detail: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm mới',
-      updateTitle: 'Chỉnh sửả',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('ip_model.add_title'),
+      updateTitle: this.$t('ip_model.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       ipDetail: {
         ip_id: '',
         emp_id: '',
@@ -119,14 +127,17 @@ export default {
   methods: {
     getEmployees() {
       rf.getRequest('EmployeeRequest')
-        .getAll()
-        .then(res => (this.emps = res))
+        .getList()
+        .then(res => (this.emps = res.data))
     },
     getInsurancePayments() {
-      return rf
+      rf
         .getRequest('InsurancePaymentRequest')
         .getAll()
-        .then(res => (this.insurancePayments = res))
+        .then(res => {
+          console.log(res)
+          this.insurancePayments = res.data
+        })
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
@@ -151,15 +162,15 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('IPDetailRequest')
-          .update({ data: this.ipDetail })
+          .update(this.ipDetail)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-ipDetail', res.data)
+              this.emitEvent('update-ipDetail', res.data.data)
             }
           })
       }
       rf.getRequest('IPDetailRequest')
-        .store({ data: this.ipDetail })
+        .store(this.ipDetail)
         .then(res => {
           if (res.status) {
             this.emitEvent('add-ipDetail', res.data)

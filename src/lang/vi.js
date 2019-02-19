@@ -66,7 +66,19 @@ export default {
     employee: {
       index: 'Nhân viên',
       list: 'Danh sách',
-      add: 'Thêm mới'
+      add: 'Thêm mới',
+      profile: 'Thông tin cá nhân',
+      edit: 'Chỉnh sửa thông tin'
+    },
+    insurance: {
+      index: 'Bảo hiểm',
+      title: 'Bảo hiểm',
+      payment: 'Thanh toán'
+    },
+    recruitment: {
+      index: 'Tuyển dụng',
+      candidate: 'Ứng viên',
+      interview: 'Phỏng vấn'
     }
   },
   navbar: {
@@ -148,7 +160,46 @@ export default {
       job: 'Công việc',
       name: 'Họ và tên',
       search_name: 'Tên tìm kiếm...',
-      header: 'Danh sách nhân viên'
+      header: 'Danh sách nhân viên',
+      gender: 'Giới tính'
+    },
+    insurance: {
+      header: 'Bảo hiểm',
+      num_social_security: 'Sổ BHXH',
+      num_health_insurance: 'Thẻ BHYT',
+      place_registration_medical: 'Nơi ĐKKCB',
+      salary_paid: 'Mức lương đóng',
+      started_at: 'Bắt đầu từ',
+      status: 'Trạng thái',
+      confirm_del: 'Bạn có chắc muốn xóa bảo hiểm này?'
+    },
+    ip: {
+      header: 'Thanh toán bảo hiểm',
+      name: 'Tên đợt thanh toán',
+      time: 'Thời gian',
+      reason_leave: 'Lý do nghỉ',
+      num_day_leave: 'Số ngày nghỉ',
+      insurance_money: 'Tiền bảo hiểm',
+      amount: 'TỔng tiền',
+      note: 'Ghi chú',
+      confirm_del: 'Bạn có chắc muốn xóa thanh toán này?'
+    },
+    recruitment: {
+      header: 'Đợt tuyển dụng',
+      name: 'Tên đợt tuyển dụng',
+      started_at: 'Bắt đầu từ',
+      ended_at: 'Kết thúc',
+      expired_at: 'Hạn nộp hồ sơ',
+      num: 'Số lượng',
+      status: 'Trạng thái'
+    },
+    candidate: {
+      name: 'Tên ứng viên',
+      gender: 'Giới tính',
+      birthday: 'Ngày sinh',
+      email: 'Email',
+      phonenumber: 'Số điện thoại',
+      status: 'Trạng thái'
     }
   },
   placeholder: {
@@ -219,21 +270,171 @@ export default {
     job: 'Công việc',
     paygrade: 'Trả lương',
     private_email: 'Email cá nhân',
-    email_work: 'Email công việc',
+    work_email: 'Email công việc',
     department: 'Phòng ban',
     supervisor: 'Người gián sát trực tiếp',
     avatar: 'Ảnh đại diện',
     indirect_supervisor: 'Người gián sát gián tiếp',
     joinAt: 'Ngày gia nhập',
-    confirmAt: 'Ngày xác nhận'
+    confirmAt: 'Ngày xác nhận',
+    edit: 'Thay đổi thông tin'
   },
   validation: {
     fields: {
-      full_name: 'Họ và tên',
+      name: 'Họ và tên',
       birthday: 'Ngày sinh',
       confirmed_at: 'Ngày xác nhận',
-      joined_at: 'Ngày gia nhập'
+      joined_at: 'Ngày gia nhập',
+      work_email: 'Email công việc'
     },
     required: 'bắt buộc không được rỗng'
+  },
+  skill: {
+    title: 'Kỹ Năng',
+    add_title: 'Thêm mới kỹ năng',
+    update_title: 'Chỉnh sửả kỹ năng',
+    detail: 'Thông tin chi tiết',
+    select: 'Lựa chọn kỹ năng',
+    detail_place: 'Thông tin chi tiết'
+  },
+  edu: {
+    qualification_title: 'Trình độ chuyên môn',
+    qualification_place: 'Lựa chọn trình độ chuyên môn',
+    startedAt: 'Ngày bắt đầu',
+    endedAt: 'Ngày hoàn thành',
+    add_title: 'Thêm trình độ',
+    update_title: 'Cập nhập trình độ',
+    institute_title: 'Học viện'
+  },
+  cer: {
+    add_title: 'Thêm chứng chỉ',
+    update_title: 'Chỉnh sửa chứng chỉ',
+    title: 'Chứng chỉ',
+    select: 'Lựa chọn chứng chỉ',
+    institute: 'Nơi học',
+    institute_place: 'Nơi học',
+    grantedOn: 'Ngày cấp',
+    validTo: 'Ngày hết hạn'
+  },
+  lang: {
+    add_title: 'Thêm mới kỹ năng',
+    update_title: 'Chỉnh sửả kỹ năng',
+    title: 'Ngôn Ngữ',
+    select: 'Lựa chọn ngôn ngữ',
+    read: 'Trình độ đọc',
+    write: 'Trình độ viết',
+    listen: 'Trình độ nghe',
+    speak: 'Trình độ nói'
+  },
+  emergency_contact: {
+    title: 'Danh bạ khẩn cấp',
+    relation: 'Quan hệ',
+    phone_number: 'Số điện thoại',
+    add_title: 'Thêm danh bạ khẩn cấp',
+    update_title: 'Chỉnh sửa danh bạ khẩn cấp',
+    full_name: 'Họ và tên'
+  },
+  dependent: {
+    title: 'Người phụ thuộc',
+    add_title: 'Thêm người phụ thuộc',
+    update_title: 'Chỉnh sửa',
+    birthday: 'Ngày sinh',
+    full_name: 'Họ và tên',
+    relation: 'Quan hệ'
+  },
+  insurance: {
+    add_title: 'Thêm mới bảo biểm',
+    update_title: 'Chỉnh sửả bảo hiểm',
+    employee: 'Nhân viên',
+    emp_select: 'Lựa chọn nhân viên',
+    status_select: 'Lựa chọn trạng thái',
+    num_social_security: 'Số sổ BHXH',
+    num_health_insurance: 'Số thẻ BHYT',
+    place_registration_medical: 'Nơi ĐKKCB',
+    salary_paid: 'Mức đóng',
+    started_at: 'Ngày bắt đầu',
+    status: {
+      title: 'Trạng thái',
+      st1: 'Đang tham gia',
+      st2: 'Giảm tạm thời',
+      st3: 'Giảm hẳn'
+    }
+  },
+  ip: {
+    title: 'Tên đợt thanh toán',
+    add_title: 'Thêm mới đợt thanh toán bảo biểm',
+    update_title: 'Chỉnh sửả đợt thanh toán bảo hiểm',
+    time: 'Thời gian',
+    detail_header: 'Danh sách thanh toán'
+  },
+  ip_model: {
+    add_title: 'Thêm mới',
+    update_title: 'Chỉnh sửa',
+    name: 'Nhân viên',
+    name_select: 'Lựa chọn nhân viên',
+    payment: 'Đợt thanh toán',
+    payment_select: 'Lựa chọn đợt thanh toán',
+    num_social_security: 'Số sổ BHXH',
+    reason_leave: 'Lý do',
+    num_day_leave: 'Số ngày nghỉ',
+    insurance_money: 'Tiền bảo hiểm',
+    amount: 'Tổng tiền',
+    notes: 'Ghi chú'
+  },
+  recruitment: {
+    title: 'Tên đợt tuyển dụng',
+    add_title: 'Thêm mới',
+    update_title: 'Chỉnh sửa',
+    status: {
+      title: 'Trạng thái',
+      st1: 'Đang triển khai',
+      st2: 'Đã hoàn thành',
+      select: 'Lựa chọn trạng thái'
+    },
+    info: 'Thông tin của đợt tuyển dụng',
+    started_at: 'Ngày bắt đầu',
+    ended_at: 'Ngày kết thúc',
+    expired_at: 'Hạn nộp hồ sơ',
+    num: 'Số lượng',
+    detail_header: 'Danh sách ứng viên'
+  },
+  gender: {
+    male: 'Nam',
+    female: 'Nữ',
+    orther: 'Khác'
+  },
+  candidate: {
+    recruitment: 'Đợt tuyển dụng',
+    recruitment_select: 'Lựa chọn đợt tuyển dụng',
+    add_title: 'Thêm mới',
+    update_title: 'Chỉnh sửa',
+    gender: 'Giới tính',
+    gender_select: 'Lựa chọn giới tính',
+    birthday: 'Ngày sinh',
+    name: 'Tên ứng viên',
+    phone: 'Số điện thoại',
+    job: 'Công việc',
+    job_select: 'Lựa chọn công việc',
+    note: 'Ghi chú',
+    email: 'Email'
+  },
+  interview: {
+    candidate: 'Ứng viên',
+    candidate_select: 'Chọn ứng viên',
+    update_title: 'Chỉnh sửa',
+    add_title: 'Thêm mới',
+    interviewer: 'Người phỏng vấn',
+    interviewer_select: 'Chọn người phỏng vấn',
+    started_at: 'Thời gian'
+  },
+  calendar: {
+    confirm_update: 'Bạn có chắc muốn thay đổi?'
+  },
+  confirm: {
+    del_skill: 'Bạn có chắc muốn xóa kỹ năng này'
+  },
+  button: {
+    save: 'Lưu',
+    update: 'Cập nhập'
   }
 }

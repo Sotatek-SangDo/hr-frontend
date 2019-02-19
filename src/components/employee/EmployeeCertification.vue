@@ -23,13 +23,13 @@
             <td v-text="props.item.valid_to"/>
             <td>
               <button class="btn btn-del" type="button" tooltip="Delete" @click="removeCertification(props.item)">
-                <i class="ti-trash"/>
+                <svg-icon icon-class="rubbish-bin" />
               </button>
               <button class="btn btn-edit" type="button" tooltip="Edit" @click="showModalUpdate(props.item)">
-                <i class="ti-marker-alt"/>
+                <svg-icon icon-class="edit" />
               </button>
               <button class="btn btn-add" type="button" tooltip="Edit" @click="addCertification(props.item)">
-                <i class="ti-plus"/>
+                <svg-icon icon-class="plus-square"/>
               </button>
             </td>
           </tr>
@@ -43,7 +43,7 @@
 <script>
 import rf from '../../requests/RequestFactory'
 import DataTable from '../commons/DataTable'
-import MasterView from '../../views/MasterView'
+import MasterView from '@/views/MasterView'
 import CertificationModal from '../commons/EmployeeModal/CertificationModal'
 
 export default {

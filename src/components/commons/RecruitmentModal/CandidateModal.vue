@@ -11,61 +11,57 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="detail-kni">Họ và tên</label>
-                      <input v-model="candidate.name" type="text" class="form-control" placeholder="Họ và tên" >
-                    </div>
-                    <date-picker v-if="delay" :title="birthday" v-model="candidate.birthday" :default="getDate(candidate.birthday)"/>
-                    <div class="form-group">
-                      <label class="col-form-label">Giới tính</label>
-                      <select v-model="candidate.gender" class="form-control">
-                        <option value="">Lựa chọn giới tính</option>
-                        <option
-                          v-for="(g, index) in gender"
-                          :key="index"
-                          :value="g"
-                          v-text="g"/>
-                      </select>
+                      <label>{{ $t('candidate.name') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="candidate.name" :placeholder="$t('candidate.name')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Số điện thoại</label>
-                      <input v-model="candidate.phonenumber" type="text" class="form-control" placeholder="Số điện thoại" >
+                      <label class="col-form-label">{{ $t('candidate.birthday') }}</label>
+                      <el-form-item prop="birthday">
+                        <el-date-picker v-model="candidate.birthday" :placeholder="$t('candidate.birthday')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Email</label>
-                      <input v-model="candidate.email" type="email" class="form-control" placeholder="Email" >
+                      <label for="kni">{{ $t('candidate.gender') }}</label>
+                      <el-drag-select v-model="candidate.gender" :placeholder="$t('candidate.gender_select')">
+                        <el-option v-for="(g, index) in gender" :label="g" :value="g" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="kni">Đợt tuyển dụng</label>
-                      <select v-model="candidate.recruitment_id" class="form-control">
-                        <option value="">Chọn đợt tuyển dụng</option>
-                        <option
-                          v-for="(r, index) in recruitments"
-                          :key="index"
-                          :value="r.id"
-                          v-text="r.name"/>
-                      </select>
+                      <label>{{ $t('candidate.phone') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="candidate.phonenumber" :placeholder="$t('candidate.phone')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="kni">Công việc</label>
-                      <select v-model="candidate.job_id" class="form-control">
-                        <option value="">Chọn đợt tuyển dụng</option>
-                        <option
-                          v-for="(j, index) in jobs"
-                          :key="index"
-                          :value="j.id"
-                          v-text="j.title"/>
-                      </select>
+                      <label>{{ $t('candidate.email') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="candidate.email" :placeholder="$t('candidate.email')" type="email" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Ghi chú</label>
+                      <label for="kni">{{ $t('candidate.recruitment') }}</label>
+                      <el-drag-select v-model="candidate.recruitment_id" :placeholder="$t('candidate.recruitment_select')">
+                        <el-option v-for="(r, index) in recruitments" :label="r.name" :value="r.id" :key="index" />
+                      </el-drag-select>
+                    </div>
+                    <div class="form-group">
+                      <label for="kni">{{ $t('candidate.job') }}</label>
+                      <el-drag-select v-model="candidate.job_id" :placeholder="$t('candidate.job_select')">
+                        <el-option v-for="(j, index) in jobs" :label="j.title" :value="j.id" :key="index" />
+                      </el-drag-select>
+                    </div>
+                    <div class="form-group">
+                      <label for="detail-kni">{{ $t('candidate.note') }}</label>
                       <textarea v-model="candidate.description" class="form-control" />
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -77,15 +73,15 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import MasterView from '../../../views/MasterView'
-import DatePicker from '../DatePicker'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'CandidateModal',
   components: {
-    DatePicker
+    ElDragSelect
   },
   extends: MasterView,
   props: {
@@ -100,10 +96,10 @@ export default {
   },
   data() {
     return {
-      createTitle: 'Thêm mới',
-      updateTitle: 'Chỉnh sửa',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('candidate.add_title'),
+      updateTitle: this.$t('candidate.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       candidate: {
         job_id: '',
         email: '',
@@ -112,17 +108,24 @@ export default {
         birthday: '',
         phonenumber: '',
         description: '',
-        id: ''
+        id: '',
+        recruitment_id: ''
       },
-      gender: ['Nam', 'Nữ', 'Khác'],
-      birthday: 'Ngày sinh',
+      gender: [
+        this.$t('gender.male'),
+        this.$t('gender.female'),
+        this.$t('gender.orther')
+      ],
       isDisable: false,
       errors: [],
       modal_id: 'candidate-modal',
       delay: false,
       recruitments: {},
-      jobs: {}
+      jobs: this.$store.getters.jobs
     }
+  },
+  created() {
+    this.getRecruitments()
   },
   mounted() {
     this.init()
@@ -134,20 +137,15 @@ export default {
     getRecruitments() {
       rf.getRequest('RecruitmentRequest')
         .getAll()
-        .then(res => (this.recruitments = res))
-    },
-    getJobs() {
-      rf.getRequest('JobRequest')
-        .getAll()
-        .then(res => (this.jobs = res))
+        .then(res => (this.recruitments = res.data))
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
     },
     init() {
-      this.candidate = this.propCandidate
-      this.getRecruitments()
-      this.getJobs()
+      if (this.propCandidate.name) {
+        this.candidate = this.propCandidate
+      }
       this.delay = true
     },
     storeOrUpdate(e) {
@@ -167,18 +165,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('CandidateRequest')
-          .update({ data: this.candidate })
+          .update(this.candidate)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-candidate', res.data)
+              this.emitEvent('update-candidate', res.data.data)
             }
           })
       }
       rf.getRequest('CandidateRequest')
-        .store({ data: this.candidate })
+        .store(this.candidate)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-candidate', res.data)
+            this.emitEvent('add-candidate', res.data.data)
           }
         })
     },

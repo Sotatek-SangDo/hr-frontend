@@ -142,7 +142,83 @@ export const mapServerRouters = {
     component: () => import('@/views/Employee/AddEmployee'),
     path: 'addemployee',
     name: 'EmployeeAdd',
-    meta: { title: 'Add Employee', icon: 'user' }
+    meta: { title: 'employee.add', icon: 'plus-square' }
+  },
+  employeeProfile: {
+    component: () => import('@/views/Employee/ProfileEmployee'),
+    path: 'profile/:id',
+    name: 'EmployeeProfile',
+    meta: { title: 'employee.profile' },
+    hidden: true
+  },
+  employeeEdit: {
+    component: () => import('@/views/Employee/AddEmployee'),
+    path: 'eidit/:id',
+    name: 'EmployeeEdit',
+    meta: { title: 'employee.edit' },
+    hidden: true
+  },
+  syncInsurance: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/insurance',
+    redirect: '/Insurances/InsurancesIndex',
+    meta: {
+      title: 'insurance.index',
+      icon: 'insurance'
+    }
+  },
+  insuranceIndex: {
+    component: () => import('@/views/Insurances/Insurances'),
+    path: 'list',
+    name: 'Insurances',
+    meta: { title: 'insurance.title', icon: 'user' }
+  },
+  insurancePayment: {
+    component: () => import('@/views/Insurances/InsurancePayment'),
+    path: 'payment',
+    name: 'InsurancePayment',
+    meta: { title: 'insurance.payment', icon: 'payment' }
+  },
+  ipDetail: {
+    component: () => import('@/views/Insurances/IPDetail'),
+    path: 'payment/:id',
+    name: 'IPDetail',
+    meta: { title: 'insurance.payment' },
+    hidden: true
+  },
+  syncRecruitment: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/recruitment',
+    redirect: '/Recruitment/RecruitmentIndex',
+    meta: {
+      title: 'recruitment.index',
+      icon: 'recruitment'
+    }
+  },
+  recruitmentIndex: {
+    component: () => import('@/views/Recruitment/Recruitment'),
+    path: 'index',
+    name: 'Recruitment',
+    meta: { title: 'recruitment.index', icon: 'recruitment' }
+  },
+  recruitmentDetail: {
+    component: () => import('@/views/Recruitment/RecruitmentDetail'),
+    path: 'detail/:id',
+    name: 'RecruitmentDetail',
+    meta: { title: 'recruitment.index', icon: 'recruitment' },
+    hidden: true
+  },
+  candidate: {
+    component: () => import('@/views/Recruitment/Candidate'),
+    path: 'candidate',
+    name: 'Candidate',
+    meta: { title: 'recruitment.candidate', icon: 'user' }
+  },
+  interviewCalendar: {
+    component: () => import('@/views/Recruitment/Interview'),
+    path: 'interview',
+    name: 'Interview',
+    meta: { title: 'recruitment.interview', icon: 'interview' }
   }
 }
 
