@@ -167,7 +167,9 @@ export default {
       })
     },
     addPage() {
-      this.$router.push({ name: 'employee-add' })
+      this.$router.push({
+        name: 'EmployeeAdd'
+      })
     },
     getEmployees() {
       return rf.getRequest('EmployeeRequest').getEmpFullInfo()

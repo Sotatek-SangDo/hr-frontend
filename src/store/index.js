@@ -8,6 +8,7 @@ import user from './modules/user'
 import getters from './getters'
 import masterData from './modules/masterData'
 import vuexCache from 'vuex-cache'
+import { getToken } from '@/utils/auth'
 
 Vue.use(Vuex)
 
@@ -24,14 +25,16 @@ const store = new Vuex.Store({
   plugins: [vuexCache]
 })
 
-store.cache.dispatch('getAllNationalities')
-store.cache.dispatch('getAllEmployeeStatus')
-store.cache.dispatch('getDepartments')
-store.cache.dispatch('getJobs')
-store.cache.dispatch('getPayGrades')
-store.cache.dispatch('getSkills')
-store.cache.dispatch('getQualifications')
-store.cache.dispatch('getCertifications')
-store.cache.dispatch('getLanguages')
+if (getToken()) {
+  store.cache.dispatch('getAllNationalities')
+  store.cache.dispatch('getAllEmployeeStatus')
+  store.cache.dispatch('getDepartments')
+  store.cache.dispatch('getJobs')
+  store.cache.dispatch('getPayGrades')
+  store.cache.dispatch('getSkills')
+  store.cache.dispatch('getQualifications')
+  store.cache.dispatch('getCertifications')
+  store.cache.dispatch('getLanguages')
+}
 
 export default store
