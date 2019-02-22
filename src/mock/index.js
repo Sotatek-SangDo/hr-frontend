@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import loginAPI from './login'
 // import articleAPI from './article'
 // import remoteSearchAPI from './remoteSearch'
-import transactionAPI from './transaction'
+// import transactionAPI from './transaction'
 // import dynamicRouters from './dynamicrouters'
 // import departmentAPI from './commons/department'
 // import employeeAPI from './commons/employee'
@@ -66,7 +66,7 @@ Mock.mock(/\/user\/info\.*/, 'get', loginAPI.getUserInfo)
 // Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)
 
 // // 账单相关
-Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
+// Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
 // Mock.mock(/\/routers\/dynamic/, 'post', dynamicRouters.getPermissionByRoles)
 

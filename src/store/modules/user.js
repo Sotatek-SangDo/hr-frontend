@@ -96,9 +96,6 @@ const user = {
             reject('Verification failed, please login again.')
           }
           const user = response.data
-          if (process.env.ENV_CONFIG === 'dev') {
-            user.roles = user.roles.concat(['admin'])
-          }
           if (user.roles && user.roles.length > 0) {
             commit('SET_ROLES', user.roles)
           } else {
