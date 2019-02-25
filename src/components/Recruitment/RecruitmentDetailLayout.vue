@@ -141,7 +141,9 @@ export default {
     },
     getList() {
       this.listLoading = true
-      this.listQuery.id = this.detailId
+      if (this.detailId) {
+        this.listQuery.id = this.detailId
+      }
       rf.getRequest('CandidateRequest')
         .getList(this.listQuery)
         .then(response => {
