@@ -1,5 +1,5 @@
 module.exports = {
   NODE_ENV: '"development"',
   ENV_CONFIG: '"dev"',
-  BASE_API: '"https://be-hr.local/api/v1"' //'"http://localhost:8080/api"'
+  BASE_API: '"http://localhost:8000/api"' //'"http://localhost:8080/api"'
 }
