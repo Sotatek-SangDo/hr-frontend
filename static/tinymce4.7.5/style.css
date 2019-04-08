@@ -2,3 +2,12 @@
 .el-date-editor.el-input {
   width: 100% !important;
 }
+.el-tabs__header {
+    margin-bottom: 0 !important;
+}
+.el-tabs__content {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+    border: 1px solid #bfbfbf;
+}

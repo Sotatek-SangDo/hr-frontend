@@ -23,12 +23,12 @@
             @sort-change="sortChange">
             <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">
               <template slot-scope="scope">
-                <span>{{ scope.row.id }}</span>
+                <span class="id" @click="showInfor(scope.row)">{{ scope.row.id }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.employee.name')" prop="name" align="center" sortable>
               <template slot-scope="scope">
-                <span @click="profilePage(scope.row.id)">{{ scope.row.name }}</span>
+                <span class="field-name" @click="profilePage(scope.row.id)">{{ scope.row.name }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.employee.job')" prop="job" align="center" sortable>
@@ -66,46 +66,95 @@
         </div>
       </div>
     </div>
+    <div class="col-12 mt-5">
+      <el-tabs v-model="activeName">
+        <el-tab-pane :label="$t('employee.info')" name="info">
+          <div class="infor-container">
+            <div class="col1 col-3 mt-3">
+              <img :src="imageUrl()" @error="errorImage">
+            </div>
+            <div class="col1 col-3 mt-3">
+              <span v-text="$t('employee.id')"/>
+              <span class="emp-info">{{ information.id || '' }}</span>
+              <span v-text="$t('employee.name')"/>
+              <span class="emp-info">{{ information.name || '' }}</span>
+            </div>
+            <div class="col1 col-3 mt-3">
+              <span v-text="$t('employee.address')"/>
+              <span class="emp-info">{{ information.address || '' }}</span>
+              <span v-text="$t('employee.ethnicity')"/>
+              <span class="emp-info">{{ information.ethnicity || '' }}</span>
+            </div>
+            <div class="col1 col-3 mt-3">
+              <span v-text="$t('employee.gender')"/>
+              <span class="emp-info">{{ information.gender || '' }}</span>
+              <span v-text="$t('employee.ethnicity')"/>
+              <span class="emp-info">{{ information.ethnicity || '' }}</span>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('employee.skill')" name="skill">
+          <employee-reference-skill :skills="information.skills"/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('employee.education')" name="edu">
+          <employee-reference-edu :edus="information.educations"/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('employee.certification')" name="certification">
+          <employee-reference-certi :cers="information.certifications"/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('lang.title')" name="lang">
+          <employee-reference-lang :lang="information.languages"/>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('emergency_contact.title')" name="ec">
+          <employee-reference-ec :contact="information.emergency_contracts"/>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script>
+const FIELD_NAME = 'field-name'
+const FIELD_ID = 'id'
+const NO_IMAGE = 'images/no-image.png'
+
 import EmployeeSkill from '../../components/employee/EmployeeSkill'
 import EmployeeEducation from '../../components/employee/EmployeeEducation'
 import EmployeeCertification from '../../components/employee/EmployeeCertification'
 import EmployeeLanguage from '../../components/employee/EmployeeLanguage'
 import EmployeeEmergencyContact from '../../components/employee/EmployeeEmergencyContact'
 import EmployeeDepartment from '../../components/employee/EmployeeDepartment'
-import TabSlide from '../../components/TabSlide'
 import rf from '@/api/commons/RequestFactory'
 import Pagination from '@/components/Pagination'
+import EmployeeReferenceSkill from '@/components/employee/EmployeeReferenceSkill'
+import EmployeeReferenceEdu from '@/components/employee/EmployeeReferenceEdu'
+import EmployeeReferenceCerti from '@/components/employee/EmployeeReferenceCerti'
+import EmployeeReferenceLang from '@/components/employee/EmployeeReferenceLang'
+import EmployeeReferenceEc from '@/components/employee/EmployeeReferenceEc'
+import $ from 'jquery'
 
 export default {
   components: {
-    TabSlide,
     EmployeeSkill,
     EmployeeEducation,
     EmployeeCertification,
     EmployeeLanguage,
     EmployeeEmergencyContact,
     EmployeeDepartment,
-    Pagination
+    Pagination,
+    EmployeeReferenceSkill,
+    EmployeeReferenceEdu,
+    EmployeeReferenceCerti,
+    EmployeeReferenceLang,
+    EmployeeReferenceEc
   },
   data() {
     return {
+      activeName: 'info',
       headerTitle: 'Nhân viên',
       header: 'Thêm mới nhân viên',
       tableKey: 0,
-      tabs: [
-        { title: 'Nhân viên', href: 'nv' },
-        { title: 'Kỹ năng', href: 'kn' },
-        { title: 'Học vấn', href: 'hv' },
-        { title: 'Chứng chỉ', href: 'chc' },
-        { title: 'Ngôn ngữ', href: 'ngn' },
-        { title: 'Danh bạ khẩn cấp', href: 'dbkc' },
-        { title: 'Phòng ban', href: 'pb' }
-      ],
-      breadcrumbs: [{ title: 'Nhân viên', href: '' }],
+      information: {},
       employees: [],
       listLoading: false,
       total: 0,
@@ -124,6 +173,16 @@ export default {
     this.inital()
   },
   methods: {
+    errorImage($event) {
+      $($event.target).attr('src', NO_IMAGE)
+    },
+    imageUrl() {
+      return this.information.avatar || NO_IMAGE
+    },
+    showInfor(emp) {
+      this.information = emp
+      console.log(this.information)
+    },
     sortChange(data) {
       const { prop, order } = data
       if (prop === 'id') {
@@ -171,16 +230,40 @@ export default {
         name: 'EmployeeAdd'
       })
     },
-    getEmployees() {
-      return rf.getRequest('EmployeeRequest').getEmpFullInfo()
-    },
     inital() {
+      $(document).on('click', '.el-table__row span', function() {
+        if ($(this).hasClass(FIELD_NAME)) return
+        if ($(this).hasClass(FIELD_ID)) return
+        $(this).parents('tr').find('.id').click()
+      })
     }
   }
 }
 </script>
-<style scoped lang="sass">
+<style lang="sass">
 @import url("https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
+#pane-skill
+  .skill-table
+    width: 30% !important
+.infor-container
+  display: flex
+  flex: 1 1 auto
+  flex-wrap: wrap
+  color: #444;
+  font-weight: 400;
+  div
+    span
+      display: flex
+      width: 100%
+      text-align: start
+      color: #444
+      font-weight: bold
+      &.emp-info
+        min-height: 30px;
+        font-weight: 400
+    img
+      width: 100%
+      height: auto
 .button
   cursor: pointer
 select

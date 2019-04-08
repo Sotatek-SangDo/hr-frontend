@@ -255,6 +255,9 @@ export default {
     vi: 'Tiếng Việt',
     en: 'Tiếng Anh'
   },
+  common: {
+    no_data: 'Không có dữ liệu'
+  },
   employee: {
     add: 'Thêm mới',
     name: 'Họ và tên',
@@ -277,7 +280,13 @@ export default {
     indirect_supervisor: 'Người gián sát gián tiếp',
     joinAt: 'Ngày gia nhập',
     confirmAt: 'Ngày xác nhận',
-    edit: 'Thay đổi thông tin'
+    edit: 'Thay đổi thông tin',
+    id: 'Mã nhân viên',
+    info: 'Thông tin cơ bản',
+    skill: 'Kỹ năng',
+    education: 'Học vấn',
+    certification: 'Trình độ',
+    certification_name: 'Trình độ chuyên môn'
   },
   validation: {
     fields: {
@@ -285,7 +294,8 @@ export default {
       birthday: 'Ngày sinh',
       confirmed_at: 'Ngày xác nhận',
       joined_at: 'Ngày gia nhập',
-      work_email: 'Email công việc'
+      work_email: 'Email công việc',
+      avatar: 'Ảnh đại diện'
     },
     required: 'bắt buộc không được rỗng'
   },
@@ -304,7 +314,9 @@ export default {
     endedAt: 'Ngày hoàn thành',
     add_title: 'Thêm trình độ',
     update_title: 'Cập nhập trình độ',
-    institute_title: 'Học viện'
+    institute_title: 'Học viện',
+    qualification_name: 'Trình độ chuyên môn',
+    institute: 'Học viện'
   },
   cer: {
     add_title: 'Thêm chứng chỉ',

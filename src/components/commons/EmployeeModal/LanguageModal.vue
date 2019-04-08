@@ -108,6 +108,11 @@ export default {
   },
   mounted() {
     this.init()
+    if (!this.languages.length) {
+      this.$store.cache
+        .dispatch('getMasterData')
+        .then(res => (this.languages = res.data.language))
+    }
   },
   methods: {
     hasErrors() {

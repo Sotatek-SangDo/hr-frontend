@@ -25,16 +25,7 @@ const store = new Vuex.Store({
   plugins: [vuexCache]
 })
 
-if (getToken()) {
-  store.cache.dispatch('getAllNationalities')
-  store.cache.dispatch('getAllEmployeeStatus')
-  store.cache.dispatch('getDepartments')
-  store.cache.dispatch('getJobs')
-  store.cache.dispatch('getPayGrades')
-  store.cache.dispatch('getSkills')
-  store.cache.dispatch('getQualifications')
-  store.cache.dispatch('getCertifications')
-  store.cache.dispatch('getLanguages')
+if (getToken() && store.cache.has('getMasterData')) {
+  store.cache.dispatch('getMasterData')
 }
-
 export default store

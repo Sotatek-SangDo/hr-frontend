@@ -1,14 +1,4 @@
-import {
-  getNationalities,
-  getEmployeeStatus,
-  getDepartments,
-  getJobs,
-  getPayGrades,
-  getSkills,
-  getQualifications,
-  getCertifications,
-  getLanguages
-} from '@/api/masterData'
+import { getMasterData } from '@/api/masterData'
 
 const masterData = {
   state: {
@@ -52,91 +42,19 @@ const masterData = {
     }
   },
   actions: {
-    getAllNationalities({ commit, state }) {
+    getMasterData({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getNationalities().then(response => {
-          commit('SET_NATIONALITIES', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getAllEmployeeStatus({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getEmployeeStatus().then(response => {
-          commit('SET_EMPLOYEE_STATUS', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getDepartments({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getDepartments().then(response => {
-          commit('SET_DEPARTMENT', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getJobs({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getJobs().then(response => {
-          commit('SET_JOB', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getPayGrades({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getPayGrades().then(response => {
-          commit('SET_PAYGRADE', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getSkills({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getSkills().then(response => {
-          commit('SET_SKILL', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getQualifications({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getQualifications().then(response => {
-          commit('SET_QUALIFICATION', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getCertifications({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getCertifications().then(response => {
-          commit('SET_CERTIFICATION', response.data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getLanguages({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getLanguages().then(response => {
-          commit('SET_E_LANGUAGE', response.data)
-          resolve()
+        getMasterData().then(response => {
+          commit('SET_NATIONALITIES', response.data.nationality)
+          commit('SET_EMPLOYEE_STATUS', response.data.employeeStatus)
+          commit('SET_DEPARTMENT', response.data.department)
+          commit('SET_JOB', response.data.job)
+          commit('SET_PAYGRADE', response.data.paygrade)
+          commit('SET_SKILL', response.data.skill)
+          commit('SET_QUALIFICATION', response.data.qualification)
+          commit('SET_CERTIFICATION', response.data.certification)
+          commit('SET_E_LANGUAGE', response.data.language)
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

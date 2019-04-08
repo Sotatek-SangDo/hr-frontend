@@ -75,6 +75,9 @@
                   <label class="custom-file-label" for="avatar" v-text="upload"/>
                 </div>
               </div>
+              <el-form-item prop="avatar">
+                <el-input v-model="emp.avatar" type="text" class="article-textarea" style="display: none;"/>
+              </el-form-item>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.paygrade') }}</label>
                 <el-drag-select v-model="emp.paygrade_id" :placeholder="$t('placeholder.employee_add.paygrade')">
@@ -170,7 +173,11 @@ export default {
   },
   data() {
     const validateRequire = (rule, value, callback) => {
-      if (value === '') {
+      console.log(value, '>>>>>>>>>>>>>>', rule)
+      if (value === '' || !value) {
+        if (rule.field === 'avatar' && this.upload !== this.$t('placeholder.employee_add.avatar')) {
+          callback()
+        }
         callback(this.handError(rule))
       } else {
         callback()
@@ -179,25 +186,25 @@ export default {
     return {
       upload: this.$t('placeholder.employee_add.avatar'),
       emp: {
-        name: 'Nguyen A',
-        nationality_id: 1,
-        birthday: '1995-01-01',
-        gender: 1,
-        marital_status: 'Độc thân',
-        ethnicity: 'Kinh',
-        address: 'Ha Noi',
-        country: 1,
-        phone: '487209473850',
-        private_email: 'a@gmail.com',
-        work_email: 'abc@gmail.com',
-        joined_at: '2019-01-01',
-        confirmed_at: '2018-12-15',
-        department_id: 1,
-        supervisor_id: 1,
-        indirect_supervisor: 2,
-        status: 1,
-        job_id: 1,
-        paygrade_id: 5,
+        name: '',
+        nationality_id: '',
+        birthday: '',
+        gender: '',
+        marital_status: '',
+        ethnicity: '',
+        address: '',
+        country: '',
+        phone: '',
+        private_email: '',
+        work_email: '',
+        joined_at: '',
+        confirmed_at: '',
+        department_id: '',
+        supervisor_id: '',
+        indirect_supervisor: '',
+        status: '',
+        job_id: '',
+        paygrade_id: '',
         id: ''
       },
       formData: new FormData(),
@@ -230,7 +237,8 @@ export default {
         department_id: [{ validator: validateRequire }],
         job_id: [{ validator: validateRequire }],
         pay_grade: [{ validator: validateRequire }],
-        status: [{ validator: validateRequire }]
+        status: [{ validator: validateRequire }],
+        avatar: [{ validator: validateRequire }]
       }
     }
   },
@@ -304,6 +312,7 @@ export default {
           this.isDisable = false
         }
       })
+      if (!this.isDisable) return
       _.forEach(this.emp, (emp, i) => {
         this.formData.append(`${i}`, emp)
       })

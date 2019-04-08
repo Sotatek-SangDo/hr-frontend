@@ -100,6 +100,13 @@ export default {
       modal_id: 'certification-modal'
     }
   },
+  created() {
+    if (!this.certifications.length) {
+      this.$store.cache.dispatch('getMasterData').then(res => {
+        this.certifications = res.data.certification
+      })
+    }
+  },
   mounted() {
     this.init()
   },
