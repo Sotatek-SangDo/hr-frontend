@@ -21,7 +21,7 @@
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.birthday') }}</label>
                 <el-form-item prop="birthday">
-                  <el-date-picker v-model="emp.birthday" :placeholder="$t('placeholder.employee_add.date')" type="date"/>
+                  <el-date-picker v-model="emp.birthday" :placeholder="$t('placeholder.employee_add.date')" value-format="yyyy-MM-dd" type="date"/>
                 </el-form-item>
               </div>
               <div class="form-group">
@@ -107,13 +107,13 @@
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.joinAt') }}</label>
                 <el-form-item prop="joined_at">
-                  <el-date-picker v-model="emp.joined_at" :placeholder="$t('placeholder.employee_add.date')" type="date"/>
+                  <el-date-picker v-model="emp.joined_at" :placeholder="$t('placeholder.employee_add.date')" type="date" value-format="yyyy-MM-dd"/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('employee.confirmAt') }}</label>
                 <el-form-item prop="confirmed_at">
-                  <el-date-picker v-model="emp.confirmed_at" :placeholder="$t('placeholder.employee_add.date')" type="date"/>
+                  <el-date-picker v-model="emp.confirmed_at" :placeholder="$t('placeholder.employee_add.date')" type="date" value-format="yyyy-MM-dd"/>
                 </el-form-item>
               </div>
               <div class="form-group">
