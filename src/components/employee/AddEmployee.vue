@@ -254,7 +254,7 @@ export default {
   },
   methods: {
     handError(rule) {
-      return new Error(`${this.$t(`validation.fields.${rule.field}`)} ${this.$t('validation.required')}`)
+      return new Error(`${this.$t(`validation.employees.${rule.field}`)} ${this.$t('validation.required')}`)
     },
     setData(response) {
       this.emp.name = response.name

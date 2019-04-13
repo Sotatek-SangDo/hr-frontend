@@ -336,13 +336,23 @@ export default {
     info: 'Thông tin hợp đồng'
   },
   validation: {
-    fields: {
+    employees: {
       name: 'Họ và tên',
       birthday: 'Ngày sinh',
       confirmed_at: 'Ngày xác nhận',
       joined_at: 'Ngày gia nhập',
       work_email: 'Email công việc',
       avatar: 'Ảnh đại diện'
+    },
+    contract: {
+      contract_code: 'Số hợp đồng',
+      employee_id: 'Nhân viên',
+      start_date: 'Ngày bắt đầu',
+      end_date: 'Ngày kết thúc',
+      salary_basic: 'Lương cơ bản',
+      salary_insurrance: 'Lương đóng BH',
+      status: 'Trạng thái HĐ',
+      contract_type_id: 'Loại HĐ'
     },
     required: 'bắt buộc không được rỗng'
   },
