@@ -224,7 +224,7 @@ export const mapServerRouters = {
     component: () => import('@/views/layout/Layout'),
     path: '/contract',
     redirect: '/Contract/ContractList',
-    meta: { title: 'contract.index' }
+    meta: { title: 'contract.index', icon: 'contract' }
   },
   childSyncContract: {
     component: () => import('@/views/Contract/ContractList'),

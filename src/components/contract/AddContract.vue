@@ -21,19 +21,19 @@
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.start_date') }}</label>
                 <el-form-item prop="birthday">
-                  <el-date-picker v-model="contract.start_date" :placeholder="$t('placeholder.contract_add.start_date')" type="date"/>
+                  <el-date-picker v-model="contract.start_date" :placeholder="$t('placeholder.contract_add.start_date')" value-format="yyyy-MM-dd" type="date"/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.end_date') }}</label>
                 <el-form-item prop="birthday">
-                  <el-date-picker v-model="contract.end_date" :placeholder="$t('placeholder.contract_add.end_date')" type="date"/>
+                  <el-date-picker v-model="contract.end_date" :placeholder="$t('placeholder.contract_add.end_date')" type="date" value-format="yyyy-MM-dd"/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.contract_type') }}</label>
                 <el-drag-select v-model="contract.contract_type_id" :placeholder="$t('placeholder.contract_add.contract_type')">
-                  <el-option v-for="(item, index) in contractTypies" :label="item.contract_type" :value="item.id" :key="index" />
+                  <el-option v-for="(item, index) in contractTypies" :label="item.type" :value="item.id" :key="index" />
                 </el-drag-select>
               </div>
               <div class="form-group">
@@ -114,7 +114,7 @@ export default {
         id: ''
       },
       formData: new FormData(),
-      contractTypies: {},
+      contractTypies: this.$store.getters.contractType,
       status: ['Hết hiệu lực', 'Đang có hiệu lưc'],
       employees: {},
       isDisable: false,
@@ -139,6 +139,13 @@ export default {
       this.getContract()
     }
     this.initial()
+    if (!this.contractTypies) {
+      this.$store.cache
+        .dispatch('getMasterData')
+        .then(res => {
+          this.contractTypies = res.data.contractType
+        })
+    }
   },
   mounted() {
   },
@@ -166,18 +173,12 @@ export default {
     },
     initial() {
       this.getEmployees()
-      this.getContractTypies()
       this.isShow = true
     },
     getEmployees() {
       rf.getRequest('EmployeeRequest')
         .getList()
         .then(res => (this.employees = res.data))
-    },
-    getContractTypies() {
-      rf.getRequest('ContractRequest')
-        .getContractTypies()
-        .then(res => (this.contractTypies = res.data))
     },
     hasErrors() {
       return !_.isEmpty(this.errors)

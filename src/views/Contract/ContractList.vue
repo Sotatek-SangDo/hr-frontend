@@ -85,25 +85,25 @@
             </div>
             <div class="col1 col-3 mt-3">
               <span v-text="$t('table.contract.contract_code')"/>
-              <span class="emp-info">{{ information.contract_code || '' }}</span>
+              <span class="emp-info">{{ information ? information.contract_code : '' }}</span>
               <span v-text="$t('table.contract.employee')"/>
-              <span class="emp-info">{{ information.employee.name || '' }}</span>
+              <span class="emp-info">{{ information ? information.employee.name : '' }}</span>
               <span v-text="$t('table.contract.contract_type')"/>
-              <span class="emp-info">{{ information.contract_type.type || '' }}</span>
+              <span class="emp-info">{{ information? information.contract_type.type : '' }}</span>
             </div>
             <div class="col1 col-3 mt-3">
               <span v-text="$t('table.contract.start_date')"/>
-              <span class="emp-info">{{ information.start_date || '' }}</span>
+              <span class="emp-info">{{ information ? information.start_date : '' }}</span>
               <span v-text="$t('table.contract.end_date')"/>
-              <span class="emp-info">{{ information.end_date || '' }}</span>
+              <span class="emp-info">{{ information ? information.end_date : '' }}</span>
               <span v-text="$t('table.contract.status')"/>
-              <span class="emp-info">{{ information.status || '' }}</span>
+              <span class="emp-info">{{ information ? information.status : '' }}</span>
             </div>
             <div class="col1 col-3 mt-3">
               <span v-text="$t('table.contract.salary_basic')"/>
-              <span class="emp-info">{{ information.salary_basic || '' }}</span>
+              <span class="emp-info">{{ information ? information.salary_basic : '' }}</span>
               <span v-text="$t('table.contract.salary_insurrance')"/>
-              <span class="emp-info">{{ information.salary_insurrance || '' }}</span>
+              <span class="emp-info">{{ information ? information.salary_insurrance : '' }}</span>
             </div>
           </div>
         </el-tab-pane>
@@ -157,7 +157,7 @@ export default {
       $($event.target).attr('src', NO_IMAGE)
     },
     imageUrl() {
-      return this.information.employee.avatar || NO_IMAGE
+      return this.information ? this.information.employee.avatar : NO_IMAGE
     },
     showInfor(contract) {
       this.information = contract
