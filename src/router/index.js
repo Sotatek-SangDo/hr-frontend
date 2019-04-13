@@ -219,6 +219,38 @@ export const mapServerRouters = {
     path: 'interview',
     name: 'Interview',
     meta: { title: 'recruitment.interview', icon: 'interview' }
+  },
+  syncContract: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/contract',
+    redirect: '/Contract/ContractList',
+    meta: { title: 'contract.index', icon: 'contract' }
+  },
+  childSyncContract: {
+    component: () => import('@/views/Contract/ContractList'),
+    path: 'index',
+    name: 'Contract',
+    meta: { title: 'contract.list', icon: 'user', noCache: true }
+  },
+  addContract: {
+    component: () => import('@/views/Contract/AddContract'),
+    path: 'addcontract',
+    name: 'ContractAdd',
+    meta: { title: 'contract.add', icon: 'plus-square' }
+  },
+  contractDetail: {
+    component: () => import('@/views/Contract/DetailContract'),
+    path: 'detail/:id',
+    name: 'ContractDetail',
+    meta: { title: 'contract.detail' },
+    hidden: true
+  },
+  contractEdit: {
+    component: () => import('@/views/Contract/AddContract'),
+    path: 'edit/:id',
+    name: 'ContractEdit',
+    meta: { title: 'contract.edit' },
+    hidden: true
   }
 }
 

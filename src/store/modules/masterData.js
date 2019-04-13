@@ -10,7 +10,8 @@ const masterData = {
     skills: [],
     qualifications: [],
     certifications: [],
-    languages: []
+    languages: [],
+    contractType: []
   },
   mutations: {
     SET_NATIONALITIES: (state, nationalities) => {
@@ -39,6 +40,9 @@ const masterData = {
     },
     SET_E_LANGUAGE: (state, langs) => {
       state.languages = langs
+    },
+    SET_TYPE_CONTRACT: (state, type) => {
+      state.contractType = type
     }
   },
   actions: {
@@ -54,6 +58,7 @@ const masterData = {
           commit('SET_QUALIFICATION', response.data.qualification)
           commit('SET_CERTIFICATION', response.data.certification)
           commit('SET_E_LANGUAGE', response.data.language)
+          commit('SET_TYPE_CONTRACT', response.data.contractType)
           resolve(response)
         }).catch(error => {
           reject(error)

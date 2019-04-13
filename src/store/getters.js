@@ -26,6 +26,7 @@ const getters = {
   skills: state => state.masterData.skills,
   qualifications: state => state.masterData.qualifications,
   certifications: state => state.masterData.certifications,
-  languages: state => state.masterData.languages
+  languages: state => state.masterData.languages,
+  contractType: state => state.contractType
 }
 export default getters
