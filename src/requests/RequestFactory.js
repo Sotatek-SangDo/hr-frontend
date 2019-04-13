@@ -22,6 +22,7 @@ import IPDetailRequest from './IPEmployeeRequest'
 import RecruitmentRequest from './RecruitmentRequest'
 import CandidateRequest from './CandidateRequest'
 import InterviewRequest from './InterviewRequest'
+import ContractRequest from './ContractRequest'
 
 const requestMap = {
   UserRequest,
@@ -47,7 +48,8 @@ const requestMap = {
   IPDetailRequest,
   RecruitmentRequest,
   CandidateRequest,
-  InterviewRequest
+  InterviewRequest,
+  ContractRequest
 }
 
 const instances = {}

@@ -4,10 +4,10 @@
       <div class="card">
         <div class="card-body">
           <div class="epm-tb-header">
-            <h4 class="header-title header-underline" v-text="$t('table.employee.header')"/>
+            <h4 class="header-title header-underline" v-text="$t('table.contract.header')"/>
           </div>
           <div class="filter-container">
-            <el-input :placeholder="$t('table.employee.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+            <el-input :placeholder="$t('table.contract.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
             <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addPage">{{ $t('table.add') }}</el-button>
           </div>
@@ -15,7 +15,7 @@
             v-loading="listLoading"
             ref="datatable"
             :key="tableKey"
-            :data="employees"
+            :data="contracts"
             border
             fit
             highlight-current-row
@@ -26,34 +26,44 @@
                 <span class="id" @click="showInfor(scope.row)">{{ scope.row.id }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.employee.name')" prop="name" align="center" sortable>
+            <el-table-column :label="$t('table.contract.contract_code')" prop="contract_code" align="center" sortable>
               <template slot-scope="scope">
-                <span class="field-name" @click="profilePage(scope.row.id)">{{ scope.row.name }}</span>
+                <span>{{ scope.row.contract_code }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.employee.job')" prop="job" align="center" sortable>
+            <el-table-column :label="$t('table.contract.employee')" prop="name" align="center" sortable>
               <template slot-scope="scope">
-                <span>{{ scope.row.job.title }}</span>
+                <span class="field-name" @click="profilePage(scope.row.employee.id)">{{ scope.row.employee.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.address')" prop="address" align="center">
+            <el-table-column :label="$t('table.contract.contract_type')" prop="contract_type" align="center" sortable>
               <template slot-scope="scope">
-                <span>{{ scope.row.address }}</span>
+                <span>{{ scope.row.contract_type.type }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.phone')" prop="phone" align="center">
+            <el-table-column :label="$t('table.contract.start_date')" prop="start_date" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.phone }}</span>
+                <span>{{ scope.row.start_date }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.birthday')" prop="birthday" align="center">
+            <el-table-column :label="$t('table.contract.end_date')" prop="end_date" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.birthday }}</span>
+                <span>{{ scope.row.end_date }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.employee.private_email')" prop="private_email" align="center">
+            <el-table-column :label="$t('table.contract.salary_basic')" prop="salary_basic" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.private_email }}</span>
+                <span>{{ scope.row.salary_basic }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.contract.salary_insurrance')" prop="salary_insurrance" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.salary_insurrance }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.contract.status')" prop="status" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.status }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
@@ -68,45 +78,34 @@
     </div>
     <div class="col-12 mt-5">
       <el-tabs v-model="activeName">
-        <el-tab-pane :label="$t('employee.info')" name="info">
+        <el-tab-pane :label="$t('table.contract.info')" name="info">
           <div class="infor-container">
             <div class="col1 col-3 mt-3">
               <img :src="imageUrl()" @error="errorImage">
             </div>
             <div class="col1 col-3 mt-3">
-              <span v-text="$t('employee.id')"/>
-              <span class="emp-info">{{ information.id || '' }}</span>
-              <span v-text="$t('employee.name')"/>
-              <span class="emp-info">{{ information.name || '' }}</span>
+              <span v-text="$t('table.contract.contract_code')"/>
+              <span class="emp-info">{{ information.contract_code || '' }}</span>
+              <span v-text="$t('table.contract.employee')"/>
+              <span class="emp-info">{{ information.employee.name || '' }}</span>
+              <span v-text="$t('table.contract.contract_type')"/>
+              <span class="emp-info">{{ information.contract_type.type || '' }}</span>
             </div>
             <div class="col1 col-3 mt-3">
-              <span v-text="$t('employee.address')"/>
-              <span class="emp-info">{{ information.address || '' }}</span>
-              <span v-text="$t('employee.ethnicity')"/>
-              <span class="emp-info">{{ information.ethnicity || '' }}</span>
+              <span v-text="$t('table.contract.start_date')"/>
+              <span class="emp-info">{{ information.start_date || '' }}</span>
+              <span v-text="$t('table.contract.end_date')"/>
+              <span class="emp-info">{{ information.end_date || '' }}</span>
+              <span v-text="$t('table.contract.status')"/>
+              <span class="emp-info">{{ information.status || '' }}</span>
             </div>
             <div class="col1 col-3 mt-3">
-              <span v-text="$t('employee.gender')"/>
-              <span class="emp-info">{{ information.gender || '' }}</span>
-              <span v-text="$t('employee.ethnicity')"/>
-              <span class="emp-info">{{ information.ethnicity || '' }}</span>
+              <span v-text="$t('table.contract.salary_basic')"/>
+              <span class="emp-info">{{ information.salary_basic || '' }}</span>
+              <span v-text="$t('table.contract.salary_insurrance')"/>
+              <span class="emp-info">{{ information.salary_insurrance || '' }}</span>
             </div>
           </div>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('employee.skill')" name="skill">
-          <employee-reference-skill :skills="information.skills"/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('employee.education')" name="edu">
-          <employee-reference-edu :edus="information.educations"/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('employee.certification')" name="certification">
-          <employee-reference-certi :cers="information.certifications"/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('lang.title')" name="lang">
-          <employee-reference-lang :lang="information.languages"/>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('emergency_contact.title')" name="ec">
-          <employee-reference-ec :contact="information.emergency_contracts"/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -118,44 +117,25 @@ const FIELD_NAME = 'field-name'
 const FIELD_ID = 'id'
 const NO_IMAGE = 'images/no-image.png'
 
-import EmployeeSkill from '../../components/employee/EmployeeSkill'
-import EmployeeEducation from '../../components/employee/EmployeeEducation'
-import EmployeeCertification from '../../components/employee/EmployeeCertification'
-import EmployeeLanguage from '../../components/employee/EmployeeLanguage'
-import EmployeeEmergencyContact from '../../components/employee/EmployeeEmergencyContact'
-import EmployeeDepartment from '../../components/employee/EmployeeDepartment'
 import rf from '@/api/commons/RequestFactory'
 import Pagination from '@/components/Pagination'
-import EmployeeReferenceSkill from '@/components/employee/EmployeeReferenceSkill'
-import EmployeeReferenceEdu from '@/components/employee/EmployeeReferenceEdu'
-import EmployeeReferenceCerti from '@/components/employee/EmployeeReferenceCerti'
-import EmployeeReferenceLang from '@/components/employee/EmployeeReferenceLang'
-import EmployeeReferenceEc from '@/components/employee/EmployeeReferenceEC'
 import $ from 'jquery'
 
 export default {
   components: {
-    EmployeeSkill,
-    EmployeeEducation,
-    EmployeeCertification,
-    EmployeeLanguage,
-    EmployeeEmergencyContact,
-    EmployeeDepartment,
-    Pagination,
-    EmployeeReferenceSkill,
-    EmployeeReferenceEdu,
-    EmployeeReferenceCerti,
-    EmployeeReferenceLang,
-    EmployeeReferenceEc
+    Pagination
   },
   data() {
     return {
       activeName: 'info',
-      headerTitle: 'Nhân viên',
-      header: 'Thêm mới nhân viên',
+      headerTitle: 'Hợp Đồng',
+      header: 'Thêm mới hợp dồng',
       tableKey: 0,
-      information: {},
-      employees: [],
+      information: {
+        employee: {},
+        contract_type: {}
+      },
+      contracts: [],
       listLoading: false,
       total: 0,
       listQuery: {
@@ -177,11 +157,10 @@ export default {
       $($event.target).attr('src', NO_IMAGE)
     },
     imageUrl() {
-      return this.information.avatar || NO_IMAGE
+      return this.information.employee.avatar || NO_IMAGE
     },
-    showInfor(emp) {
-      this.information = emp
-      console.log(this.information)
+    showInfor(contract) {
+      this.information = contract
     },
     sortChange(data) {
       const { prop, order } = data
@@ -203,15 +182,22 @@ export default {
     },
     getList() {
       this.listLoading = true
-      rf.getRequest('EmployeeRequest')
-        .getFullInfo(this.listQuery)
+      rf.getRequest('ContractRequest')
+        .getAll(this.listQuery)
         .then(response => {
-          this.employees = response.data.data
+          this.contracts = response.data.data
           this.total = response.data.total
+          this.information = window._.find(this.contracts, (index, item) => { return index })
           setTimeout(() => {
             this.listLoading = false
           }, 1.5 * 1000)
         })
+    },
+    handleUpdate(row) {
+      return this.$router.push({
+        name: 'ContractEdit',
+        params: { id: row.id }
+      })
     },
     profilePage(empId) {
       return this.$router.push({
@@ -219,15 +205,9 @@ export default {
         params: { id: empId }
       })
     },
-    handleUpdate(row) {
-      return this.$router.push({
-        name: 'EmployeeEdit',
-        params: { id: row.id }
-      })
-    },
     addPage() {
       this.$router.push({
-        name: 'EmployeeAdd'
+        name: 'ContractAdd'
       })
     },
     inital() {

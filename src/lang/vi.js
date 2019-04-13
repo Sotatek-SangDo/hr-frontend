@@ -79,6 +79,13 @@ export default {
       index: 'Tuyển dụng',
       candidate: 'Ứng viên',
       interview: 'Phỏng vấn'
+    },
+    contract: {
+      index: 'Hợp đồng',
+      list: 'Danh sách',
+      add: 'Thêm mới',
+      detail: 'Thông tin hợp đồng',
+      edit: 'Chỉnh sửa thông tin'
     }
   },
   navbar: {
@@ -200,6 +207,21 @@ export default {
       email: 'Email',
       phonenumber: 'Số điện thoại',
       status: 'Trạng thái'
+    },
+    contract: {
+      contract_code: 'Số hợp đồng',
+      employee: 'Nhân viên',
+      search_name: 'Tên tìm kiếm...',
+      header: 'Danh sách hồ sơ',
+      start_date: 'Ngày bắt đầu',
+      end_date: 'Ngày kết thúc',
+      salary_basic: 'Lương cơ bản',
+      salary_insurrance: 'Lương đóng BH',
+      status: 'Trạng thái HĐ',
+      contract_type: 'Loại HĐ',
+      info: 'Thông tin hợp đồng',
+      status_active: 'Đang có hiệu lục',
+      status_inactive: 'Hết hiệu lực'
     }
   },
   placeholder: {
@@ -221,6 +243,16 @@ export default {
       supervisor: 'Chọn người giám sát trực tiếp',
       indirect_supervisor: 'Lựa chọn người giám sát gián tiếp',
       date: 'Chọn một ngày...'
+    },
+    contract_add: {
+      employee: 'Chọn nhân viên',
+      contract_code: 'Số hợp đồng',
+      start_date: 'Chọn ngày bắt đầu',
+      end_date: 'Chọn ngày kết thúc',
+      contract_type: 'Chọn loại hợp đồng',
+      salary_basic: 'Lương cơ bản',
+      salary_insurrance: 'Lương đóng bảo hiểm',
+      status: 'Trạng thái'
     }
   },
   errorLog: {
@@ -287,6 +319,21 @@ export default {
     education: 'Học vấn',
     certification: 'Trình độ',
     certification_name: 'Trình độ chuyên môn'
+  },
+  contract: {
+    add: 'Thêm mới',
+    edit: 'Thay đổi thông tin',
+    contract_code: 'Số hợp đồng',
+    employee: 'Nhân viên',
+    search_name: 'Tên tìm kiếm...',
+    header: 'Danh sách hồ sơ',
+    start_date: 'Ngày bắt đầu',
+    end_date: 'Ngày kết thúc',
+    salary_basic: 'Lương cơ bản',
+    salary_insurrance: 'Lương đóng BH',
+    status: 'Trạng thái HĐ',
+    contract_type: 'Loại HĐ',
+    info: 'Thông tin hợp đồng'
   },
   validation: {
     fields: {
