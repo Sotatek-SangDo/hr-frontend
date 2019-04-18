@@ -217,10 +217,11 @@ export default {
       end_date: 'Ngày kết thúc',
       salary_basic: 'Lương cơ bản',
       salary_insurrance: 'Lương đóng BH',
-      status: 'Trạng thái HĐ',
-      contract_type: 'Loại HĐ',
+      salary_insurrance_type: 'Loại BH',
+      status: 'Trạng thái hợp đồng',
+      contract_type: 'Loại hợp đồng',
       info: 'Thông tin hợp đồng',
-      status_active: 'Đang có hiệu lục',
+      status_active: 'Đang có hiệu lực',
       status_inactive: 'Hết hiệu lực'
     }
   },

@@ -49,7 +49,9 @@
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.salary_insurrance') }}</label>
                 <el-form-item>
-                  <el-input :rows="1" v-model="contract.salary_insurrance" :placeholder="$t('placeholder.contract_add.salary_insurrance')" type="text" class="article-textarea" autosize/>
+                  <el-drag-select v-model="contract.salary_insurance_id" :placeholder="$t('placeholder.contract_add.salary_insurrance')">
+                    <el-option v-for="(item, index) in salaryInsurances" :label="item.insurance" :value="item.id" :key="index" />
+                  </el-drag-select>
                 </el-form-item>
               </div>
               <div class="form-group">
@@ -113,12 +115,13 @@ export default {
         end_date: '',
         contract_type_id: '',
         salary_basic: '',
-        salary_insurrance: '',
+        salary_insurance_id: '',
         status: '',
         id: ''
       },
       formData: new FormData(),
       contractTypies: this.$store.getters.contractType,
+      salaryInsurances: this.$store.getters.salaryInsurance,
       status: ['Hết hiệu lực', 'Đang có hiệu lưc'],
       employees: {},
       isDisable: false,
@@ -133,7 +136,7 @@ export default {
         end_date: [{ validator: validateRequire }],
         contract_type_id: [{ validator: validateRequire }],
         salary_basic: [{ validator: validateRequire }],
-        salary_insurrance: [{ validator: validateRequire }],
+        salary_insurance_id: [{ validator: validateRequire }],
         status: [{ validator: validateRequire }]
       }
     }
@@ -150,6 +153,14 @@ export default {
           this.contractTypies = res.data.contractType
         })
     }
+
+    if (!this.salaryInsurances) {
+      this.$store.cache
+        .dispatch('getMasterData')
+        .then(res => {
+          this.salaryInsurances = res.data.salaryInsurance
+        })
+    }
   },
   mounted() {
   },
@@ -164,7 +175,7 @@ export default {
       this.contract.end_date = response.end_date
       this.contract.contract_type_id = response.contract_type_id
       this.contract.salary_basic = response.salary_basic
-      this.contract.salary_insurrance = response.salary_insurrance
+      this.contract.salary_insurance_id = response.salary_insurance_id
       this.contract.status = response.status
       this.contract.id = response.id
     },

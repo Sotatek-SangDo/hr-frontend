@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column :label="$t('table.contract.salary_insurrance')" prop="salary_insurrance" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.salary_insurrance }}</span>
+                <span>{{ scope.row.salary_insurance.salary }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.contract.status')" prop="status" align="center">
@@ -102,8 +102,10 @@
             <div class="col1 col-3 mt-3">
               <span v-text="$t('table.contract.salary_basic')"/>
               <span class="emp-info">{{ information ? information.salary_basic : '' }}</span>
+              <span v-text="$t('table.contract.salary_insurrance_type')"/>
+              <span class="emp-info">{{ information ? information.salary_insurance.insurance : '' }}</span>
               <span v-text="$t('table.contract.salary_insurrance')"/>
-              <span class="emp-info">{{ information ? information.salary_insurrance : '' }}</span>
+              <span class="emp-info">{{ information ? information.salary_insurance.salary : '' }}</span>
             </div>
           </div>
         </el-tab-pane>
