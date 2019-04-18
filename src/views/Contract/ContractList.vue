@@ -7,7 +7,7 @@
             <h4 class="header-title header-underline" v-text="$t('table.contract.header')"/>
           </div>
           <div class="filter-container">
-            <el-input :placeholder="$t('table.contract.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+            <el-input :placeholder="$t('table.contract.search_name')" v-model="listQuery.keySearch" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
             <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addPage">{{ $t('table.add') }}</el-button>
           </div>
@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column :label="$t('table.contract.salary_insurrance')" prop="salary_insurrance" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.salary_insurrance }}</span>
+                <span>{{ scope.row.salary_insurance.salary }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.contract.status')" prop="status" align="center">
@@ -102,8 +102,10 @@
             <div class="col1 col-3 mt-3">
               <span v-text="$t('table.contract.salary_basic')"/>
               <span class="emp-info">{{ information ? information.salary_basic : '' }}</span>
+              <span v-text="$t('table.contract.salary_insurrance_type')"/>
+              <span class="emp-info">{{ information ? information.salary_insurance.insurance : '' }}</span>
               <span v-text="$t('table.contract.salary_insurrance')"/>
-              <span class="emp-info">{{ information ? information.salary_insurrance : '' }}</span>
+              <span class="emp-info">{{ information ? information.salary_insurance.salary : '' }}</span>
             </div>
           </div>
         </el-tab-pane>
@@ -141,7 +143,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        title: undefined,
+        keySearch: undefined,
         sort: '+id'
       }
     }

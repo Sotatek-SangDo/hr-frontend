@@ -8,33 +8,37 @@
             <div class="col-xs-12 col-md-12">
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.employee') }}</label>
-                <el-drag-select v-model="contract.employee_id" :placeholder="$t('placeholder.contract_add.employee')">
-                  <el-option v-for="(item, index) in employees" :label="item.name" :value="item.id" :key="index" />
-                </el-drag-select>
+                <el-form-item prop="employee_id">
+                  <el-drag-select v-model="contract.employee_id" :placeholder="$t('placeholder.contract_add.employee')">
+                    <el-option v-for="(item, index) in employees" :label="item.name" :value="item.id" :key="index" />
+                  </el-drag-select>
+                </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.contract_code') }}</label>
-                <el-form-item>
-                  <el-input :rows="1" v-model="contract.contract_code" :placeholder="$t('placeholder.contract_add.contract_code')" type="text" class="article-textarea" autosize/>
+                <el-form-item prop="contract_code">
+                  <el-input :rows="1" v-model="contract.contract_code" :placeholder="$t('placeholder.contract_add.contract_code')" :maxlength="8" type="text" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.start_date') }}</label>
-                <el-form-item prop="birthday">
+                <el-form-item prop="start_date">
                   <el-date-picker v-model="contract.start_date" :placeholder="$t('placeholder.contract_add.start_date')" value-format="yyyy-MM-dd" type="date"/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.end_date') }}</label>
-                <el-form-item prop="birthday">
+                <el-form-item prop="end_date">
                   <el-date-picker v-model="contract.end_date" :placeholder="$t('placeholder.contract_add.end_date')" type="date" value-format="yyyy-MM-dd"/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.contract_type') }}</label>
-                <el-drag-select v-model="contract.contract_type_id" :placeholder="$t('placeholder.contract_add.contract_type')">
-                  <el-option v-for="(item, index) in contractTypies" :label="item.type" :value="item.id" :key="index" />
-                </el-drag-select>
+                <el-form-item prop="contract_type_id">
+                  <el-drag-select v-model="contract.contract_type_id" :placeholder="$t('placeholder.contract_add.contract_type')">
+                    <el-option v-for="(item, index) in contractTypies" :label="item.type" :value="item.id" :key="index" />
+                  </el-drag-select>
+                </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.salary_basic') }}</label>
@@ -45,12 +49,14 @@
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.salary_insurrance') }}</label>
                 <el-form-item>
-                  <el-input :rows="1" v-model="contract.salary_insurrance" :placeholder="$t('placeholder.contract_add.salary_insurrance')" type="text" class="article-textarea" autosize/>
+                  <el-drag-select v-model="contract.salary_insurance_id" :placeholder="$t('placeholder.contract_add.salary_insurrance')">
+                    <el-option v-for="(item, index) in salaryInsurances" :label="item.insurance" :value="item.id" :key="index" />
+                  </el-drag-select>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('contract.status') }}</label>
-                <el-form-item>
+                <el-form-item prop="status">
                   <el-drag-select v-model="contract.status" :placeholder="$t('placeholder.contract_add.status')">
                     <el-option v-for="(item, index) in status" :label="item" :value="item" :key="index" />
                   </el-drag-select>
@@ -109,12 +115,13 @@ export default {
         end_date: '',
         contract_type_id: '',
         salary_basic: '',
-        salary_insurrance: '',
+        salary_insurance_id: '',
         status: '',
         id: ''
       },
       formData: new FormData(),
       contractTypies: this.$store.getters.contractType,
+      salaryInsurances: this.$store.getters.salaryInsurance,
       status: ['Hết hiệu lực', 'Đang có hiệu lưc'],
       employees: {},
       isDisable: false,
@@ -129,7 +136,7 @@ export default {
         end_date: [{ validator: validateRequire }],
         contract_type_id: [{ validator: validateRequire }],
         salary_basic: [{ validator: validateRequire }],
-        salary_insurrance: [{ validator: validateRequire }],
+        salary_insurance_id: [{ validator: validateRequire }],
         status: [{ validator: validateRequire }]
       }
     }
@@ -146,12 +153,20 @@ export default {
           this.contractTypies = res.data.contractType
         })
     }
+
+    if (!this.salaryInsurances) {
+      this.$store.cache
+        .dispatch('getMasterData')
+        .then(res => {
+          this.salaryInsurances = res.data.salaryInsurance
+        })
+    }
   },
   mounted() {
   },
   methods: {
     handError(rule) {
-      return new Error(`${this.$t(`validation.fields.${rule.field}`)} ${this.$t('validation.required')}`)
+      return new Error(`${this.$t(`validation.contract.${rule.field}`)} ${this.$t('validation.required')}`)
     },
     setData(response) {
       this.contract.employee_id = response.employee_id
@@ -160,7 +175,7 @@ export default {
       this.contract.end_date = response.end_date
       this.contract.contract_type_id = response.contract_type_id
       this.contract.salary_basic = response.salary_basic
-      this.contract.salary_insurrance = response.salary_insurrance
+      this.contract.salary_insurance_id = response.salary_insurance_id
       this.contract.status = response.status
       this.contract.id = response.id
     },
@@ -186,12 +201,13 @@ export default {
     submitForm(e) {
       e.preventDefault()
       this.isDisable = true
-      this.$refs['postForm'].validate((valid) => {
+      this.$refs.postForm.validate((valid) => {
         if (!valid) {
           this.isDisable = false
         }
       })
       if (!this.isDisable) return
+      this.contract.contract_code = `HĐ${this.contract.contract_code}`
       _.forEach(this.contract, (contract, i) => {
         this.formData.append(`${i}`, contract)
       })
