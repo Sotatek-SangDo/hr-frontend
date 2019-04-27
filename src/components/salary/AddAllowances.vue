@@ -3,55 +3,45 @@
     <div class="card-body">
       <div class="container">
         <h5>{{ header }}</h5>
-        <el-form ref="postForm" :model="contract" :rules="rules" class="form-container">
+        <el-form ref="postForm" :model="allowance" :rules="rules" class="form-container">
           <div class="row">
             <div class="col-xs-12 col-md-12">
               <div class="form-group">
-                <label class="col-form-label">{{ $t('contract.employee') }}</label>
+                <label class="col-form-label">{{ $t('allowance.employee') }}</label>
                 <el-form-item prop="employee_id">
-                  <el-drag-select v-model="contract.employee_id" :placeholder="$t('placeholder.contract_add.employee')">
+                  <el-drag-select v-model="allowance.employee_id" :placeholder="$t('placeholder.allowance_add.employee')">
                     <el-option v-for="(item, index) in employees" :label="item.name" :value="item.id" :key="index" />
                   </el-drag-select>
                 </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">{{ $t('contract.contract_code') }}</label>
-                <el-form-item prop="contract_code">
-                  <el-input :rows="1" v-model="contract.contract_code" :placeholder="$t('placeholder.contract_add.contract_code')" :maxlength="8" type="text" class="article-textarea" autosize/>
+                <label class="col-form-label">{{ $t('allowance.allowance_type') }}</label>
+                <el-form-item prop="allowance_code">
+                  <el-input :rows="1" v-model="allowance.allowance_type" :placeholder="$t('placeholder.allowance_add.allowance_type')" :maxlength="8" type="text" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">{{ $t('contract.start_date') }}</label>
-                <el-form-item prop="start_date">
-                  <el-date-picker v-model="contract.start_date" :placeholder="$t('placeholder.contract_add.start_date')" value-format="yyyy-MM-dd" type="date"/>
+                <label class="col-form-label">{{ $t('allowance.subsidy') }}</label>
+                <el-form-item prop="subsidy">
+                  <el-input :rows="1" v-model="allowance.subsidy" :placeholder="$t('placeholder.allowance_add.subsidy')" :maxlength="8" type="text" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">{{ $t('contract.end_date') }}</label>
-                <el-form-item prop="end_date">
-                  <el-date-picker v-model="contract.end_date" :placeholder="$t('placeholder.contract_add.end_date')" type="date" value-format="yyyy-MM-dd"/>
+                <label class="col-form-label">{{ $t('allowance.apply_date') }}</label>
+                <el-form-item prop="apply_date">
+                  <el-date-picker v-model="allowance.apply_date" :placeholder="$t('placeholder.allowance_add.apply_date')" value-format="yyyy-MM-dd" type="date"/>
                 </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">{{ $t('contract.contract_type') }}</label>
-                <el-form-item prop="contract_type_id">
-                  <el-drag-select v-model="contract.contract_type_id" :placeholder="$t('placeholder.contract_add.contract_type')">
-                    <el-option v-for="(item, index) in contractTypies" :label="item.type" :value="item.id" :key="index" />
-                  </el-drag-select>
-                </el-form-item>
-              </div>
-              <div v-if="!contractId" class="form-group">
-                <label class="col-form-label">{{ $t('contract.salary_basic') }}</label>
+                <label class="col-form-label">{{ $t('allowance.notes') }}</label>
                 <el-form-item>
-                  <el-drag-select v-model="contract.salary_basic" :placeholder="$t('placeholder.contract_add.salary_basic')">
-                    <el-option v-for="(item, index) in salaryBasic" :label="item.type" :value="item.subsidy" :key="index" />
-                  </el-drag-select>
+                  <el-input :rows="1" v-model="allowance.notes" :placeholder="$t('placeholder.allowance_add.notes')" :maxlength="8" type="text" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
               <div class="form-group">
-                <label class="col-form-label">{{ $t('contract.status') }}</label>
+                <label class="col-form-label">{{ $t('allowance.status') }}</label>
                 <el-form-item prop="status">
-                  <el-drag-select v-model="contract.status" :placeholder="$t('placeholder.contract_add.status')">
+                  <el-drag-select v-model="allowance.status" :placeholder="$t('placeholder.allowance_add.status')">
                     <el-option v-for="(item, index) in status" :label="item" :value="item" :key="index" />
                   </el-drag-select>
                 </el-form-item>
@@ -64,7 +54,7 @@
           </div>
           <div class="form-group">
             <button :disabled="isDisable" class="btn btn-success mb-3" type="submit" @click="submitForm">
-              {{ contractId ? createBtn : updateBtn }}
+              {{ allowanceId ? createBtn : updateBtn }}
             </button>
           </div>
         </el-form>
@@ -78,23 +68,8 @@ import rf from '@/api/commons/RequestFactory'
 import _ from 'lodash'
 import ElDragSelect from '@/components/DragSelect/select'
 
-const SALARY_BASIC = [
-  {
-    'type': 'Mức 1',
-    'subsidy': '10000000'
-  },
-  {
-    'type': 'Mức 2',
-    'subsidy': '20000000'
-  },
-  {
-    'type': 'Mức 3',
-    'subsidy': '30000000'
-  }
-]
-
 export default {
-  name: 'ContractAdd',
+  name: 'AllowancesAdd',
   components: {
     ElDragSelect
   },
@@ -103,7 +78,7 @@ export default {
       type: String,
       default: ''
     },
-    contractId: {
+    allowanceId: {
       type: [String, Number],
       default: ''
     }
@@ -117,20 +92,16 @@ export default {
       }
     }
     return {
-      contract: {
+      allowance: {
         employee_id: '',
-        contract_code: '',
-        start_date: '',
-        end_date: '',
-        contract_type_id: '',
-        salary_basic: '',
+        allowance_type: '',
+        apply_date: '',
+        subsidy: '',
+        notes: '',
         status: '',
         id: ''
       },
-      salaryBasic: SALARY_BASIC,
       formData: new FormData(),
-      contractTypies: this.$store.getters.contractType,
-      salaryInsurances: this.$store.getters.salaryInsurance,
       status: ['Hết hiệu lực', 'Đang có hiệu lưc'],
       employees: {},
       isDisable: false,
@@ -140,25 +111,24 @@ export default {
       updateBtn: this.$t('button.update'),
       rules: {
         employee_id: [{ validator: validateRequire }],
-        contract_code: [{ validator: validateRequire }],
-        start_date: [{ validator: validateRequire }],
-        end_date: [{ validator: validateRequire }],
-        contract_type_id: [{ validator: validateRequire }],
-        salary_basic: [{ validator: validateRequire }],
+        allowance_type: [{ validator: validateRequire }],
+        apply_date: [{ validator: validateRequire }],
+        subsidy: [{ validator: validateRequire }],
+        notes: [{ validator: validateRequire }],
         status: [{ validator: validateRequire }]
       }
     }
   },
   created() {
-    if (this.contractId) {
-      this.getContract()
+    if (this.allowanceId) {
+      this.getAllowances()
     }
     this.initial()
-    if (!this.contractTypies) {
+    if (!this.allowanceTypies) {
       this.$store.cache
         .dispatch('getMasterData')
         .then(res => {
-          this.contractTypies = res.data.contractType
+          this.allowanceTypies = res.data.allowanceType
         })
     }
 
@@ -174,21 +144,20 @@ export default {
   },
   methods: {
     handError(rule) {
-      return new Error(`${this.$t(`validation.contract.${rule.field}`)} ${this.$t('validation.required')}`)
+      return new Error(`${this.$t(`validation.allowance.${rule.field}`)} ${this.$t('validation.required')}`)
     },
     setData(response) {
-      this.contract.employee_id = response.employee_id
-      this.contract.contract_code = response.contract_code
-      this.contract.start_date = response.start_date
-      this.contract.end_date = response.end_date
-      this.contract.contract_type_id = response.contract_type_id
-      this.contract.salary_basic = response.salary.salary_basic
-      this.contract.status = response.status
-      this.contract.id = response.id
+      this.allowance.employee_id = response.employee_id
+      this.allowance.allowance_type = response.allowance_type
+      this.allowance.apply_date = response.apply_date
+      this.allowance.subsidy = response.subsidy
+      this.allowance.status = response.status
+      this.allowance.notes = response.notes
+      this.allowance.id = response.id
     },
-    getContract() {
-      rf.getRequest('ContractRequest')
-        .getContract({ id: this.contractId })
+    getAllowances() {
+      rf.getRequest('AllowancesRequest')
+        .getAllowances({ id: this.allowanceId })
         .then(res => {
           this.setData(res.data)
         })
@@ -214,19 +183,18 @@ export default {
         }
       })
       if (!this.isDisable) return
-      this.contract.contract_code = !this.contractId ? `HĐ${this.contract.contract_code}` : this.contract.contract_code
-      _.forEach(this.contract, (contract, i) => {
-        this.formData.append(`${i}`, contract)
+      _.forEach(this.allowance, (allowance, i) => {
+        this.formData.append(`${i}`, allowance)
       })
-      if (this.contractId) {
+      if (this.allowanceId) {
         return rf
-          .getRequest('ContractRequest')
+          .getRequest('AllowancesRequest')
           .update(this.formData)
           .then(res => {
             this.handleRespone(res)
           })
       }
-      rf.getRequest('ContractRequest')
+      rf.getRequest('AllowancesRequest')
         .store(this.formData)
         .then(res => {
           this.handleRespone(res)
@@ -234,7 +202,7 @@ export default {
     },
     handleRespone(response) {
       response.data.status
-        ? this.$router.push({ name: 'Contract' })
+        ? this.$router.push({ name: 'Allowances' })
         : this.errors.push({ keys: 'Lỗi chưa xác định trên server' })
     }
   }

@@ -19,6 +19,9 @@ import RecruitmentRequest from './RecruitmentRequest'
 import CandidateRequest from './CandidateRequest'
 import InterviewRequest from './InterviewRequest'
 import ContractRequest from './ContractRequest'
+import SalaryRequest from './SalaryRequest'
+import AllowancesRequest from './AllowancesRequest'
+import SalaryBusinessRequest from './SalaryBusinessRequest'
 
 const requestMap = {
   NationalityRequest,
@@ -41,7 +44,10 @@ const requestMap = {
   RecruitmentRequest,
   CandidateRequest,
   InterviewRequest,
-  ContractRequest
+  ContractRequest,
+  SalaryRequest,
+  AllowancesRequest,
+  SalaryBusinessRequest
 }
 
 const instances = {}
