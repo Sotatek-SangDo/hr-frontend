@@ -101,11 +101,11 @@
             </div>
             <div class="col1 col-3 mt-3">
               <span v-text="$t('table.contract.salary_basic')"/>
-              <span class="emp-info">{{ information.salary ? information.salary.salary_basic : '' }}</span>
+              <span class="emp-info">{{ information && information.salary ? information.salary.salary_basic : '' }}</span>
               <span v-text="$t('table.contract.salary_insurrance_type')"/>
-              <span class="emp-info">{{ information.salary_insurance[0] ? information.salary_insurance[0].insurance : '' }}</span>
+              <span class="emp-info">{{ information && information.salary_insurance[0] ? information.salary_insurance[0].insurance : '' }}</span>
               <span v-text="$t('table.contract.salary_insurrance')"/>
-              <span class="emp-info">{{ information.salary_insurance[0] ? information.salary_insurance[0].salary : '' }}</span>
+              <span class="emp-info">{{ information && information.salary_insurance[0] ? information.salary_insurance[0].salary : '' }}</span>
             </div>
           </div>
         </el-tab-pane>

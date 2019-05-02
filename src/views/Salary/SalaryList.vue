@@ -64,13 +64,13 @@
             </div>
             <div class="col1 col-4 mt-4">
               <span v-text="$t('table.salary.employee_name')"/>
-              <span class="emp-info">{{ information.employee[0] ? information.employee[0].name : '' }}</span>
+              <span class="emp-info">{{ information && information.employee[0] ? information.employee[0].name : '' }}</span>
               <span v-text="$t('table.salary.salary_basic')"/>
               <span class="emp-info">{{ information ? information.salary_basic : '' }}</span>
             </div>
             <div class="col1 col-4 mt-4">
               <span v-text="$t('table.salary.salary_insurance')"/>
-              <span class="emp-info">{{ information.insurance ?information.insurance.salary : '' }}</span>
+              <span class="emp-info">{{ information && information.insurance ?information.insurance.salary : '' }}</span>
               <span v-text="$t('table.salary.salary_notes')"/>
               <span class="emp-info">{{ information ? information.notes : '' }}</span>
             </div>
@@ -125,7 +125,7 @@ export default {
       $($event.target).attr('src', NO_IMAGE)
     },
     imageUrl(information) {
-      return information.employee[0] ? information.employee[0].avatar : NO_IMAGE
+      return information && information.employee[0] ? information.employee[0].avatar : NO_IMAGE
     },
     showInfor(salary) {
       this.information = salary
