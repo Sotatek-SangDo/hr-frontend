@@ -23,6 +23,12 @@
                 </el-form-item>
               </div>
               <div class="form-group">
+                <label class="col-form-label">{{ $t('salary.apply_date') }}</label>
+                <el-form-item prop="apply_date">
+                  <el-date-picker v-model="salary.apply_date" :placeholder="$t('placeholder.salary_add.apply_date')" type="date" value-format="yyyy-MM-dd"/>
+                </el-form-item>
+              </div>
+              <div class="form-group">
                 <label class="col-form-label">{{ $t('salary.notes') }}</label>
                 <el-form-item>
                   <el-input :rows="1" v-model="salary.notes" :placeholder="$t('placeholder.salary_add.notes')" type="text" class="article-textarea" autosize/>
@@ -93,6 +99,7 @@ export default {
         salary_basic: '',
         salary_insurance_id: '',
         notes: '',
+        apply_date: '',
         id: ''
       },
       salaryBasic: SALARY_BASIC,
@@ -108,7 +115,8 @@ export default {
       rules: {
         salary_basic: [{ validator: validateRequire }],
         salary_insurance_id: [{ validator: validateRequire }],
-        salary_notes: [{ validator: validateRequire }]
+        salary_notes: [{ validator: validateRequire }],
+        apply_date: [{ validator: validateRequire }]
       }
     }
   },
@@ -136,6 +144,7 @@ export default {
       this.salary.salary_insurance_id = response.salary_insurance_id
       this.salary.salary_basic = response.salary_basic
       this.salary.notes = response.notes
+      this.salary.apply_date = response.apply_date
       this.salary.id = response.id
       this.employee = response.employee.employee
     },

@@ -256,7 +256,8 @@ export default {
       salary_insurance: 'Lương đóng bảo hiểm',
       salary_business: 'Lương kinh doanh',
       salary_notes: 'Ghi chú',
-      search_name: 'Tên tìm kiếm...'
+      search_name: 'Tên tìm kiếm...',
+      apply_date: 'Ngày áp dụng'
     },
     salary_business: {
       header: 'Danh sách lương kinh doanh',
@@ -310,7 +311,8 @@ export default {
       salary_basic: 'Lương cơ bản',
       salary_insurance: 'Lương đóng bảo hiểm',
       salary_business: 'Lương kinh doanh',
-      notes: 'Ghi chú'
+      notes: 'Ghi chú',
+      apply_date: 'Ngày áp dụng'
     },
     salary_business_add: {
       employee_name: 'Nhân viên',
@@ -414,7 +416,8 @@ export default {
     salary_basic: 'Lương cơ bản',
     salary_insurance: 'Lương đóng bảo hiểm',
     salary_business: 'Lương kinh doanh',
-    notes: 'Ghi chú'
+    notes: 'Ghi chú',
+    apply_date: 'Ngày áp dụng'
   },
   salary_business: {
     edit: 'Thay đổi thông tin',

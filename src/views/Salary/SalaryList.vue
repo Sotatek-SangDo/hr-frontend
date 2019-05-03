@@ -40,6 +40,11 @@
                 <span>{{ scope.row.insurance ? scope.row.insurance.salary : '' }}</span>
               </template>
             </el-table-column>
+            <el-table-column :label="$t('table.salary.apply_date')" prop="apply_date" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.apply_date }}</span>
+              </template>
+            </el-table-column>
             <el-table-column :label="$t('table.salary.salary_notes')" prop="notes" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.notes }}</span>
@@ -70,7 +75,9 @@
             </div>
             <div class="col1 col-4 mt-4">
               <span v-text="$t('table.salary.salary_insurance')"/>
-              <span class="emp-info">{{ information && information.insurance ?information.insurance.salary : '' }}</span>
+              <span class="emp-info">{{ information && information.insurance ? information.insurance.salary : '' }}</span>
+              <span v-text="$t('table.salary.apply_date')"/>
+              <span class="emp-info">{{ information ? information.apply_date : '' }}</span>
               <span v-text="$t('table.salary.salary_notes')"/>
               <span class="emp-info">{{ information ? information.notes : '' }}</span>
             </div>
