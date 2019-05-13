@@ -251,6 +251,31 @@ export const mapServerRouters = {
     name: 'ContractEdit',
     meta: { title: 'contract.edit' },
     hidden: true
+  },
+  syncDepartment: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/department',
+    redirect: '/Department/DepartmentList',
+    meta: { title: 'department.index', icon: 'department' }
+  },
+  childSyncDepartment: {
+    component: () => import('@/views/Department/DepartmentList'),
+    path: 'index',
+    name: 'Department',
+    meta: { title: 'department.list', icon: 'user', noCache: true }
+  },
+  addDepartment: {
+    component: () => import('@/views/Department/AddDepartment'),
+    path: 'adddepartment',
+    name: 'DepartmentAdd',
+    meta: { title: 'department.add', icon: 'plus-square' }
+  },
+  departmentEdit: {
+    component: () => import('@/views/Department/AddDepartment'),
+    path: 'edit/:id',
+    name: 'DepartmentEdit',
+    meta: { title: 'department.edit' },
+    hidden: true
   }
 }
 
@@ -510,23 +535,23 @@ export const developerRouterMap = [
 ]
 
 export const asyncRouterMap = [
-  {
-    path: '/department',
-    component: Layout,
-    // redirect: '/department/index',
-    name: 'Departments',
-    meta: {
-      title: 'Department',
-      icon: 'department'
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/Department/index'),
-        name: 'DepartmentsIndex',
-        meta: { title: 'Department', icon: 'department' }
-      }
-    ]
-  },
+  // {
+  //   path: '/department',
+  //   component: Layout,
+  //   // redirect: '/department/index',
+  //   name: 'Departments',
+  //   meta: {
+  //     title: 'Department',
+  //     icon: 'department'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/Department/index'),
+  //       name: 'DepartmentsIndex',
+  //       meta: { title: 'Department', icon: 'department' }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]
