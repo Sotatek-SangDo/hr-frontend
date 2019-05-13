@@ -99,6 +99,11 @@ export default {
       allowances: 'Trợ cấp',
       allowances_add: 'Thêm mới trợ cấp',
       allowances_edit: 'Chỉnh sửa trợ cấp'
+    },
+    department: {
+      index: 'Phòng ban',
+      list: 'Danh sách',
+      add: 'Thêm mới'
     }
   },
   navbar: {
@@ -172,8 +177,12 @@ export default {
     birthday: 'Ngày sinh',
     address: 'Địa chỉ',
     department: {
+      header: 'Phòng Ban',
       name: 'Phòng ban',
-      email: 'Email công việc'
+      email: 'Email',
+      phone_number: 'Số điện thoại',
+      count_emp: 'Số nhận viên',
+      search_name: 'Tên tìm kiếm...'
     },
     employee: {
       private_email: 'Email cá nhân',
@@ -319,6 +328,11 @@ export default {
       sales: 'Mặt hàng kinh doanh',
       amount: 'Số lượng',
       unit: 'Lương / Mặt hàng'
+    },
+    department_add: {
+      name: 'Tên phòng ban',
+      email: 'Email phòng ban',
+      phone_number: 'Số điện thoại'
     }
   },
   errorLog: {
@@ -426,6 +440,15 @@ export default {
     amount: 'Số lượng',
     unit: 'Lương / Mặt hàng'
   },
+  department: {
+    add: 'Thêm mới',
+    edit: 'Thay đổi thông tin',
+    search_name: 'Tên tìm kiếm...',
+    header: 'Danh sách phòng ban',
+    name: 'Tên phòng ban',
+    email: 'Email phòng ban',
+    phone_number: 'Số điên thoại'
+  },
   validation: {
     employees: {
       name: 'Họ và tên',
@@ -444,6 +467,11 @@ export default {
       salary_insurrance: 'Lương đóng BH',
       status: 'Trạng thái HĐ',
       contract_type_id: 'Loại HĐ'
+    },
+    department: {
+      email: 'email',
+      name: 'Tên phòng ban',
+      phone_number: 'Số điện thoại'
     },
     required: 'bắt buộc không được rỗng'
   },
