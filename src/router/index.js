@@ -252,6 +252,78 @@ export const mapServerRouters = {
     meta: { title: 'contract.edit' },
     hidden: true
   },
+  syncSalary: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/salary',
+    redirect: '/Salary/SalaryList',
+    meta: { title: 'salary.index', icon: 'salary' }
+  },
+  childSyncSalary: {
+    component: () => import('@/views/Salary/SalaryList'),
+    path: 'index',
+    name: 'Salary',
+    meta: { title: 'salary.list', icon: 'salary', noCache: true }
+  },
+  salaryDetail: {
+    component: () => import('@/views/Salary/SalaryDetail'),
+    path: 'detail/:id',
+    name: 'SalaryDetail',
+    meta: { title: 'salary.detail' },
+    hidden: true
+  },
+  salaryEdit: {
+    component: () => import('@/views/Salary/SalaryEdit'),
+    path: 'edit/:id',
+    name: 'SalaryEdit',
+    meta: { title: 'salary.edit' },
+    hidden: true
+  },
+  childSyncSalaryBusiness: {
+    component: () => import('@/views/Salary/SalaryBusinessList'),
+    path: '/salary/business/index',
+    name: 'SalaryBusiness',
+    meta: { title: 'salary.business', icon: 'salary-business', noCache: true }
+  },
+  salaryBusinessAdd: {
+    component: () => import('@/views/Salary/BusinessAdd'),
+    path: 'business-add',
+    name: 'BusinessAdd',
+    meta: { title: 'salary.business_add' },
+    hidden: true
+  },
+  salaryBusinessEdit: {
+    component: () => import('@/views/Salary/BusinessAdd'),
+    path: 'business-edit/:id',
+    name: 'BusinessEdit',
+    meta: { title: 'salary.business_edit' },
+    hidden: true
+  },
+  childSyncAllowances: {
+    component: () => import('@/views/Salary/AllowancesList'),
+    path: '/allowances/index',
+    name: 'Allowances',
+    meta: { title: 'salary.allowances', icon: 'allowed', noCache: true }
+  },
+  addAllowances: {
+    component: () => import('@/views/Salary/AddAllowances'),
+    path: 'addallowances',
+    name: 'AllowanceAdd',
+    meta: { title: 'salary.allowances_add', icon: 'plus-square' },
+    hidden: true
+  },
+  allowancesDetail: {
+    component: () => import('@/views/Salary/DetailAllowances'),
+    path: 'allowances-detail/:id',
+    name: 'AllowancesDetail',
+    meta: { title: 'salary.detail' },
+    hidden: true
+  },
+  allowancesEdit: {
+    component: () => import('@/views/Salary/AddAllowances'),
+    path: 'allowances-edit/:id',
+    name: 'AllowancesEdit',
+    meta: { title: 'salary.allowances_edit' }
+  },
   syncDepartment: {
     component: () => import('@/views/layout/Layout'),
     path: '/department',

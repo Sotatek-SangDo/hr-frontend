@@ -87,6 +87,19 @@ export default {
       detail: 'Thông tin hợp đồng',
       edit: 'Chỉnh sửa thông tin'
     },
+    salary: {
+      index: 'Lương',
+      list: 'Lương',
+      add: 'Thêm mới',
+      detail: 'Thông tin lương',
+      edit: 'Chỉnh sửa thông tin lương',
+      business: 'Kinh doanh',
+      business_add: 'Thêm mới lương kinh doanh',
+      business_edit: 'Chỉnh sửa lương kinh doanh',
+      allowances: 'Trợ cấp',
+      allowances_add: 'Thêm mới trợ cấp',
+      allowances_edit: 'Chỉnh sửa trợ cấp'
+    },
     department: {
       index: 'Phòng ban',
       list: 'Danh sách',
@@ -164,6 +177,7 @@ export default {
     birthday: 'Ngày sinh',
     address: 'Địa chỉ',
     department: {
+      header: 'Phòng Ban',
       name: 'Phòng ban',
       email: 'Email',
       phone_number: 'Số điện thoại',
@@ -226,11 +240,42 @@ export default {
       salary_basic: 'Lương cơ bản',
       salary_insurrance: 'Lương đóng BH',
       salary_insurrance_type: 'Loại BH',
-      status: 'Trạng thái hợp đồng',
+      status: 'Trạng thái',
       contract_type: 'Loại hợp đồng',
       info: 'Thông tin hợp đồng',
       status_active: 'Đang có hiệu lực',
       status_inactive: 'Hết hiệu lực'
+    },
+    allowance: {
+      info: 'Thông tin trợ cấp',
+      header: 'Danh sách trợ cấp',
+      search_name: 'Tên tìm kiếm...',
+      employee: 'Nhân viên',
+      allowance_type: 'Loại',
+      subsidy: 'Số tiền',
+      notes: 'Ghi chú',
+      apply_date: 'Ngày áp dụng',
+      status: 'Trạng thái'
+    },
+    salary: {
+      header: 'Danh sách lương',
+      info: 'Thông tin lương',
+      employee_name: 'Nhân viên',
+      salary_basic: 'Lương cơ bản',
+      salary_insurance: 'Lương đóng bảo hiểm',
+      salary_business: 'Lương kinh doanh',
+      salary_notes: 'Ghi chú',
+      search_name: 'Tên tìm kiếm...',
+      apply_date: 'Ngày áp dụng'
+    },
+    salary_business: {
+      header: 'Danh sách lương kinh doanh',
+      info: 'Thông tin kinh doanh',
+      employee_name: 'Nhân viên',
+      sales: 'Mặt hàng kinh doanh',
+      amount: 'Số lượng',
+      unit: 'Lương / Mặt hàng',
+      search_name: 'Tên tìm kiếm...'
     }
   },
   placeholder: {
@@ -259,9 +304,30 @@ export default {
       start_date: 'Chọn ngày bắt đầu',
       end_date: 'Chọn ngày kết thúc',
       contract_type: 'Chọn loại hợp đồng',
-      salary_basic: 'Lương cơ bản',
       salary_insurrance: 'Lương đóng bảo hiểm',
       status: 'Trạng thái'
+    },
+    allowance_add: {
+      employee: 'Nhân viên',
+      allowance_type: 'Loại',
+      subsidy: 'Số tiền',
+      notes: 'Ghi chú',
+      apply_date: 'Ngày áp dụng',
+      status: 'Trạng thái'
+    },
+    salary_add: {
+      employee_name: 'Nhân viên',
+      salary_basic: 'Lương cơ bản',
+      salary_insurance: 'Lương đóng bảo hiểm',
+      salary_business: 'Lương kinh doanh',
+      notes: 'Ghi chú',
+      apply_date: 'Ngày áp dụng'
+    },
+    salary_business_add: {
+      employee_name: 'Nhân viên',
+      sales: 'Mặt hàng kinh doanh',
+      amount: 'Số lượng',
+      unit: 'Lương / Mặt hàng'
     },
     department_add: {
       name: 'Tên phòng ban',
@@ -348,6 +414,31 @@ export default {
     status: 'Trạng thái HĐ',
     contract_type: 'Loại HĐ',
     info: 'Thông tin hợp đồng'
+  },
+  allowance: {
+    edit: 'Thay đổi thông tin',
+    employee: 'Nhân viên',
+    allowance_type: 'Loại',
+    subsidy: 'Số tiền',
+    notes: 'Ghi chú',
+    apply_date: 'Ngày áp dụng',
+    status: 'Trạng thái'
+  },
+  salary: {
+    edit: 'Thay đổi thông tin',
+    employee_name: 'Nhân viên',
+    salary_basic: 'Lương cơ bản',
+    salary_insurance: 'Lương đóng bảo hiểm',
+    salary_business: 'Lương kinh doanh',
+    notes: 'Ghi chú',
+    apply_date: 'Ngày áp dụng'
+  },
+  salary_business: {
+    edit: 'Thay đổi thông tin',
+    employee_name: 'Nhân viên',
+    sales: 'Mặt hàng kinh doanh',
+    amount: 'Số lượng',
+    unit: 'Lương / Mặt hàng'
   },
   department: {
     add: 'Thêm mới',

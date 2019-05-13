@@ -4,10 +4,10 @@
       <div class="card">
         <div class="card-body">
           <div class="epm-tb-header">
-            <h4 class="header-title header-underline" v-text="$t('table.contract.header')"/>
+            <h4 class="header-title header-underline" v-text="$t('table.allowance.header')"/>
           </div>
           <div class="filter-container">
-            <el-input :placeholder="$t('table.contract.search_name')" v-model="listQuery.keySearch" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+            <el-input :placeholder="$t('table.allowance.search_name')" v-model="listQuery.keySearchAllowance" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
             <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addPage">{{ $t('table.add') }}</el-button>
           </div>
@@ -15,7 +15,7 @@
             v-loading="listLoading"
             ref="datatable"
             :key="tableKey"
-            :data="contracts"
+            :data="allowances"
             border
             fit
             highlight-current-row
@@ -26,42 +26,32 @@
                 <span class="id" @click="showInfor(scope.row)">{{ scope.row.id }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.contract.contract_code')" prop="contract_code" align="center" sortable>
-              <template slot-scope="scope">
-                <span>{{ scope.row.contract_code }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('table.contract.employee')" prop="name" align="center" sortable>
+            <el-table-column :label="$t('table.allowance.employee')" prop="name" align="center" sortable>
               <template slot-scope="scope">
                 <span class="field-name" @click="profilePage(scope.row.employee.id)">{{ scope.row.employee.name }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.contract.contract_type')" prop="contract_type" align="center" sortable>
+            <el-table-column :label="$t('table.allowance.allowance_type')" prop="allowance_type" align="center" sortable>
               <template slot-scope="scope">
-                <span>{{ scope.row.contract_type.type }}</span>
+                <span>{{ scope.row.allowance_type }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.contract.start_date')" prop="start_date" align="center">
+            <el-table-column :label="$t('table.allowance.subsidy')" prop="subsidy" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.start_date }}</span>
+                <span>{{ scope.row.subsidy }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.contract.end_date')" prop="end_date" align="center">
+            <el-table-column :label="$t('table.allowance.notes')" prop="notes" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.end_date }}</span>
+                <span>{{ scope.row.notes }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.contract.salary_basic')" prop="salary_basic" align="center">
+            <el-table-column :label="$t('table.allowance.apply_date')" prop="apply_date" align="center">
               <template slot-scope="scope">
-                <span>{{ scope.row.salary.salary_basic }}</span>
+                <span>{{ scope.row.apply_date }}</span>
               </template>
             </el-table-column>
-            <el-table-column :label="$t('table.contract.salary_insurrance')" prop="salary_insurrance" align="center">
-              <template slot-scope="scope">
-                <span>{{ scope.row.salary_insurance[0] ? scope.row.salary_insurance[0].salary : '' }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('table.contract.status')" prop="status" align="center">
+            <el-table-column :label="$t('table.allowance.status')" prop="status" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.status }}</span>
               </template>
@@ -78,34 +68,28 @@
     </div>
     <div class="col-12 mt-5">
       <el-tabs v-model="activeName">
-        <el-tab-pane :label="$t('table.contract.info')" name="info">
+        <el-tab-pane :label="$t('table.allowance.info')" name="info">
           <div class="infor-container">
             <div class="col1 col-3 mt-3">
               <img :src="imageUrl()" @error="errorImage">
             </div>
             <div class="col1 col-3 mt-3">
-              <span v-text="$t('table.contract.contract_code')"/>
-              <span class="emp-info">{{ information ? information.contract_code : '' }}</span>
-              <span v-text="$t('table.contract.employee')"/>
+              <span v-text="$t('table.allowance.employee')"/>
               <span class="emp-info">{{ information ? information.employee.name : '' }}</span>
-              <span v-text="$t('table.contract.contract_type')"/>
-              <span class="emp-info">{{ information? information.contract_type.type : '' }}</span>
+              <span v-text="$t('table.allowance.status')"/>
+              <span class="emp-info">{{ information? information.status : '' }}</span>
             </div>
             <div class="col1 col-3 mt-3">
-              <span v-text="$t('table.contract.start_date')"/>
-              <span class="emp-info">{{ information ? information.start_date : '' }}</span>
-              <span v-text="$t('table.contract.end_date')"/>
-              <span class="emp-info">{{ information ? information.end_date : '' }}</span>
-              <span v-text="$t('table.contract.status')"/>
-              <span class="emp-info">{{ information ? information.status : '' }}</span>
+              <span v-text="$t('table.allowance.allowance_type')"/>
+              <span class="emp-info">{{ information ? information.allowance_type : '' }}</span>
+              <span v-text="$t('table.allowance.subsidy')"/>
+              <span class="emp-info">{{ information ? information.subsidy : '' }}</span>
             </div>
             <div class="col1 col-3 mt-3">
-              <span v-text="$t('table.contract.salary_basic')"/>
-              <span class="emp-info">{{ information && information.salary ? information.salary.salary_basic : '' }}</span>
-              <span v-text="$t('table.contract.salary_insurrance_type')"/>
-              <span class="emp-info">{{ information && information.salary_insurance[0] ? information.salary_insurance[0].insurance : '' }}</span>
-              <span v-text="$t('table.contract.salary_insurrance')"/>
-              <span class="emp-info">{{ information && information.salary_insurance[0] ? information.salary_insurance[0].salary : '' }}</span>
+              <span v-text="$t('table.allowance.notes')"/>
+              <span class="emp-info">{{ information ? information.notes : '' }}</span>
+              <span v-text="$t('table.allowance.apply_date')"/>
+              <span class="emp-info">{{ information ? information.apply_date : '' }}</span>
             </div>
           </div>
         </el-tab-pane>
@@ -130,22 +114,19 @@ export default {
   data() {
     return {
       activeName: 'info',
-      headerTitle: 'Hợp Đồng',
-      header: 'Thêm mới hợp dồng',
+      headerTitle: 'Trợ cấp',
+      header: 'Thêm mới trợ cấp',
       tableKey: 0,
       information: {
-        employee: {},
-        contract_type: {},
-        salary: {},
-        salary_insurance: {}
+        employee: {}
       },
-      contracts: [],
+      allowances: [],
       listLoading: false,
       total: 0,
       listQuery: {
         page: 1,
         limit: 20,
-        keySearch: undefined,
+        keySearchAllowance: undefined,
         sort: '+id'
       }
     }
@@ -163,8 +144,8 @@ export default {
     imageUrl() {
       return this.information ? this.information.employee.avatar : NO_IMAGE
     },
-    showInfor(contract) {
-      this.information = contract
+    showInfor(allowance) {
+      this.information = allowance
     },
     sortChange(data) {
       const { prop, order } = data
@@ -186,12 +167,12 @@ export default {
     },
     getList() {
       this.listLoading = true
-      rf.getRequest('ContractRequest')
+      rf.getRequest('AllowancesRequest')
         .getAll(this.listQuery)
         .then(response => {
-          this.contracts = response.data.data
+          this.allowances = response.data.data
           this.total = response.data.total
-          this.information = window._.find(this.contracts, (index, item) => { return index })
+          this.information = window._.find(this.allowances, (index, item) => { return index })
           setTimeout(() => {
             this.listLoading = false
           }, 1.5 * 1000)
@@ -199,7 +180,7 @@ export default {
     },
     handleUpdate(row) {
       return this.$router.push({
-        name: 'ContractEdit',
+        name: 'AllowancesEdit',
         params: { id: row.id }
       })
     },
@@ -211,7 +192,7 @@ export default {
     },
     addPage() {
       this.$router.push({
-        name: 'ContractAdd'
+        name: 'AllowanceAdd'
       })
     },
     inital() {
