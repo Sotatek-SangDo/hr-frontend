@@ -16,7 +16,7 @@ module.exports = {
         changeOrigin: true
       },
       '/auth': {
-        target: 'http://auth.erptech.vn',
+        target: 'http://login-hrm.erptech.vn',
         pathRewrite: {'^/auth' : ''},
         changeOrigin: true
       }
