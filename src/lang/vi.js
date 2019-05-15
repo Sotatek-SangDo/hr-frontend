@@ -103,7 +103,8 @@ export default {
     department: {
       index: 'Phòng ban',
       list: 'Danh sách',
-      add: 'Thêm mới'
+      add: 'Thêm mới',
+      edit: 'Chỉnh sửa thông tin phòng ban'
     }
   },
   navbar: {
