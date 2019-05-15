@@ -24,6 +24,14 @@
                   <el-input :rows="1" v-model="department.phone_number" :placeholder="$t('placeholder.department_add.phone_number')" type="text" class="article-textarea" autosize/>
                 </el-form-item>
               </div>
+              <div class="form-group">
+                <label class="col-form-label">{{ $t('department.rolls') }}</label>
+                <el-form-item prop="rolls">
+                  <el-drag-select v-model="department.rolls" :placeholder="$t('placeholder.department_add.rolls')" multiple>
+                    <el-option v-for="(item, index) in rolls" :label="item.name" :value="item.id" :key="index" />
+                  </el-drag-select>
+                </el-form-item>
+              </div>
             </div>
           </div>
           <div class="errors">
@@ -44,9 +52,13 @@
 <script>
 import rf from '@/api/commons/RequestFactory'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'DepartmentAdd',
+  components: {
+    ElDragSelect
+  },
   props: {
     header: {
       type: String,
@@ -70,12 +82,14 @@ export default {
         name: '',
         email: '',
         phone_number: '',
+        rolls: '',
         id: ''
       },
       formData: new FormData(),
       isDisable: false,
       errors: [],
       isShow: false,
+      rolls: this.$store.getters.rolls,
       createBtn: this.$t('button.save'),
       updateBtn: this.$t('button.update'),
       rules: {
@@ -90,6 +104,14 @@ export default {
       this.getDepartment()
     }
     this.initial()
+
+    if (!this.rolls) {
+      this.$store.cache
+        .dispatch('getMasterData')
+        .then(res => {
+          this.rolls = res.data.rolls
+        })
+    }
   },
   mounted() {
   },
@@ -101,6 +123,7 @@ export default {
       this.department.name = response.name
       this.department.email = response.email
       this.department.phone_number = response.phone_number
+      this.department.rolls = _.map(response.rolls, (item) => { return item.id })
       this.department.id = response.id
     },
     getDepartment() {
