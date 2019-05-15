@@ -12,7 +12,8 @@ const masterData = {
     certifications: [],
     languages: [],
     contractType: [],
-    salaryInsurance: []
+    salaryInsurance: [],
+    rolls: []
   },
   mutations: {
     SET_NATIONALITIES: (state, nationalities) => {
@@ -47,6 +48,9 @@ const masterData = {
     },
     SET_SALARY_INSURANCE: (state, insurane) => {
       state.salaryInsurance = insurane
+    },
+    SET_ROLL: (state, rolls) => {
+      state.rolls = rolls
     }
   },
   actions: {
@@ -64,6 +68,7 @@ const masterData = {
           commit('SET_E_LANGUAGE', response.data.language)
           commit('SET_TYPE_CONTRACT', response.data.contractType)
           commit('SET_SALARY_INSURANCE', response.data.salaryInsurance)
+          commit('SET_ROLL', response.data.rolls)
           resolve(response)
         }).catch(error => {
           reject(error)

@@ -46,6 +46,11 @@
                 <span>{{ scope.row.count_emp }}</span>
               </template>
             </el-table-column>
+            <el-table-column :label="$t('table.department.count_roll')" prop="count_roll" align="center">
+              <template slot-scope="scope">
+                <span>{{ scope.row.count_roll }}</span>
+              </template>
+            </el-table-column>
             <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
               <template slot-scope="scope">
                 <el-button type="primary" size="medium" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>

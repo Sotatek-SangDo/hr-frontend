@@ -103,7 +103,8 @@ export default {
     department: {
       index: 'Phòng ban',
       list: 'Danh sách',
-      add: 'Thêm mới'
+      add: 'Thêm mới',
+      edit: 'Chỉnh sửa thông tin phòng ban'
     }
   },
   navbar: {
@@ -182,6 +183,7 @@ export default {
       email: 'Email',
       phone_number: 'Số điện thoại',
       count_emp: 'Số nhận viên',
+      count_roll: 'Số chức vụ',
       search_name: 'Tên tìm kiếm...'
     },
     employee: {
@@ -332,7 +334,8 @@ export default {
     department_add: {
       name: 'Tên phòng ban',
       email: 'Email phòng ban',
-      phone_number: 'Số điện thoại'
+      phone_number: 'Số điện thoại',
+      rolls: 'Chức vụ'
     }
   },
   errorLog: {
@@ -447,7 +450,8 @@ export default {
     header: 'Danh sách phòng ban',
     name: 'Tên phòng ban',
     email: 'Email phòng ban',
-    phone_number: 'Số điên thoại'
+    phone_number: 'Số điên thoại',
+    rolls: 'Chức vụ'
   },
   validation: {
     employees: {
