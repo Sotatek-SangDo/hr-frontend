@@ -348,6 +348,27 @@ export const mapServerRouters = {
     name: 'DepartmentEdit',
     meta: { title: 'department.edit' },
     hidden: true
+  },
+  syncPermission: {
+    path: '/permissions',
+    component: () => import('@/views/layout/Layout'),
+    redirect: '/PermissionStore',
+    alwaysShow: true,
+    name: 'PermissionIndex',
+    meta: { title: 'permissions.index', icon: 'lock' }
+  },
+  storePermission: {
+    component: () => import('@/views/UserPermission/PermissionStore'),
+    path: 'create',
+    name: 'PermissionStore',
+    meta: { title: 'permissions.store', icon: 'plus-square' }
+  },
+  editPermission: {
+    component: () => import('@/views/UserPermission/edit'),
+    path: 'update',
+    name: 'PermissionUpdate',
+    meta: { title: 'permissions.edit' },
+    hidden: true
   }
 }
 

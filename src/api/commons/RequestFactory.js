@@ -22,6 +22,7 @@ import ContractRequest from './ContractRequest'
 import SalaryRequest from './SalaryRequest'
 import AllowancesRequest from './AllowancesRequest'
 import SalaryBusinessRequest from './SalaryBusinessRequest'
+import AuthRequest from './AuthRequest'
 
 const requestMap = {
   NationalityRequest,
@@ -47,7 +48,8 @@ const requestMap = {
   ContractRequest,
   SalaryRequest,
   AllowancesRequest,
-  SalaryBusinessRequest
+  SalaryBusinessRequest,
+  AuthRequest
 }
 
 const instances = {}

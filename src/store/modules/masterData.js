@@ -13,7 +13,8 @@ const masterData = {
     languages: [],
     contractType: [],
     salaryInsurance: [],
-    rolls: []
+    rolls: [],
+    routerRoles: []
   },
   mutations: {
     SET_NATIONALITIES: (state, nationalities) => {
@@ -51,6 +52,9 @@ const masterData = {
     },
     SET_ROLL: (state, rolls) => {
       state.rolls = rolls
+    },
+    SET_ROUTER_ROLES: (state, roles) => {
+      state.routerRoles = roles
     }
   },
   actions: {
@@ -69,6 +73,7 @@ const masterData = {
           commit('SET_TYPE_CONTRACT', response.data.contractType)
           commit('SET_SALARY_INSURANCE', response.data.salaryInsurance)
           commit('SET_ROLL', response.data.rolls)
+          commit('SET_ROUTER_ROLES', response.data.roles)
           resolve(response)
         }).catch(error => {
           reject(error)
