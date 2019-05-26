@@ -105,6 +105,10 @@ export default {
       list: 'Danh sách',
       add: 'Thêm mới',
       edit: 'Chỉnh sửa thông tin phòng ban'
+    },
+    permissions: {
+      index: 'Phân Quyền',
+      store: 'Thêm user'
     }
   },
   navbar: {
@@ -336,6 +340,13 @@ export default {
       email: 'Email phòng ban',
       phone_number: 'Số điện thoại',
       rolls: 'Chức vụ'
+    },
+    user: {
+      firstName: 'Họ',
+      lastName: 'Tên',
+      email: 'Email',
+      phonenumber: 'Số điện thoại',
+      role: 'Quyền'
     }
   },
   errorLog: {
@@ -461,6 +472,12 @@ export default {
       joined_at: 'Ngày gia nhập',
       work_email: 'Email công việc',
       avatar: 'Ảnh đại diện'
+    },
+    user: {
+      firstName: 'Họ',
+      lastName: 'Tên',
+      email: 'Email',
+      role: 'Quyền'
     },
     contract: {
       contract_code: 'Số hợp đồng',
@@ -618,6 +635,16 @@ export default {
     interviewer: 'Người phỏng vấn',
     interviewer_select: 'Chọn người phỏng vấn',
     started_at: 'Thời gian'
+  },
+  permissions: {
+    add: 'Thêm User',
+    user: {
+      firstName: 'Họ',
+      lastName: 'Tên',
+      email: 'Email',
+      phonenumber: 'Số điện thoại',
+      role: 'Quyền'
+    }
   },
   calendar: {
     confirm_update: 'Bạn có chắc muốn thay đổi?'

@@ -27,8 +27,9 @@ const getters = {
   qualifications: state => state.masterData.qualifications,
   certifications: state => state.masterData.certifications,
   languages: state => state.masterData.languages,
-  contractType: state => state.contractType,
-  salaryInsurance: state => state.salaryInsurance,
-  rolls: state => state.rolls
+  contractType: state => state.masterData.contractType,
+  salaryInsurance: state => state.masterData.salaryInsurance,
+  rolls: state => state.masterData.rolls,
+  routerRoles: state => state.masterData.routerRoles
 }
 export default getters
