@@ -50,6 +50,7 @@
         </div>
 
         <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
+        <span class="link" @click="forgot">Forgot Password</span>
       </div>
     </el-form>
 
@@ -141,6 +142,9 @@ export default {
         }
       })
     },
+    forgot() {
+      this.$router.push({ path: '/forgot-password' })
+    },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
       // const hashObj = getQueryObject(hash)
@@ -227,6 +231,12 @@ $light_gray:#eee;
     padding: 160px 35px 0;
     margin: 0 auto;
     overflow: hidden;
+  }
+  span.link {
+    text-decoration: underline;
+    color: #fff;
+    font-style: italic;
+    cursor: pointer;
   }
   .tips {
     font-size: 14px;

@@ -15,6 +15,7 @@ function hasPermission(roles, permissionRoles) {
 }
 
 const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
+const passExcept = ['ForgotPassword', 'ResetPassword']
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
@@ -58,7 +59,10 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    /* has no token*/
+    if (passExcept.indexOf(to.name) >= 0 || passExcept.indexOf(from.name) >= 0) {
+      next()
+      return NProgress.done()
+    }
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
     } else {

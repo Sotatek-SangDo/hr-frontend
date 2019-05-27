@@ -646,6 +646,11 @@ export default {
       role: 'Quyền'
     }
   },
+  forgot: {
+    title: 'Quên mật khẩu',
+    email: 'Nhập vào email...',
+    submit: 'Gửi'
+  },
   calendar: {
     confirm_update: 'Bạn có chắc muốn thay đổi?'
   },

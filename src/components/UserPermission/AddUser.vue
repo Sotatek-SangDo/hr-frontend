@@ -8,14 +8,14 @@
             <div class="col-xs-4 col-md-4">
               <div class="form-group">
                 <label class="col-form-label">{{ $t('permissions.user.firstName') }}</label>
-                <el-form-item style="margin-bottom: 30px;" prop="firstName">
-                  <el-input :rows="1" v-model="user.firstName" :placeholder="$t('placeholder.user.firstName')" type="text" class="article-textarea"/>
+                <el-form-item style="margin-bottom: 30px;" prop="firstname">
+                  <el-input :rows="1" v-model="user.firstname" :placeholder="$t('placeholder.user.firstName')" type="text" class="article-textarea"/>
                 </el-form-item>
               </div>
               <div class="form-group">
                 <label class="col-form-label">{{ $t('permissions.user.lastName') }}</label>
-                <el-form-item style="margin-bottom: 30px;" prop="lastName">
-                  <el-input :rows="1" v-model="user.lastName" :placeholder="$t('placeholder.user.lastName')" type="text" class="article-textarea"/>
+                <el-form-item style="margin-bottom: 30px;" prop="lastname">
+                  <el-input :rows="1" v-model="user.lastname" :placeholder="$t('placeholder.user.lastName')" type="text" class="article-textarea"/>
                 </el-form-item>
               </div>
               <div class="form-group">
@@ -87,8 +87,8 @@ export default {
     return {
       user: {
         email: '',
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         phonenumber: '',
         role: ''
       },
@@ -103,9 +103,9 @@ export default {
       createBtn: this.$t('button.save'),
       updateBtn: this.$t('button.update'),
       rules: {
-        firstName: [{ validator: validateRequire }],
+        firstname: [{ validator: validateRequire }],
         email: [{ validator: validateRequire }],
-        lastName: [{ validator: validateRequire }],
+        lastname: [{ validator: validateRequire }],
         role: [{ validator: validateRequire }]
       }
     }
@@ -126,8 +126,8 @@ export default {
     },
     setData(response) {
     },
-    getUser() {
-      rf.getRequest('')
+    getUserInfor() {
+      rf.getRequest('AuthRequest')
         .getEmployee({ id: this.userId })
         .then(res => {
           this.setData(res.data)
@@ -150,16 +150,16 @@ export default {
       _.forEach(this.emp, (emp, i) => {
         this.formData.append(`${i}`, emp)
       })
-      const params = this.user.concat(this.passwordDefault)
+      const params = { ...this.user, ...this.passwordDefault }
       if (this.empId) {
         return rf
-          .getRequest('UserRequest')
+          .getRequest('AuthRequest')
           .update(params)
           .then(res => {
             this.handleRespone(res)
           })
       }
-      rf.getRequest('UserRequest')
+      rf.getRequest('AuthRequest')
         .store(params)
         .then(res => {
           this.handleRespone(res)
@@ -167,7 +167,7 @@ export default {
         .catch(() => (this.disabled = false))
     },
     handleRespone(response) {
-      response.data.status
+      response.data.status === 200
         ? window.location.reload()
         : this.errors.push({ keys: 'Lỗi chưa xác định trên server' })
     }

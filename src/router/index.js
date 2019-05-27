@@ -49,6 +49,18 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/forgot-password',
+    component: () => import('@/views/login/forgot'),
+    name: 'ForgotPassword',
+    hidden: true
+  },
+  {
+    path: '/reset-password',
+    component: () => import('@/views/login/forgot'),
+    name: 'ResetPassword',
+    hidden: true
+  },
+  {
     path: '/auth-redirect',
     component: () => import('@/views/login/authredirect'),
     hidden: true
