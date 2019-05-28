@@ -25,12 +25,29 @@
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleForgot">{{ $t('forgot.submit') }}</el-button>
     </el-form>
+    <div id="confirm_modal" class="modal fade show">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span>Kiểm tra email của bạn.</span>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              @click="goToLogin">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { validateEmail } from '@/utils/validate'
 import rf from '@/api/commons/RequestFactory'
+import $ from 'jquery'
 
 export default {
   name: 'ForgotPassword',
@@ -61,7 +78,7 @@ export default {
             .forgotPassword(this.forgotForm)
             .then(res => {
               this.loading = false
-              // this.$router.push({ path: '/login' })
+              $('#confirm_modal').modal('show')
             })
             .catch(() => (this.loading = false))
         } else {
@@ -69,6 +86,9 @@ export default {
           return false
         }
       })
+    },
+    goToLogin() {
+      this.$router.push({ path: '/login' })
     }
   }
 }
@@ -78,7 +98,9 @@ export default {
   $bg:#283443;
   $light_gray:#eee;
   $cursor: #fff;
-
+  .modal-footer {
+    padding: 0;
+  }
   @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
     .login-container .el-input input{
       color: $cursor;
