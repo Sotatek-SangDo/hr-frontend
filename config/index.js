@@ -11,13 +11,12 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: "http://mock.erptech.vn/mock/5c493ec0c583af69a0715fdb",
-        // target: "http://localhost:8000/api/v1",
+        target: 'http://be-hr.local:8008/api/v1',//'http://mock.erptech.vn/mock/5c493ec0c583af69a0715fdb',
         pathRewrite: {'^/api' : ''},
         changeOrigin: true
       },
       '/auth': {
-        target: 'http://auth.erptech.vn',
+        target: 'http://login-hrm.erptech.vn',
         pathRewrite: {'^/auth' : ''},
         changeOrigin: true
       }
@@ -28,7 +27,7 @@ module.exports = {
     // can be overwritten by process.env.HOST
     // if you want dev by ip, please set host: '0.0.0.0'
     host: 'localhost',
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: false,

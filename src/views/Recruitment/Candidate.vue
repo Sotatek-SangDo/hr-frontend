@@ -1,39 +1,24 @@
 <template>
-  <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
-    <template slot="main-content">
-      <candidate-layout/>
-    </template>
-  </home-layout>
+  <recruitment-detail-layout/>
 </template>
 
 <script>
-import MasterView from '../MasterView.vue'
-import HomeLayout from '../../components/HomeLayout'
-import CandidateLayout from '../../components/Recruitment/CandidateLayout'
+import MasterView from '@/views/MasterView.vue'
+import RecruitmentDetailLayout from '@/components/Recruitment/RecruitmentDetailLayout'
 
 export default {
   name: 'Cadidate',
   components: {
-    HomeLayout,
-    CandidateLayout
+    RecruitmentDetailLayout
   },
   extends: MasterView,
   data() {
     return {
-      headerTitle: 'Ứng viên',
-      breadcrumbs: [{ title: 'Đợt tuyển dụng', href: '' }]
     }
   },
   mounted() {
-    this.inital()
   },
   methods: {
-    inital() {
-      this.sleep(500).then(() => {
-        this.init()
-      })
-      this.fadeOut()
-    }
   }
 }
 </script>

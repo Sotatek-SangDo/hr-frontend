@@ -73,20 +73,22 @@ export default {
           center: 'title',
           right: 'month,agendaWeek'
         },
+        timeFormat: 'HH:mm',
         defaultDate: new Date(),
         defaultView: 'agendaWeek',
+        slotLabelFormat: 'HH:mm',
         editable: true,
         selectable: true,
         select: function(start, end) {
           self.selectCalendar(start, end)
         },
         eventDrop: function(event, delta, revertFunc) {
-          confirm('Bạn có chắc muốn thay đổi?')
+          confirm(self.$t('calendar.confirm_update'))
             ? self.drop(event)
             : revertFunc()
         },
         eventResize: function(event, delta, revertFunc) {
-          !confirm('Ban co chac muon thay doi?')
+          !confirm(self.$t('calendar.confirm_update'))
             ? revertFunc()
             : self.resize(event)
         },

@@ -5,6 +5,9 @@ const data = [{
       component: 'childSyncEmployee'
     },
     {
+      component: 'childSyncEmployeeAdd'
+    },
+    {
       component: 'childSyncEmployee2'
     }
   ]

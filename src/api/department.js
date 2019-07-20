@@ -33,7 +33,6 @@ export function destroy(data) {
 }
 
 const getModel = () => {
-  // return process.env.ENV_CONFIG === 'dev' ? 'mock-department' : 'departments'
   return 'departments'
 }
 

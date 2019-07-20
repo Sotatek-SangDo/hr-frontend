@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addLanguage">
-          <span class="icon"><i class="ti-plus"/></span>Ngôn ngữ
+          <span class="icon"><svg-icon icon-class="plus-square"/></span>Ngôn ngữ
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
@@ -11,10 +11,10 @@
           <div v-for="(lang, i) in userLanguages" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading" style="text-transform: uppercase">{{ lang.language }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeLang(lang)">
-                <i class="ti-trash"/>
+                <svg-icon icon-class="rubbish-bin" />
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(lang)">
-                <i class="ti-marker-alt"/>
+                <svg-icon icon-class="edit" />
               </button>
             </h5>
             <p class="list-group-item-text">Listen: {{ lang.listen }}</p>
@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import rf from '../../requests/RequestFactory'
-import MasterView from '../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import LanguageModal from '../commons/EmployeeModal/LanguageModal'
 
 export default {
@@ -42,7 +42,8 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -70,7 +71,7 @@ export default {
       rf.getRequest('UserLanguagesRequest')
         .getELanguages({ id: this.empId })
         .then(res => {
-          this.userLanguages = res
+          this.userLanguages = res.data
         })
     },
     addLanguage(e) {
@@ -150,6 +151,7 @@ a.icon-p
   position: absolute
   top: 0
   padding: 5px
+  cursor: pointer
   &.but-del
     right: 0
     border-right: none

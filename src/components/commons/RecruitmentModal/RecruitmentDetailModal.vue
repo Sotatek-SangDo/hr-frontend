@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import MasterView from '../../../views/MasterView'
 import DatePicker from '../DatePicker'
 import _ from 'lodash'

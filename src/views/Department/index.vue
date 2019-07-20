@@ -83,9 +83,9 @@
 
 <script>
 import TabSlide from '../../components/TabSlide'
-import rf from '../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import Pagination from '@/components/Pagination'
-import { fetchList, store, update, destroy } from '@/api/department'
+import { store, update, destroy } from '@/api/department'
 import waves from '@/directive/waves'
 
 // options components
@@ -134,7 +134,7 @@ export default {
       filename: 'departments',
       autoWidth: true,
       bookType: 'xlsx',
-      downloadLoading: false,
+      downloadLoading: false
     }
   },
   watch: {
@@ -145,29 +145,37 @@ export default {
     }
   },
   mounted() {
-    console.warn("mounted");
+    console.warn('mounted')
     this.inital()
   },
-  activated: function(){
+  activated: function() {
     console.log('activated', this._inactive, this.list)
   },
-  deactivated: function(){
+  deactivated: function() {
     console.log('deactivated', this._inactive, this.list)
   },
   created() {
-    console.warn("created");
+    console.warn('created')
     this.getList()
+    this.getJobs()
   },
   beforeCreate() {
-    console.warn("beforeCreate");
+    console.warn('beforeCreate')
   },
   beforeDestroy() {
-    console.warn("beforeDestroy");
+    console.warn('beforeDestroy')
   },
   destroyed() {
-    console.warn("destroyed");
+    console.warn('destroyed')
   },
   methods: {
+    getJobs() {
+      rf.getRequest('JobRequest')
+        .getList()
+        .then(res => {
+          this.jobs = res.data.data
+        })
+    },
     createData() {
       store(this.temp).then(response => {
         this.dialogFormVisible = false
@@ -235,16 +243,16 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.total
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
-    },
-    getDepartments() {
-      return rf.getRequest('DepartmentRequest').getAll()
+      rf.getRequest('DepartmentRequest')
+        .getList(this.listQuery)
+        .then(response => {
+          console.log(response)
+          this.list = response.data.data
+          this.total = response.data.total
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
     },
     inital() {
     },
@@ -257,7 +265,7 @@ export default {
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
-          return parseTime(v[j])
+          return new Date(v[j])
         } else {
           return v[j]
         }
@@ -267,7 +275,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Id', 'Phòng ban', 'Email', 'Số điện thoại']
-        const filterVal = ['id', 'name', 'email', 'phone_number',]
+        const filterVal = ['id', 'name', 'email', 'phone_number']
         const list = this.list
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

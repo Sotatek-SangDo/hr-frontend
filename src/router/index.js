@@ -116,7 +116,7 @@ export const mapServerRouters = {
     path: '/employee',
     redirect: '/Employee/EmployeeList',
     meta: {
-      title: 'Employee List',
+      title: 'employee.index',
       icon: 'user'
     }
   },
@@ -124,7 +124,13 @@ export const mapServerRouters = {
     component: () => import('@/views/Employee/EmployeeList'),
     path: 'index',
     name: 'Employee',
-    meta: { title: 'Employee', icon: 'user', noCache: true }
+    meta: { title: 'employee.list', icon: 'user', noCache: true }
+  },
+  childSyncEmployeeAdd: {
+    component: () => import('@/views/Employee/AddEmployee'),
+    path: 'add',
+    name: 'Add Employee',
+    meta: { title: 'employee.add', icon: 'new-user', noCache: true }
   },
   childSyncEmployee2: {
     component: () => import('@/views/Employee/EmployeeList'),
@@ -136,8 +142,213 @@ export const mapServerRouters = {
     component: () => import('@/views/Employee/AddEmployee'),
     path: 'addemployee',
     name: 'EmployeeAdd',
-    meta: { title: 'Add Employee', icon: 'user' }
+    meta: { title: 'employee.add', icon: 'plus-square' }
   },
+  employeeProfile: {
+    component: () => import('@/views/Employee/ProfileEmployee'),
+    path: 'profile/:id',
+    name: 'EmployeeProfile',
+    meta: { title: 'employee.profile' },
+    hidden: true
+  },
+  employeeEdit: {
+    component: () => import('@/views/Employee/AddEmployee'),
+    path: 'eidit/:id',
+    name: 'EmployeeEdit',
+    meta: { title: 'employee.edit' },
+    hidden: true
+  },
+  syncInsurance: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/insurance',
+    redirect: '/Insurances/InsurancesIndex',
+    meta: {
+      title: 'insurance.index',
+      icon: 'insurance'
+    }
+  },
+  insuranceIndex: {
+    component: () => import('@/views/Insurances/Insurances'),
+    path: 'list',
+    name: 'Insurances',
+    meta: { title: 'insurance.title', icon: 'user' }
+  },
+  insurancePayment: {
+    component: () => import('@/views/Insurances/InsurancePayment'),
+    path: 'payment',
+    name: 'InsurancePayment',
+    meta: { title: 'insurance.payment', icon: 'payment' }
+  },
+  ipDetail: {
+    component: () => import('@/views/Insurances/IPDetail'),
+    path: 'payment/:id',
+    name: 'IPDetail',
+    meta: { title: 'insurance.payment' },
+    hidden: true
+  },
+  syncRecruitment: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/recruitment',
+    redirect: '/Recruitment/RecruitmentIndex',
+    meta: {
+      title: 'recruitment.index',
+      icon: 'recruitment'
+    }
+  },
+  recruitmentIndex: {
+    component: () => import('@/views/Recruitment/Recruitment'),
+    path: 'index',
+    name: 'Recruitment',
+    meta: { title: 'recruitment.index', icon: 'recruitment' }
+  },
+  recruitmentDetail: {
+    component: () => import('@/views/Recruitment/RecruitmentDetail'),
+    path: 'detail/:id',
+    name: 'RecruitmentDetail',
+    meta: { title: 'recruitment.index', icon: 'recruitment' },
+    hidden: true
+  },
+  candidate: {
+    component: () => import('@/views/Recruitment/Candidate'),
+    path: 'candidate',
+    name: 'Candidate',
+    meta: { title: 'recruitment.candidate', icon: 'user' }
+  },
+  interviewCalendar: {
+    component: () => import('@/views/Recruitment/Interview'),
+    path: 'interview',
+    name: 'Interview',
+    meta: { title: 'recruitment.interview', icon: 'interview' }
+  },
+  syncContract: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/contract',
+    redirect: '/Contract/ContractList',
+    meta: { title: 'contract.index', icon: 'contract' }
+  },
+  childSyncContract: {
+    component: () => import('@/views/Contract/ContractList'),
+    path: 'index',
+    name: 'Contract',
+    meta: { title: 'contract.list', icon: 'user', noCache: true }
+  },
+  addContract: {
+    component: () => import('@/views/Contract/AddContract'),
+    path: 'addcontract',
+    name: 'ContractAdd',
+    meta: { title: 'contract.add', icon: 'plus-square' }
+  },
+  contractDetail: {
+    component: () => import('@/views/Contract/DetailContract'),
+    path: 'detail/:id',
+    name: 'ContractDetail',
+    meta: { title: 'contract.detail' },
+    hidden: true
+  },
+  contractEdit: {
+    component: () => import('@/views/Contract/AddContract'),
+    path: 'edit/:id',
+    name: 'ContractEdit',
+    meta: { title: 'contract.edit' },
+    hidden: true
+  },
+  syncSalary: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/salary',
+    redirect: '/Salary/SalaryList',
+    meta: { title: 'salary.index', icon: 'salary' }
+  },
+  childSyncSalary: {
+    component: () => import('@/views/Salary/SalaryList'),
+    path: 'index',
+    name: 'Salary',
+    meta: { title: 'salary.list', icon: 'salary', noCache: true }
+  },
+  salaryDetail: {
+    component: () => import('@/views/Salary/SalaryDetail'),
+    path: 'detail/:id',
+    name: 'SalaryDetail',
+    meta: { title: 'salary.detail' },
+    hidden: true
+  },
+  salaryEdit: {
+    component: () => import('@/views/Salary/SalaryEdit'),
+    path: 'edit/:id',
+    name: 'SalaryEdit',
+    meta: { title: 'salary.edit' },
+    hidden: true
+  },
+  childSyncSalaryBusiness: {
+    component: () => import('@/views/Salary/SalaryBusinessList'),
+    path: '/salary/business/index',
+    name: 'SalaryBusiness',
+    meta: { title: 'salary.business', icon: 'salary-business', noCache: true }
+  },
+  salaryBusinessAdd: {
+    component: () => import('@/views/Salary/BusinessAdd'),
+    path: 'business-add',
+    name: 'BusinessAdd',
+    meta: { title: 'salary.business_add' },
+    hidden: true
+  },
+  salaryBusinessEdit: {
+    component: () => import('@/views/Salary/BusinessAdd'),
+    path: 'business-edit/:id',
+    name: 'BusinessEdit',
+    meta: { title: 'salary.business_edit' },
+    hidden: true
+  },
+  childSyncAllowances: {
+    component: () => import('@/views/Salary/AllowancesList'),
+    path: '/allowances/index',
+    name: 'Allowances',
+    meta: { title: 'salary.allowances', icon: 'allowed', noCache: true }
+  },
+  addAllowances: {
+    component: () => import('@/views/Salary/AddAllowances'),
+    path: 'addallowances',
+    name: 'AllowanceAdd',
+    meta: { title: 'salary.allowances_add', icon: 'plus-square' },
+    hidden: true
+  },
+  allowancesDetail: {
+    component: () => import('@/views/Salary/DetailAllowances'),
+    path: 'allowances-detail/:id',
+    name: 'AllowancesDetail',
+    meta: { title: 'salary.detail' },
+    hidden: true
+  },
+  allowancesEdit: {
+    component: () => import('@/views/Salary/AddAllowances'),
+    path: 'allowances-edit/:id',
+    name: 'AllowancesEdit',
+    meta: { title: 'salary.allowances_edit' }
+  },
+  syncDepartment: {
+    component: () => import('@/views/layout/Layout'),
+    path: '/department',
+    redirect: '/Department/DepartmentList',
+    meta: { title: 'department.index', icon: 'department' }
+  },
+  childSyncDepartment: {
+    component: () => import('@/views/Department/DepartmentList'),
+    path: 'index',
+    name: 'Department',
+    meta: { title: 'department.list', icon: 'user', noCache: true }
+  },
+  addDepartment: {
+    component: () => import('@/views/Department/AddDepartment'),
+    path: 'adddepartment',
+    name: 'DepartmentAdd',
+    meta: { title: 'department.add', icon: 'plus-square' }
+  },
+  departmentEdit: {
+    component: () => import('@/views/Department/AddDepartment'),
+    path: 'edit/:id',
+    name: 'DepartmentEdit',
+    meta: { title: 'department.edit' },
+    hidden: true
+  }
 }
 
 export const developerRouterMap = [
@@ -396,23 +607,23 @@ export const developerRouterMap = [
 ]
 
 export const asyncRouterMap = [
-  {
-    path: '/department',
-    component: Layout,
-    // redirect: '/department/index',
-    name: 'Departments',
-    meta: {
-      title: 'Department',
-      icon: 'department',
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/Department/index'),
-        name: 'DepartmentsIndex',
-        meta: { title: 'Department', icon: 'department'}
-      }
-    ]
-  },
+  // {
+  //   path: '/department',
+  //   component: Layout,
+  //   // redirect: '/department/index',
+  //   name: 'Departments',
+  //   meta: {
+  //     title: 'Department',
+  //     icon: 'department'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/Department/index'),
+  //       name: 'DepartmentsIndex',
+  //       meta: { title: 'Department', icon: 'department' }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]

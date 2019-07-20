@@ -1,15 +1,8 @@
 import request from '@/utils/request'
 
-export function getNationalities() {
+export function getMasterData() {
   return request({
-    url: `nationalities`,
-    method: 'get'
-  })
-}
-
-export function getEmployeeStatus() {
-  return request({
-    url: `employee-status`,
+    url: 'master-data',
     method: 'get'
   })
 }

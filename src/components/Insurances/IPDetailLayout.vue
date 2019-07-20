@@ -1,57 +1,96 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="epm-tb-header">
-        <a class="button-add button" @click="addInsurancePayment">
-          <span>Thêm mới</span>
-        </a>
+      <div class="insurance-header">
+        <h4 class="header-title header-underline" v-text="$t('ip.detail_header')"/>
       </div>
-      <data-table ref="datatable" :get-data="getInsurancePayment">
-        <template slot="head" slot-scope="props">
-          <th class="sort sorting_asc" @click="props.sort('name', $event)">Tên nhân viên</th>
-          <th class="sort sorting_asc" @click="props.sort('reason_leave', $event)">Lý do nghỉ</th>
-          <th class="sort sorting_asc" @click="props.sort('num_social_security', $event)">Số sổ BHXH</th>
-          <th class="sort sorting_asc" @click="props.sort('num_day_leave', $event)">Số ngày nghỉ</th>
-          <th class="sort sorting_asc" @click="props.sort('insurance_money', $event)">Tiền bảo hiểm</th>
-          <th class="sort sorting_asc" @click="props.sort('amount', $event)">Tổng tiền</th>
-          <th>Ghi chú</th>
-          <th>Thao tác</th>
-        </template>
-        <template slot="body" slot-scope="props">
-          <tr>
-            <td v-text="props.item.name"/>
-            <td v-text="props.item.reason_leave"/>
-            <td v-text="props.item.num_social_security"/>
-            <td v-text="props.item.num_day_leave"/>
-            <td v-text="props.item.insurance_money"/>
-            <td v-text="props.item.amount"/>
-            <td v-text="props.item.notes"/>
-            <td>
-              <button class="btn btn-edit" type="button" tooltip="Edit" @click="updateInsurancePayment(props.item)">
-                <i class="ti-marker-alt"/>
-              </button>
-            </td>
-          </tr>
-        </template>
-      </data-table>
+      <div class="filter-container">
+        <el-input :placeholder="$t('table.employee.search_name')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+        <el-button type="primary" class="filter-item" icon="el-icon-plus" @click="addInsurancePayment">{{ $t('table.add') }}</el-button>
+      </div>
+      <el-table
+        v-loading="listLoading"
+        ref="datatable"
+        :key="tableKey"
+        :data="ipDetails"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%;"
+        @sort-change="sortChange">
+        <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="65">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.employee.name')" prop="name" align="center" sortable>
+          <template slot-scope="scope">
+            <span @click="detailPage(scope.row.id)">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.ip.reason_leave')" prop="reason_leave" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.reason_leave }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.insurance.num_social_security')" prop="num_social_security" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.num_social_security }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.ip.num_day_leave')" prop="num_day_leave" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.num_day_leave }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.ip.insurance_money')" prop="insurance_money" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.insurance_money }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.ip.amount')" prop="amount" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.amount }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.ip.note')" prop="notes" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.notes }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button type="primary" size="medium" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+            <el-button type="primary" size="medium" @click="handleDestroy(scope.row)">{{ $t('table.delete') }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </div>
     <ip-detail-modal v-if="isShow" :detail="ipDetail" :is-create="isCreate"/>
   </div>
 </template>
 
 <script>
-import MasterView from '../../views/MasterView'
-import DataTable from '../commons/DataTable'
-import rf from '../../requests/RequestFactory'
-import IpDetailModal from '../commons/InsuranceModal/IPDetailModal'
+import MasterView from '@/views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import IpDetailModal from '@/components/commons/InsuranceModal/IPDetailModal'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'IPDetailLayout',
   components: {
-    DataTable,
-    IpDetailModal
+    IpDetailModal,
+    Pagination
   },
   extends: MasterView,
+  props: {
+    detailId: {
+      type: [String, Number],
+      default: ''
+    }
+  },
   data() {
     return {
       ipDetail: {
@@ -67,16 +106,57 @@ export default {
       },
       isShow: false,
       isCreate: true,
-      modal_id: 'detail-modal'
+      modal_id: 'detail-modal',
+      listLoading: false,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        title: undefined,
+        sort: '+id'
+      },
+      tableKey: 0,
+      ipDetails: [],
+      id: ''
     }
+  },
+  created() {
+    this.getList()
   },
   mounted() {
     this.onListener()
   },
   methods: {
-    getInsurancePayment() {
-      const query = this.$route.query.id
-      return rf.getRequest('IPDetailRequest').getAll({ id: query })
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter()
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    getList() {
+      this.listLoading = true
+      this.listQuery.id = this.detailId
+      rf.getRequest('IPDetailRequest')
+        .getList(this.listQuery)
+        .then(response => {
+          this.ipDetails = response.data.data
+          this.total = response.data.total
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
     },
     addInsurancePayment(e) {
       e.preventDefault()
@@ -84,17 +164,24 @@ export default {
       this.isShow = true
       this.addEventShowModal()
     },
-    updateInsurancePayment(ipDetail) {
+    handleUpdate(ipDetail) {
       this.isCreate = false
       Object.assign(this.ipDetail, this.setData(this.ipDetail, ipDetail))
       this.isShow = true
       this.addEventShowModal()
     },
+    handleDestroy(row) {
+      if (confirm(this.$t('table.ip.confirm_del'))) {
+        rf.getRequest('IPDetailRequest')
+          .destroy({ id: row.id })
+          .then(res => this.handleFilter())
+      }
+    },
     clearData() {
       this.ipDetail = this.emptyData(this.ipDetail)
     },
     tableRefresh() {
-      this.$refs.datatable.refresh()
+      this.handleFilter()
       this.isShow = false
     },
     onListener() {

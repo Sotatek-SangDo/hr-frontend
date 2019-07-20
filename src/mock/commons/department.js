@@ -1,5 +1,4 @@
 import Mock from 'mockjs'
-import { param2Obj } from '@/utils'
 
 const List = []
 const count = 100
@@ -14,16 +13,19 @@ for (let i = 0; i < count; i++) {
 }
 
 export default {
+  getAll: () => {
+    return List
+  },
   getList: config => {
-    let result = Mock.mock({
+    const result = Mock.mock({
       total: '@integer(100, 300)',
-      "data|20": [{
-        id: "@integer(1, 100)",
-        name: "Phòng Ban " + "@integer(1, 100)",
+      'data|20': [{
+        id: '@integer(1, 100)',
+        name: 'Phòng Ban ' + '@integer(1, 100)',
         email: '@email',
         phone_number: '@string("number", 9)'
       }]
-    });
+    })
     return result
   },
   createDepartment: (config) => {

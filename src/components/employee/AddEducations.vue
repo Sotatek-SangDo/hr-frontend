@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addEducation">
-          <span class="icon"><i class="ti-plus"/></span>Trình độ chuyên môn
+          <span class="icon"><svg-icon icon-class="plus-square"/></span>Trình độ chuyên môn
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
@@ -11,10 +11,10 @@
           <div v-for="(edu, i) in userEducations" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ edu.qualification_name }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeEducation(edu)">
-                <i class="ti-trash"/>
+                <svg-icon icon-class="rubbish-bin" />
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(edu)">
-                <i class="ti-marker-alt"/>
+                <svg-icon icon-class="edit" />
               </button>
             </h5>
             <p class="list-group-item-text">Ngaỳ bắt đầu: {{ edu.started_at }}</p>
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import rf from '../../requests/RequestFactory'
-import MasterView from '../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import EducationModal from '../commons/EmployeeModal/EducationModal'
 
 export default {
@@ -41,7 +41,8 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -68,7 +69,7 @@ export default {
       rf.getRequest('EducationRequest')
         .getEmployeeEducation({ id: this.empId })
         .then(res => {
-          this.userEducations = res
+          this.userEducations = res.data
         })
     },
     addEducation(e) {
@@ -151,6 +152,7 @@ a.icon-p
   position: absolute
   top: 0
   padding: 5px
+  cursor: pointer
   &.but-del
     right: 0
     border-right: none

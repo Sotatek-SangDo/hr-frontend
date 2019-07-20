@@ -8,7 +8,7 @@ import user from './modules/user'
 import getters from './getters'
 import masterData from './modules/masterData'
 import vuexCache from 'vuex-cache'
-
+import { getToken } from '@/utils/auth'
 
 Vue.use(Vuex)
 
@@ -22,10 +22,10 @@ const store = new Vuex.Store({
     masterData
   },
   getters,
-  plugins: [vuexCache],
+  plugins: [vuexCache]
 })
 
-store.cache.dispatch('getAllNationalities')
-store.cache.dispatch('getAllEmployeeStatus')
-
+if (getToken() && store.cache.has('getMasterData')) {
+  store.cache.dispatch('getMasterData')
+}
 export default store

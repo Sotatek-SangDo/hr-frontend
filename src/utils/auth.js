@@ -32,7 +32,7 @@ export function getExpiresAt() {
 }
 
 export function setExpiresAt(expiresAt) {
-  let expriesTimestamp = Date.now() + expiresAt*1000
+  const expriesTimestamp = Date.now() + expiresAt * 1000
   return localStorage.setItem(ExpiresAtKey, expriesTimestamp)
 }
 
@@ -44,9 +44,8 @@ export function removeExpiresAt() {
   return localStorage.removeItem(ExpiresAtKey)
 }
 
-export function tenMinutesBeforeExpires(){
-
-  if (Date.now() >= (getExpiresAt() - 10*60*1000)) {
+export function tenMinutesBeforeExpires() {
+  if (Date.now() >= (getExpiresAt() - 10 * 60 * 1000)) {
     return true
   }
   return false

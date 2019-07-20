@@ -74,7 +74,6 @@ const user = {
       })
     },
     GetTokenFromRefreshToken({ commit }) {
-
       return new Promise((resolve, reject) => {
         getTokenFromRefreshToken().then(response => {
           const token = response.access_token

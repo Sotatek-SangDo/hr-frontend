@@ -1,27 +1,19 @@
 <template>
-  <home-layout :breadcrumbs="breadcrumbs" :header-title="headerTitle">
-    <template slot="main-content">
-      <insurance-layout/>
-    </template>
-  </home-layout>
+  <insurance-layout/>
 </template>
 
 <script>
-import MasterView from '../MasterView.vue'
-import HomeLayout from '../../components/HomeLayout'
-import InsuranceLayout from '../../components/Insurances/InsuranceLayout'
+import MasterView from '@/views/MasterView.vue'
+import InsuranceLayout from '@/components/Insurances/InsuranceLayout'
 
 export default {
   name: 'Insurances',
   components: {
-    HomeLayout,
     InsuranceLayout
   },
   extends: MasterView,
   data() {
     return {
-      headerTitle: 'Bảo hiểm',
-      breadcrumbs: [{ title: 'Bảo hiểm', href: '' }]
     }
   },
   mounted() {
@@ -29,10 +21,6 @@ export default {
   },
   methods: {
     inital() {
-      this.sleep(500).then(() => {
-        this.init()
-      })
-      this.fadeOut()
     }
   }
 }

@@ -11,16 +11,21 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="detail-kni">Tên đợt thanh thoán</label>
-                      <textarea id="detail-kni" v-model="insuranceP.title" type="text" class="form-control" placeholder="Tên đợt thanh toán" />
+                      <label>{{ $t('ip.title') }}</label>
+                      <el-input :rows="1" v-model="insuranceP.name" :placeholder="$t('ip.title')" type="text" class="article-textarea"/>
                     </div>
-                    <date-picker v-if="delay" :title="startedAt" v-model="insuranceP.time" :default="getDate(insuranceP.time)"/>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('ip.time') }}</label>
+                      <el-form-item prop="time">
+                        <el-date-picker v-model="insuranceP.time" :placeholder="$t('ip.time')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
+                    </div>
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -32,7 +37,7 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
+import rf from '@/api/commons/RequestFactory'
 import MasterView from '../../../views/MasterView'
 import DatePicker from '../DatePicker'
 import _ from 'lodash'
@@ -45,24 +50,25 @@ export default {
   extends: MasterView,
   props: {
     insurancePayment: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm mới đợt thanh toán bảo biểm',
-      updateTitle: 'Chỉnh sửả đợt thanh toán bảo hiểm',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('ip.add_title'),
+      updateTitle: this.$t('ip.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       insuranceP: {
-        title: '',
+        name: '',
         time: '',
         id: ''
       },
-      startedAt: 'Thời gian',
       isDisable: false,
       errors: [],
       modal_id: 'insurance-payment-modal',
@@ -73,9 +79,6 @@ export default {
     this.init()
   },
   methods: {
-    getDate(date) {
-      return date ? new Date(date) : new Date()
-    },
     hasErrors() {
       return !_.isEmpty(this.errors)
     },
@@ -85,7 +88,6 @@ export default {
     },
     storeOrUpdate(e) {
       e.preventDefault()
-      console.log(this.insuranceP)
       this.isDisable = true
       const keyNullable = ['id']
       _.forEach(this.insuranceP, (val, key) => {
@@ -98,18 +100,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('InsurancePaymentRequest')
-          .update({ data: this.insuranceP })
+          .update(this.insuranceP)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-ip', res.data)
+              this.emitEvent('update-ip', true)
             }
           })
       }
       rf.getRequest('InsurancePaymentRequest')
-        .store({ data: this.insuranceP })
+        .store(this.insuranceP)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-ip', res.data)
+            this.emitEvent('add-ip', true)
           }
         })
     },

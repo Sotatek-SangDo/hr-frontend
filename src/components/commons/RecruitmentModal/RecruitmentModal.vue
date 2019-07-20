@@ -11,37 +11,51 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="detail-kni">Tên đợt tuyển dụng</label>
-                      <input v-model="recruit.name" type="text" class="form-control" placeholder="Tên đợt tuyển dụng" >
-                    </div>
-                    <date-picker v-if="delay" :title="startedAt" v-model="recruit.started_at" :default="getDate(recruit.started_at)"/>
-                    <date-picker v-if="delay" :title="endedAt" v-model="recruit.ended_at" :default="getDate(recruit.started_at)"/>
-                    <date-picker v-if="delay" :title="expiredAt" v-model="recruit.expired_at" :default="getDate(recruit.expired_at)"/>
-                    <div class="form-group">
-                      <label for="detail-kni">Số lượng</label>
-                      <input v-model="recruit.num" type="number" class="form-control" placeholder="Số lương nhân viên tuyển trong đợt" >
+                      <label>{{ $t('recruitment.title') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="recruit.name" :placeholder="$t('recruitment.title')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="kni">Trạng thái</label>
-                      <select v-model="recruit.status" class="form-control">
-                        <option value="">Chọn trạng thái</option>
-                        <option
-                          v-for="(s, index) in status"
-                          :key="index"
-                          :value="s"
-                          v-text="s"/>
-                      </select>
+                      <label class="col-form-label">{{ $t('recruitment.started_at') }}</label>
+                      <el-form-item prop="started_at">
+                        <el-date-picker v-model="recruit.started_at" :placeholder="$t('recruitment.started_at')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Thông tin của đợt tuyển dụng</label>
-                      <textarea v-model="recruit.recruitment_required" class="form-control" placeholder="Thông tin đợt tuyển dụng"/>
+                      <label class="col-form-label">{{ $t('recruitment.ended_at') }}</label>
+                      <el-form-item prop="ended_at">
+                        <el-date-picker v-model="recruit.ended_at" :placeholder="$t('recruitment.ended_at')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('recruitment.expired_at') }}</label>
+                      <el-form-item prop="expired_at">
+                        <el-date-picker v-model="recruit.expired_at" :placeholder="$t('recruitment.expired_at')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
+                    </div>
+                    <div class="form-group">
+                      <label>{{ $t('recruitment.num') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="recruit.num" :placeholder="$t('recruitment.num')" type="text" class="article-textarea"/>
+                      </el-form-item>
+                    </div>
+                    <div class="form-group">
+                      <label>{{ $t('recruitment.status.title') }}</label>
+                      <el-drag-select v-model="recruit.status" :placeholder="$t('recruitment.status.select')">
+                        <el-option v-for="(s, index) in status" :label="s" :value="s" :key="index" />
+                      </el-drag-select>
+                    </div>
+                    <div class="form-group">
+                      <label for="detail-kni">{{ $t('recruitment.info') }}</label>
+                      <textarea v-model="recruit.recruitment_required" :placeholder="$t('recruitment.info')" class="form-control"/>
+                    </div>
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -53,15 +67,15 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import MasterView from '../../../views/MasterView'
-import DatePicker from '../DatePicker'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'InsuranceModal',
   components: {
-    DatePicker
+    ElDragSelect
   },
   extends: MasterView,
   props: {
@@ -76,10 +90,10 @@ export default {
   },
   data() {
     return {
-      createTitle: 'Thêm mới',
-      updateTitle: 'Chỉnh sửa',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
+      createTitle: this.$t('recruitment.add_title'),
+      updateTitle: this.$t('recruitment.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
       recruit: {
         name: '',
         started_at: '',
@@ -90,9 +104,6 @@ export default {
         recruitment_required: '',
         id: ''
       },
-      startedAt: 'Bắt đầu từ ngày',
-      endedAt: 'Ngày hết thúc',
-      expiredAt: 'Hạn nộp hồ sơ',
       isDisable: false,
       emps: {},
       errors: [],
@@ -100,8 +111,8 @@ export default {
       delay: false,
       jobs: {},
       status: [
-        'Đang triển khai',
-        'Đã hoàn thành'
+        this.$t('recruitment.status.st1'),
+        this.$t('recruitment.status.st2')
       ]
     }
   },
@@ -136,18 +147,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('RecruitmentRequest')
-          .update({ data: this.recruit })
+          .update(this.recruit)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-recruitment', res.data)
+              this.emitEvent('update-recruitment', res.data.data)
             }
           })
       }
       rf.getRequest('RecruitmentRequest')
-        .store({ data: this.recruit })
+        .store(this.recruit)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-recruitment', res.data)
+            this.emitEvent('add-recruitment', res.data.data)
           }
         })
     },

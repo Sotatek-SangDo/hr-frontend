@@ -11,41 +11,44 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="kni">Ngôn ngữ</label>
-                      <select id="kni" v-model="user_language.lang_id" class="form-control">
-                        <option value="">Lựa chọn Language</option>
-                        <option
-                          v-for="(lang, index) in languages"
-                          :key="index"
-                          :value="lang.id"
-                          v-text="lang.title"/>
-                      </select>
+                      <label for="kni">{{ $t('lang.title') }}</label>
+                      <el-drag-select v-model="user_language.lang_id" :placeholder="$t('lang.select')">
+                        <el-option v-for="(lang, index) in languages" :label="lang.title" :value="lang.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Trình độ nghe:</label>
-                      <input id="detail-kni" v-model="user_language.listen" type="text" class="form-control" placeholder="Trình độ nghe">
+                      <label>{{ $t('lang.listen') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_language.listen" :placeholder="$t('lang.listen')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Trình độ nói:</label>
-                      <input id="detail-kni" v-model="user_language.speak" type="text" class="form-control" placeholder="Trình độ nói">
+                      <label>{{ $t('lang.speak') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_language.speak" :placeholder="$t('lang.speak')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Trình độ đọc:</label>
-                      <input id="detail-kni" v-model="user_language.read" type="text" class="form-control" placeholder="Trình độ đọc">
+                      <label>{{ $t('lang.read') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_language.read" :placeholder="$t('lang.read')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Trình độ viết</label>
-                      <input id="detail-kni" v-model="user_language.write" type="text" class="form-control" placeholder="Trình độ viết">
+                      <label>{{ $t('lang.write') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_language.write" :placeholder="$t('lang.write')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -57,31 +60,38 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import MasterView from '../../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'LanguageModal',
+  components: {
+    ElDragSelect
+  },
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     },
     eLanguage: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm mới kỹ năng',
-      updateTitle: 'Chỉnh sửả kỹ năng',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
-      languages: {},
+      createTitle: this.$t('lang.add_title'),
+      updateTitle: this.$t('lang.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
+      languages: this.$store.getters.languages,
       user_language: {
         lang_id: '',
         listen: '',
@@ -98,21 +108,18 @@ export default {
   },
   mounted() {
     this.init()
+    if (!this.languages.length) {
+      this.$store.cache
+        .dispatch('getMasterData')
+        .then(res => (this.languages = res.data.language))
+    }
   },
   methods: {
-    getLanguages() {
-      rf.getRequest('LanguagesRequest')
-        .getAll()
-        .then(res => {
-          this.languages = res
-        })
-    },
     hasErrors() {
       return !_.isEmpty(this.errors)
     },
     init() {
       this.user_language = this.eLanguage
-      this.getLanguages()
     },
     storeOrUpdate(e) {
       e.preventDefault()
@@ -130,18 +137,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('UserLanguagesRequest')
-          .update({ data: this.user_language })
+          .update(this.user_language)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eLanguage', res.data)
+              this.emitEvent('update-eLanguage', res.data.data)
             }
           })
       }
       rf.getRequest('UserLanguagesRequest')
-        .store({ data: this.user_language })
+        .store(this.user_language)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eLanguage', res.data)
+            this.emitEvent('add-eLanguage', res.data.data)
           }
         })
     },

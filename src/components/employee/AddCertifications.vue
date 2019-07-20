@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <a href="#" class="card-link icon-p" @click="addCertification">
-          <span class="icon"><i class="ti-plus"/></span>Chứng chỉ
+          <span class="icon"><svg-icon icon-class="plus-square"/></span>Chứng chỉ
         </a>
       </div>
       <div class="collapse show" data-parent="#accordion6">
@@ -11,10 +11,10 @@
           <div v-for="(cer, i) in userCertifications" :key="i" class="list-group-item sub-tab-item">
             <h5 class="list-group-item-heading">{{ cer.certification_name }}
               <button class="but but-del" type="button" tooltip="Delete" @click="removeCertification(cer)">
-                <i class="ti-trash"/>
+                <svg-icon icon-class="rubbish-bin" />
               </button>
               <button class="but but-edit" type="button" tooltip="Edit" @click="showModalUpdate(cer)">
-                <i class="ti-marker-alt"/>
+                <svg-icon icon-class="edit" />
               </button>
             </h5>
             <p class="list-group-item-text">Ngày cấp: {{ cer.granted_on }}</p>
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import rf from '../../requests/RequestFactory'
-import MasterView from '../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import CertificationModal from '../../components/commons/EmployeeModal/CertificationModal'
 
 export default {
@@ -41,7 +41,8 @@ export default {
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -67,7 +68,7 @@ export default {
       rf.getRequest('CertificationUserRequest')
         .getECertification({ id: this.empId })
         .then(res => {
-          this.userCertifications = res
+          this.userCertifications = res.data
         })
     },
     addCertification(e) {
@@ -150,6 +151,7 @@ a.icon-p
   position: absolute
   top: 0
   padding: 5px
+  cursor: pointer
   &.but-del
     right: 0
     border-right: none

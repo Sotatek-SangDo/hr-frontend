@@ -11,31 +11,38 @@
             <div class="col-12 mt-12">
               <div class="card">
                 <div class="card-body">
-                  <form @submit.prevent="storeOrUpdate">
+                  <el-form>
                     <div class="form-group">
-                      <label for="kni">Trình độ chuyên môn</label>
-                      <select id="kni" v-model="user_certification.certification_id" class="form-control">
-                        <option value="">Lựa chọn trình độ chuyên môn</option>
-                        <option
-                          v-for="(cer, index) in certifications"
-                          :key="index"
-                          :value="cer.id"
-                          v-text="cer.name"/>
-                      </select>
+                      <label for="kni">{{ $t('cer.title') }}</label>
+                      <el-drag-select v-model="user_certification.certification_id" :placeholder="$t('cer.select')">
+                        <el-option v-for="(c, index) in certifications" :label="c.name" :value="c.id" :key="index" />
+                      </el-drag-select>
                     </div>
                     <div class="form-group">
-                      <label for="detail-kni">Nơi học</label>
-                      <input id="detail-kni" v-model="user_certification.institute" type="text" class="form-control" placeholder="Nơi học">
+                      <label for="detail-kni">{{ $t('cer.institute') }}</label>
+                      <el-form-item>
+                        <el-input :rows="1" v-model="user_certification.institute" :placeholder="$t('cer.institute_place')" type="text" class="article-textarea"/>
+                      </el-form-item>
                     </div>
-                    <date-picker v-if="delay" :title="grantedOn" v-model="user_certification.granted_on" :default="getDate(user_certification.granted_on)"/>
-                    <date-picker v-if="delay" :title="validTo" v-model="user_certification.valid_to" :default="getDate(user_certification.valid_to)"/>
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('cer.grantedOn') }}</label>
+                      <el-form-item prop="granted_on">
+                        <el-date-picker v-model="user_certification.granted_on" :placeholder="$t('cer.grantedOn')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-form-label">{{ $t('cer.validTo') }}</label>
+                      <el-form-item prop="valid_to">
+                        <el-date-picker v-model="user_certification.valid_to" :placeholder="$t('cer.validTo')" type="date" value-format="yyyy-MM-dd"/>
+                      </el-form-item>
+                    </div>
                     <div v-if="hasErrors()" class="errors">
                       <span v-text="errors[0].keys"/>
                     </div>
-                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                    <button :disabled="isDisable" type="submit" class="btn btn-primary mt-4 pr-4 pl-4" @click="storeOrUpdate">
                       <i class="ti-save"/> {{ isCreate ? btnCreate : btnUpdate }}
                     </button>
-                  </form>
+                  </el-form>
                 </div>
               </div>
             </div>
@@ -47,35 +54,38 @@
 </template>
 
 <script>
-import rf from '../../../requests/RequestFactory'
-import DatePicker from '../DatePicker'
-import MasterView from '../../../views/MasterView'
+import rf from '@/api/commons/RequestFactory'
+import MasterView from '@/views/MasterView'
 import _ from 'lodash'
+import ElDragSelect from '@/components/DragSelect/select'
 
 export default {
   name: 'CertificationModal',
   components: {
-    DatePicker
+    ElDragSelect
   },
   extends: MasterView,
   props: {
     empId: {
-      type: Number
+      type: Number,
+      default: 0
     },
     certification: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     isCreate: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      createTitle: 'Thêm chứng chỉ',
-      updateTitle: 'Chỉnh sửa chứng chỉ',
-      btnCreate: 'Lưu',
-      btnUpdate: 'Cập nhập',
-      certifications: {},
+      createTitle: this.$t('cer.add_title'),
+      updateTitle: this.$t('cer.update_title'),
+      btnCreate: this.$t('button.save'),
+      btnUpdate: this.$t('button.update'),
+      certifications: this.$store.getters.certifications,
       user_certification: {
         certification_id: '',
         institute: '',
@@ -86,10 +96,15 @@ export default {
       },
       isDisable: false,
       errors: [],
-      grantedOn: 'Ngày cấp',
-      validTo: 'Ngày hết hạn',
       delay: false,
       modal_id: 'certification-modal'
+    }
+  },
+  created() {
+    if (!this.certifications.length) {
+      this.$store.cache.dispatch('getMasterData').then(res => {
+        this.certifications = res.data.certification
+      })
     }
   },
   mounted() {
@@ -98,13 +113,6 @@ export default {
   methods: {
     getDate(date) {
       return date ? new Date(date) : new Date()
-    },
-    getCertifications() {
-      rf.getRequest('CertificationRequest')
-        .getAll()
-        .then(res => {
-          this.certifications = res
-        })
     },
     hasErrors() {
       return !_.isEmpty(this.errors)
@@ -125,18 +133,18 @@ export default {
       if (!this.isCreate) {
         return rf
           .getRequest('CertificationUserRequest')
-          .update({ data: this.user_certification })
+          .update(this.user_certification)
           .then(res => {
             if (res.status) {
-              this.emitEvent('update-eCertification', res.data)
+              this.emitEvent('update-eCertification', res.data.data)
             }
           })
       }
       rf.getRequest('CertificationUserRequest')
-        .store({ data: this.user_certification })
+        .store(this.user_certification)
         .then(res => {
           if (res.status) {
-            this.emitEvent('add-eCertification', res.data)
+            this.emitEvent('add-eCertification', res.data.data)
           }
         })
     },
@@ -147,7 +155,6 @@ export default {
     init() {
       this.user_certification = this.certification
       this.delay = true
-      this.getCertifications()
     }
   }
 }

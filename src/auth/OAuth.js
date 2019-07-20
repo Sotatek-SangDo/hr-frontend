@@ -76,6 +76,5 @@ export default {
       EventBus.$emit('errors', { type: 'request_auth', error: err.message })
     }
     return reject(err)
-  },
-
+  }
 }

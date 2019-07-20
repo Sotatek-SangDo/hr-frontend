@@ -19,6 +19,16 @@ const getters = {
   employeeStatus: state => state.masterData.employeeStatus,
   getNationalityById: (state) => (id) => {
     return state.masterData.nationalities.find(nationality => nationality.id === id)
-  }
+  },
+  departments: state => state.masterData.departments,
+  jobs: state => state.masterData.jobs,
+  paygrades: state => state.masterData.paygrades,
+  skills: state => state.masterData.skills,
+  qualifications: state => state.masterData.qualifications,
+  certifications: state => state.masterData.certifications,
+  languages: state => state.masterData.languages,
+  contractType: state => state.contractType,
+  salaryInsurance: state => state.salaryInsurance,
+  rolls: state => state.rolls
 }
 export default getters

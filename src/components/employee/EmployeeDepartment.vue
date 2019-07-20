@@ -28,7 +28,7 @@
 <script>
 import rf from '../../requests/RequestFactory'
 import DataTable from '../commons/DataTable'
-import MasterView from '../../views/MasterView'
+import MasterView from '@/views/MasterView'
 
 export default {
   name: 'EmployeeSkill',

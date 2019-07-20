@@ -1,35 +1,32 @@
-<!-- <template> -->
-  <template slot="main-content">
-    <add-employee :is-create="isCreate"/>
-  </template>
-<!-- </template> -->
+<template>
+  <add-employee :header="header" :emp-id="empId"/>
+</template>
 
 <script>
-// import HomeLayout from '../../components/HomeLayout'
 import AddEmployee from '../../components/employee/AddEmployee'
 
 export default {
   name: 'EmployeeAdd',
   components: {
-    // HomeLayout,
     AddEmployee
   },
   data() {
     return {
-      headerTitle: 'Thêm mới',
-      breadcrumbs: [{ title: 'Thêm mới', href: '' }],
-      isCreate: true
+      header: this.$t('employee.add'),
+      empId: ''
     }
+  },
+  created() {
+    const route = this.$route.path
+    if (route.length < 4) return
+    this.empId = route.split('/')[3]
+    this.header = this.$t('employee.edit')
   },
   mounted() {
     this.inital()
   },
   methods: {
     inital() {
-      // this.sleep(500).then(() => {
-      //   this.init()
-      // })
-      // this.fadeOut()
     }
   }
 }
