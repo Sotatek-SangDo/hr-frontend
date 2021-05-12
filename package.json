@@ -33,7 +33,7 @@
     "bootstrap-datetime-picker": "^2.4.4",
     "bootstrap-vue": "^2.0.0-rc.11",
     "clipboard": "1.7.1",
-    "codemirror": "5.39.2",
+    "codemirror": "5.58.2",
     "connect": "3.6.6",
     "datatables": "^1.10.18",
     "datatables-bootstrap": "0.0.1",
