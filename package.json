@@ -50,7 +50,7 @@
     "jszip": "3.1.5",
     "metismenu": "^3.0.3",
     "mockjs": "1.0.1-beta3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "oauth": "^0.9.15",
