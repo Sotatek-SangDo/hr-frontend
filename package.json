@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "axios": "0.18.0",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "bootstrap-datepicker": "^1.8.0",
     "bootstrap-datetime-picker": "^2.4.4",
     "bootstrap-vue": "^2.0.0-rc.11",
